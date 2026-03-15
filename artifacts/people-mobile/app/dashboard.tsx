@@ -470,8 +470,11 @@ const s = StyleSheet.create({
     position: 'absolute', bottom: 28, right: 22,
     width: 58, height: 58, borderRadius: 29,
     backgroundColor: C.accent, alignItems: 'center', justifyContent: 'center',
-    elevation: 8, shadowColor: C.accent,
-    shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 12,
+    elevation: 8,
+    ...Platform.select({
+      ios: { shadowColor: C.accent, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 12 },
+      default: {},
+    }),
   },
   fabPressed: { backgroundColor: C.accentDim, transform: [{ scale: 0.94 }] },
 });
