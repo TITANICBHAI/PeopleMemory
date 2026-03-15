@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>People Memory</title>
+    <base href="/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+    <div id="app">
+        <div class="loading-screen">
+            <div class="loading-hex">⬡</div>
+            <p class="loading-text">PEOPLE MEMORY</p>
+            <p class="loading-sub">Initializing...</p>
+        </div>
+    </div>
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">✕</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <script>
+        // Disable SRI integrity checks — required when served behind a reverse proxy
+        // (proxy may re-compress responses, changing byte hashes)
+        Blazor.start({
+            loadBootResource: function (type, name, defaultUri, integrity) {
+                return fetch(defaultUri, { cache: 'no-cache', integrity: '' });
+            }
+        });
+    </script>
+</body>
+</html>

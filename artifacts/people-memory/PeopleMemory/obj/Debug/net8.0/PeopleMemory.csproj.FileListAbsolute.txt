@@ -1026,3 +1026,8 @@
 /home/runner/workspace/artifacts/people-memory/PeopleMemory/obj/Debug/net8.0/refint/PeopleMemory.dll
 /home/runner/workspace/artifacts/people-memory/PeopleMemory/obj/Debug/net8.0/PeopleMemory.pdb
 /home/runner/workspace/artifacts/people-memory/PeopleMemory/obj/Debug/net8.0/ref/PeopleMemory.dll
+/home/runner/workspace/artifacts/people-memory/PeopleMemory/bin/Debug/net8.0/publish/web.config
+/home/runner/workspace/artifacts/people-memory/PeopleMemory/bin/Debug/net8.0/publish/publish/wwwroot/sample-data/weather.json
+/home/runner/workspace/artifacts/people-memory/PeopleMemory/bin/Debug/net8.0/publish/publish/wwwroot/_framework/blazor.boot.json
+/home/runner/workspace/artifacts/people-memory/PeopleMemory/bin/Debug/net8.0/publish/wwwroot/sample-data/weather.json
+/home/runner/workspace/artifacts/people-memory/PeopleMemory/bin/Debug/net8.0/publish/wwwroot/_framework/blazor.boot.json

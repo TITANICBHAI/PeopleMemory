@@ -1,0 +1,4 @@
+/home/runner/workspace/artifacts/people-memory/PeopleMemory/publish/publish/web.config
+/home/runner/workspace/artifacts/people-memory/PeopleMemory/publish/publish/wwwroot/sample-data/weather.json
+/home/runner/workspace/artifacts/people-memory/PeopleMemory/publish/publish/wwwroot/_framework/blazor.boot.json
+/home/runner/workspace/artifacts/people-memory/PeopleMemory/publish/web.config
