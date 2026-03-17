@@ -56,6 +56,7 @@ interface CtxValue extends State {
   updatePerson: (p: Person) => Promise<void>;
   deletePerson: (id: string) => Promise<void>;
   getPersonById: (id: string) => Person | undefined;
+  clearAllData: () => Promise<void>;
 }
 
 const Ctx = createContext<CtxValue | null>(null);
@@ -193,11 +194,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return state.people.find(p => p.id === id);
   }, [state.people]);
 
+  const clearAllData = useCallback(async () => {
+    await AsyncStorage.multiRemove([PEOPLE_KEY]);
+    setState(s => ({ ...s, people: [] }));
+    router.replace('/dashboard');
+  }, []);
+
   return (
     <Ctx.Provider value={{
       ...state,
       setupPin, verifyPin, lock, resetInactivity, markTutorialSeen,
-      addPerson, updatePerson, deletePerson, getPersonById,
+      addPerson, updatePerson, deletePerson, getPersonById, clearAllData,
     }}>
       {children}
     </Ctx.Provider>

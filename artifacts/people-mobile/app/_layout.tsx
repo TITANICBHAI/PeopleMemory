@@ -50,6 +50,8 @@ export default function RootLayout() {
                 <Stack.Screen name="add" />
                 <Stack.Screen name="edit/[id]" />
                 <Stack.Screen name="profile/[id]" />
+                <Stack.Screen name="settings" />
+                <Stack.Screen name="privacy" />
               </Stack>
             </KeyboardProvider>
           </GestureHandlerRootView>

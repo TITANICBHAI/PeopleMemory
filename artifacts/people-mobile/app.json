@@ -5,11 +5,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "people-mobile",
+    "scheme": "peoplememory",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "backgroundColor": "#1A1A1A",
     "description": "Your personal memory for every person you meet. Track trust, notes, likes, and important dates — all stored privately on your device.",
+    "keywords": ["contacts", "people", "memory", "trust", "relationships", "networking", "crm"],
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
@@ -18,16 +19,26 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.peoplememory.app",
+      "buildNumber": "1",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "People Memory needs access to your photos so you can set a profile picture for your contacts.",
-        "NSCameraUsageDescription": "People Memory needs access to your camera so you can take a profile photo for your contacts."
+        "NSCameraUsageDescription": "People Memory needs access to your camera so you can take a profile photo for your contacts.",
+        "NSUserNotificationUsageDescription": "People Memory sends you reminders before scheduled meetings.",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "privacyManifests": {
+        "NSPrivacyAccessedAPITypes": []
       }
     },
     "android": {
       "package": "com.peoplememory.app",
+      "versionCode": 1,
       "permissions": [
-        "READ_MEDIA_IMAGES",
-        "READ_EXTERNAL_STORAGE"
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.SCHEDULE_EXACT_ALARM",
+        "android.permission.POST_NOTIFICATIONS"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
@@ -41,12 +52,19 @@
       [
         "expo-router",
         {
-          "origin": "https://replit.com/"
+          "origin": "https://peoplememory.app/"
         }
       ],
       "expo-font",
       "expo-web-browser",
-      "expo-notifications",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#3A7EFF",
+          "sounds": []
+        }
+      ],
       [
         "expo-image-picker",
         {
@@ -58,6 +76,11 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ed99f22b-69c6-4f88-a9cc-cb0ce7e14a70"
+      }
     }
   }
 }

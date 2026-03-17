@@ -404,6 +404,12 @@ export default function Dashboard() {
         </View>
         <View style={s.headerActions}>
           <Pressable
+            style={s.iconBtn}
+            onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.push('/settings'); }}
+          >
+            <Feather name="settings" size={18} color={C.textMuted} />
+          </Pressable>
+          <Pressable
             style={[s.iconBtn, view === 'table' && s.iconBtnActive]}
             onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setView(v => v === 'cards' ? 'table' : 'cards'); }}
           >
