@@ -24,7 +24,8 @@ import { Person, useApp } from '@/context/AppContext';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
-function trustColor(n: number) {
+function trustColor(n: number | null) {
+  if (n === null || n === undefined) return C.textDim;
   return n <= 3 ? C.red : n <= 6 ? C.yellow : C.green;
 }
 
@@ -44,7 +45,14 @@ function notesCount(p: Person) {
 
 // ─── micro-components ────────────────────────────────────────────────────────
 
-function TrustBadge({ level }: { level: number }) {
+function TrustBadge({ level }: { level: number | null }) {
+  if (level === null || level === undefined) {
+    return (
+      <View style={[tb.wrap, { borderColor: C.border }]}>
+        <Text style={[tb.num, { color: C.textDim }]}>—</Text>
+      </View>
+    );
+  }
   const color = trustColor(level);
   return (
     <View style={[tb.wrap, { borderColor: color + '55' }]}>
@@ -367,7 +375,7 @@ export default function Dashboard() {
       let cmp = 0;
       switch (sortKey) {
         case 'name': cmp = a.name.localeCompare(b.name); break;
-        case 'trustLevel': cmp = a.trustLevel - b.trustLevel; break;
+        case 'trustLevel': cmp = (a.trustLevel ?? -1) - (b.trustLevel ?? -1); break;
         case 'lastMet': cmp = (a.lastMet ?? '').localeCompare(b.lastMet ?? ''); break;
         case 'notes': cmp = notesCount(a) - notesCount(b); break;
       }

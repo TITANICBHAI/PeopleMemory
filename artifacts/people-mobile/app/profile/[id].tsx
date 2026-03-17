@@ -179,7 +179,9 @@ export default function ProfileScreen() {
         </View>
 
         {/* Trust Level */}
-        <TrustBar level={person.trustLevel} />
+        {person.trustLevel !== null && person.trustLevel !== undefined && (
+          <TrustBar level={person.trustLevel} />
+        )}
 
         {/* Description */}
         {person.description ? (

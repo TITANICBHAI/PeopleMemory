@@ -182,34 +182,49 @@ const te = StyleSheet.create({
   },
 });
 
-function TrustSlider({ value, onChange }: { value: number; onChange: (v: number) => void }) {
-  const color = value <= 3 ? C.red : value <= 6 ? C.yellow : C.green;
+function TrustSlider({ value, onChange }: { value: number | null; onChange: (v: number | null) => void }) {
+  const active = value !== null;
+  const num = value ?? 5;
+  const color = num <= 3 ? C.red : num <= 6 ? C.yellow : C.green;
   return (
     <View style={ts.wrap}>
-      <FieldLabel text={`Trust Level — ${value}/10`} />
-      <View style={ts.track}>
-        {[...Array(11)].map((_, i) => (
-          <Pressable
-            key={i}
-            style={[
-              ts.pip,
-              i <= value ? { backgroundColor: color } : { backgroundColor: C.border },
-              i === value && { width: 18, height: 18, borderRadius: 9 },
-            ]}
-            onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onChange(i); }}
-          />
-        ))}
+      <View style={ts.header}>
+        <FieldLabel text={active ? `Trust Level — ${num}/10` : 'Trust Level'} />
+        <Pressable
+          style={[ts.naBtn, !active && ts.naBtnOn]}
+          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onChange(active ? null : 5); }}
+        >
+          <Text style={[ts.naBtnText, !active && ts.naBtnTextOn]}>N/A</Text>
+        </Pressable>
       </View>
-      <View style={ts.labels}>
-        <Text style={ts.labelText}>No trust</Text>
-        <Text style={[ts.levelText, { color }]}>{value <= 3 ? 'Low' : value <= 6 ? 'Moderate' : 'High'}</Text>
-        <Text style={ts.labelText}>Full trust</Text>
-      </View>
+      {active && (
+        <>
+          <View style={ts.track}>
+            {[...Array(11)].map((_, i) => (
+              <Pressable
+                key={i}
+                style={[ts.pip, i <= num ? { backgroundColor: color } : { backgroundColor: C.border }, i === num && { width: 18, height: 18, borderRadius: 9 }]}
+                onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onChange(i); }}
+              />
+            ))}
+          </View>
+          <View style={ts.labels}>
+            <Text style={ts.labelText}>No trust</Text>
+            <Text style={[ts.levelText, { color }]}>{num <= 3 ? 'Low' : num <= 6 ? 'Moderate' : 'High'}</Text>
+            <Text style={ts.labelText}>Full trust</Text>
+          </View>
+        </>
+      )}
     </View>
   );
 }
 const ts = StyleSheet.create({
   wrap: { marginBottom: 18 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
+  naBtn: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, borderWidth: 1, borderColor: C.border, backgroundColor: C.panel },
+  naBtnOn: { borderColor: C.accent, backgroundColor: C.accent + '22' },
+  naBtnText: { fontSize: 11, fontFamily: 'Inter_600SemiBold', color: C.textMuted },
+  naBtnTextOn: { color: C.accent },
   track: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 2, height: 36 },
   pip: { width: 12, height: 12, borderRadius: 6 },
   labels: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 },
@@ -223,7 +238,7 @@ const blank: FormData = {
   name: '',
   photoUri: undefined,
   tags: [],
-  trustLevel: 5,
+  trustLevel: null,
   description: '',
   likes: '',
   dislikes: '',

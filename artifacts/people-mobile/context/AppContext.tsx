@@ -22,7 +22,7 @@ export interface Person {
   name: string;
   photoUri?: string;
   tags: string[];
-  trustLevel: number;
+  trustLevel: number | null;
   description: string;
   likes: string;
   dislikes: string;
