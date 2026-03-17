@@ -1,0 +1,32 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "pytwIk6kpbpW8X-IvJHZD"
+uri = "file://artifacts/people-mobile/assets/screenshots/ss1-dashboard.png"
+type = "image"
+title = "Screenshot 1 — Dashboard"
+
+[[outputs]]
+id = "hytv05L2qTXjo33-8Nzih"
+uri = "file://artifacts/people-mobile/assets/screenshots/ss2-add-person.png"
+type = "image"
+title = "Screenshot 2 — Add Person"
+
+[[outputs]]
+id = "WlzKLzzf0hei1enAVa1A4"
+uri = "file://artifacts/people-mobile/assets/screenshots/ss3-profile.png"
+type = "image"
+title = "Screenshot 3 — Profile View"
+
+[[outputs]]
+id = "VemfnBjvfAW6VvoiU_t_K"
+uri = "file://artifacts/people-mobile/assets/screenshots/ss4-avatar.png"
+type = "image"
+title = "Screenshot 4 — Avatar Picker"
+
+[[outputs]]
+id = "W8etcDCpiiwAsO41vjLlG"
+uri = "file://artifacts/people-mobile/assets/screenshots/ss5-tutorial.png"
+type = "image"
+title = "Screenshot 5 — Onboarding Tutorial"

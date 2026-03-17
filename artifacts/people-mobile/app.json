@@ -9,6 +9,7 @@
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "backgroundColor": "#1A1A1A",
+    "description": "Your personal memory for every person you meet. Track trust, notes, likes, and important dates — all stored privately on your device.",
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
@@ -16,10 +17,18 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.peoplemobile.app"
+      "bundleIdentifier": "com.peoplememory.app",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "People Memory needs access to your photos so you can set a profile picture for your contacts.",
+        "NSCameraUsageDescription": "People Memory needs access to your camera so you can take a profile photo for your contacts."
+      }
     },
     "android": {
-      "package": "com.peoplemobile.app",
+      "package": "com.peoplememory.app",
+      "permissions": [
+        "READ_MEDIA_IMAGES",
+        "READ_EXTERNAL_STORAGE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#1A1A1A"
@@ -36,7 +45,14 @@
         }
       ],
       "expo-font",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "People Memory needs access to your photos so you can set a profile picture for your contacts.",
+          "cameraPermission": "People Memory needs access to your camera so you can take a profile photo."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

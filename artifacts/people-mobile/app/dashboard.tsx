@@ -18,6 +18,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PRESET_AVATARS } from '@/components/AvatarPicker';
+import Tutorial from '@/components/Tutorial';
 import C from '@/constants/colors';
 import { Person, useApp } from '@/context/AppContext';
 
@@ -329,7 +330,7 @@ const atm = StyleSheet.create({
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 
 export default function Dashboard() {
-  const { people, deletePerson, lock } = useApp();
+  const { people, deletePerson, lock, hasSeenTutorial, markTutorialSeen } = useApp();
   const insets = useSafeAreaInsets();
 
   const [query, setQuery] = useState('');
@@ -530,6 +531,11 @@ export default function Dashboard() {
       >
         <Feather name="plus" size={26} color={C.textBright} />
       </Pressable>
+
+      {/* One-time tutorial */}
+      {!hasSeenTutorial && (
+        <Tutorial onDone={markTutorialSeen} />
+      )}
     </View>
   );
 }

@@ -42,6 +42,7 @@ interface State {
   pinHash: string | null;
   isUnlocked: boolean;
   isLoading: boolean;
+  hasSeenTutorial: boolean;
 }
 
 interface CtxValue extends State {
@@ -49,6 +50,7 @@ interface CtxValue extends State {
   verifyPin: (pin: string) => Promise<boolean>;
   lock: () => void;
   resetInactivity: () => void;
+  markTutorialSeen: () => Promise<void>;
   addPerson: (p: Omit<Person, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Person>;
   updatePerson: (p: Person) => Promise<void>;
   deletePerson: (id: string) => Promise<void>;
@@ -59,6 +61,7 @@ const Ctx = createContext<CtxValue | null>(null);
 
 const PEOPLE_KEY = 'pm_people_v1';
 const PIN_KEY = 'pm_pin_v1';
+const TUTORIAL_KEY = 'pm_tutorial_seen';
 const AUTO_LOCK_MS = 5 * 60 * 1000; // 5 minutes
 
 async function sha256(text: string): Promise<string> {
@@ -75,6 +78,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     pinHash: null,
     isUnlocked: false,
     isLoading: true,
+    hasSeenTutorial: false,
   });
   const lockTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const appStateRef = useRef(AppState.currentState);
@@ -82,14 +86,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        const [rawPeople, rawPin] = await Promise.all([
+        const [rawPeople, rawPin, rawTutorial] = await Promise.all([
           AsyncStorage.getItem(PEOPLE_KEY),
           AsyncStorage.getItem(PIN_KEY),
+          AsyncStorage.getItem(TUTORIAL_KEY),
         ]);
         setState(s => ({
           ...s,
           people: rawPeople ? JSON.parse(rawPeople) : [],
           pinHash: rawPin,
+          hasSeenTutorial: rawTutorial === '1',
           isLoading: false,
         }));
       } catch {
@@ -141,6 +147,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     router.replace('/');
   }, []);
 
+  const markTutorialSeen = useCallback(async () => {
+    await AsyncStorage.setItem(TUTORIAL_KEY, '1');
+    setState(s => ({ ...s, hasSeenTutorial: true }));
+  }, []);
+
   const resetInactivity = useCallback(() => {
     if (lockTimer.current) clearTimeout(lockTimer.current);
     lockTimer.current = setTimeout(() => {
@@ -184,7 +195,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   return (
     <Ctx.Provider value={{
       ...state,
-      setupPin, verifyPin, lock, resetInactivity,
+      setupPin, verifyPin, lock, resetInactivity, markTutorialSeen,
       addPerson, updatePerson, deletePerson, getPersonById,
     }}>
       {children}
