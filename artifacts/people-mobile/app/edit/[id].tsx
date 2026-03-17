@@ -106,11 +106,15 @@ function DatePickerField({ label, value, onChange, hint, rightSlot }: {
   const [show, setShow] = useState(false);
   const dateObj = value ? new Date(value + 'T00:00:00') : new Date();
 
+  const openPicker = () => {
+    if (Platform.OS === 'web') return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setShow(true);
+  };
+
   const handleChange = (_: any, selectedDate?: Date) => {
     if (Platform.OS === 'android') setShow(false);
-    if (selectedDate) {
-      onChange(dateToString(selectedDate));
-    }
+    if (selectedDate) onChange(dateToString(selectedDate));
   };
 
   return (
@@ -120,25 +124,28 @@ function DatePickerField({ label, value, onChange, hint, rightSlot }: {
         <View style={dpf.labelRight}>
           {hint ? <Text style={fi.hint}>{hint}</Text> : null}
           {rightSlot}
+        </View>
+      </View>
+
+      <View style={dpf.inputRow}>
+        <Text style={[dpf.valueText, !value && dpf.valuePlaceholder]} numberOfLines={1}>
+          {value ? formatDateDisplay(value) : 'Not set'}
+        </Text>
+        <View style={dpf.inputActions}>
           {value ? (
             <Pressable
+              style={dpf.clearBtn}
               onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onChange(undefined); }}
               hitSlop={8}
             >
-              <Feather name="x" size={14} color={C.red} />
+              <Feather name="x" size={13} color={C.textMuted} />
             </Pressable>
           ) : null}
+          <Pressable style={dpf.calBtn} onPress={openPicker} hitSlop={4}>
+            <Feather name="calendar" size={16} color={C.accent} />
+          </Pressable>
         </View>
       </View>
-      <Pressable
-        style={dpf.button}
-        onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setShow(true); }}
-      >
-        <Feather name="calendar" size={15} color={value ? C.accent : C.textDim} />
-        <Text style={[dpf.buttonText, !value && dpf.buttonTextEmpty]}>
-          {formatDateDisplay(value)}
-        </Text>
-      </Pressable>
 
       {show && Platform.OS === 'ios' && (
         <Modal transparent animationType="slide" visible={show} onRequestClose={() => setShow(false)}>
@@ -148,6 +155,7 @@ function DatePickerField({ label, value, onChange, hint, rightSlot }: {
               <Pressable onPress={() => { onChange(undefined); setShow(false); }}>
                 <Text style={dpf.sheetClear}>Clear</Text>
               </Pressable>
+              <Text style={dpf.sheetTitle}>{label}</Text>
               <Pressable onPress={() => setShow(false)}>
                 <Text style={dpf.sheetDone}>Done</Text>
               </Pressable>
@@ -180,13 +188,22 @@ const dpf = StyleSheet.create({
   wrap: { marginBottom: 18 },
   labelRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 },
   labelRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  button: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
+  inputRow: {
+    flexDirection: 'row', alignItems: 'center',
     backgroundColor: C.panel, borderRadius: 12, borderWidth: 1, borderColor: C.border,
-    paddingHorizontal: 14, height: 48,
+    paddingLeft: 14, height: 48, overflow: 'hidden',
   },
-  buttonText: { fontSize: 15, fontFamily: 'Inter_400Regular', color: C.text },
-  buttonTextEmpty: { color: C.textDim },
+  valueText: { flex: 1, fontSize: 15, fontFamily: 'Inter_400Regular', color: C.text },
+  valuePlaceholder: { color: C.textDim },
+  inputActions: { flexDirection: 'row', alignItems: 'center', gap: 0 },
+  clearBtn: {
+    width: 36, height: 48, alignItems: 'center', justifyContent: 'center',
+  },
+  calBtn: {
+    width: 48, height: 48, alignItems: 'center', justifyContent: 'center',
+    borderLeftWidth: 1, borderLeftColor: C.border,
+    backgroundColor: C.panelHigh,
+  },
   overlay: { flex: 1, backgroundColor: '#00000066' },
   sheet: {
     backgroundColor: C.panel,
@@ -202,8 +219,9 @@ const dpf = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 8,
   },
-  sheetClear: { fontSize: 16, fontFamily: 'Inter_400Regular', color: C.red },
-  sheetDone: { fontSize: 16, fontFamily: 'Inter_600SemiBold', color: C.accent },
+  sheetTitle: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: C.text },
+  sheetClear: { fontSize: 15, fontFamily: 'Inter_400Regular', color: C.red, minWidth: 48 },
+  sheetDone: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: C.accent, minWidth: 48, textAlign: 'right' },
 });
 
 function TagsEditor({ tags, onAdd, onRemove }: { tags: string[]; onAdd: (t: string) => void; onRemove: (t: string) => void }) {

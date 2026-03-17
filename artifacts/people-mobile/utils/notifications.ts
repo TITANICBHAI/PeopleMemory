@@ -14,6 +14,7 @@ Notifications.setNotificationHandler({
 
 const MEETING_KEY = (personId: string) => `notif_${personId}`;
 const BIRTHDAY_KEY = (personId: string) => `notif_birthday_${personId}`;
+const CUSTOM_DATE_KEY = (personId: string, dateId: string) => `notif_custom_${personId}_${dateId}`;
 
 export async function requestNotificationPermission(): Promise<boolean> {
   if (Platform.OS === 'web') return false;
@@ -23,13 +24,61 @@ export async function requestNotificationPermission(): Promise<boolean> {
   return status === 'granted';
 }
 
+async function cancelStoredNotifications(key: string): Promise<void> {
+  const stored = await AsyncStorage.getItem(key);
+  if (!stored) return;
+  try {
+    const ids: string[] = JSON.parse(stored);
+    await Promise.all(ids.map(id => Notifications.cancelScheduledNotificationAsync(id)));
+  } catch {
+    await Notifications.cancelScheduledNotificationAsync(stored);
+  }
+  await AsyncStorage.removeItem(key);
+}
+
+async function scheduleAnnualNotifications(
+  key: string,
+  title: string,
+  body: string,
+  month: number,
+  day: number,
+): Promise<void> {
+  await cancelStoredNotifications(key);
+  if (Platform.OS === 'web') return;
+
+  const granted = await requestNotificationPermission();
+  if (!granted) return;
+
+  const ids: string[] = [];
+  const now = new Date();
+  let year = now.getFullYear();
+
+  for (let i = 0; i < 5; i++) {
+    const trigger = new Date(year, month - 1, day, 9, 0, 0);
+    if (trigger.getTime() > now.getTime()) {
+      const id = await Notifications.scheduleNotificationAsync({
+        content: { title, body, sound: true },
+        trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: trigger },
+      });
+      ids.push(id);
+    }
+    year++;
+  }
+
+  if (ids.length > 0) {
+    await AsyncStorage.setItem(key, JSON.stringify(ids));
+  }
+}
+
 export async function scheduleNextMeetingNotification(
   personId: string,
   personName: string,
   date: string,
   time: string,
 ): Promise<void> {
-  await cancelNextMeetingNotification(personId);
+  await cancelStoredNotifications(MEETING_KEY(personId));
+
+  if (Platform.OS === 'web') return;
 
   const [year, month, day] = date.split('-').map(Number);
   const [hour, minute] = time.split(':').map(Number);
@@ -49,15 +98,11 @@ export async function scheduleNextMeetingNotification(
     trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: trigger },
   });
 
-  await AsyncStorage.setItem(MEETING_KEY(personId), id);
+  await AsyncStorage.setItem(MEETING_KEY(personId), JSON.stringify([id]));
 }
 
 export async function cancelNextMeetingNotification(personId: string): Promise<void> {
-  const id = await AsyncStorage.getItem(MEETING_KEY(personId));
-  if (id) {
-    await Notifications.cancelScheduledNotificationAsync(id);
-    await AsyncStorage.removeItem(MEETING_KEY(personId));
-  }
+  await cancelStoredNotifications(MEETING_KEY(personId));
 }
 
 export async function scheduleBirthdayNotification(
@@ -65,43 +110,19 @@ export async function scheduleBirthdayNotification(
   personName: string,
   birthday: string,
 ): Promise<void> {
-  await cancelBirthdayNotification(personId);
-
-  if (Platform.OS === 'web') return;
-
-  const granted = await requestNotificationPermission();
-  if (!granted) return;
-
   const [, month, day] = birthday.split('-').map(Number);
-
-  const id = await Notifications.scheduleNotificationAsync({
-    content: {
-      title: `🎂 ${personName}'s Birthday!`,
-      body: `Today is ${personName}'s birthday — don't forget to wish them well!`,
-      sound: true,
-    },
-    trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-      repeats: true,
-      month,
-      day,
-      hour: 9,
-      minute: 0,
-    },
-  });
-
-  await AsyncStorage.setItem(BIRTHDAY_KEY(personId), id);
+  await scheduleAnnualNotifications(
+    BIRTHDAY_KEY(personId),
+    `🎂 ${personName}'s Birthday!`,
+    `Today is ${personName}'s birthday — don't forget to wish them well!`,
+    month,
+    day,
+  );
 }
 
 export async function cancelBirthdayNotification(personId: string): Promise<void> {
-  const id = await AsyncStorage.getItem(BIRTHDAY_KEY(personId));
-  if (id) {
-    await Notifications.cancelScheduledNotificationAsync(id);
-    await AsyncStorage.removeItem(BIRTHDAY_KEY(personId));
-  }
+  await cancelStoredNotifications(BIRTHDAY_KEY(personId));
 }
-
-const CUSTOM_DATE_KEY = (personId: string, dateId: string) => `notif_custom_${personId}_${dateId}`;
 
 export async function scheduleCustomDateNotification(
   personId: string,
@@ -110,38 +131,16 @@ export async function scheduleCustomDateNotification(
   label: string,
   date: string,
 ): Promise<void> {
-  await cancelCustomDateNotification(personId, dateId);
-
-  if (Platform.OS === 'web') return;
-
-  const granted = await requestNotificationPermission();
-  if (!granted) return;
-
   const [, month, day] = date.split('-').map(Number);
-
-  const id = await Notifications.scheduleNotificationAsync({
-    content: {
-      title: `📅 ${label}`,
-      body: `Today marks "${label}" for ${personName}`,
-      sound: true,
-    },
-    trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-      repeats: true,
-      month,
-      day,
-      hour: 9,
-      minute: 0,
-    },
-  });
-
-  await AsyncStorage.setItem(CUSTOM_DATE_KEY(personId, dateId), id);
+  await scheduleAnnualNotifications(
+    CUSTOM_DATE_KEY(personId, dateId),
+    `📅 ${label}`,
+    `Today marks "${label}" for ${personName}`,
+    month,
+    day,
+  );
 }
 
 export async function cancelCustomDateNotification(personId: string, dateId: string): Promise<void> {
-  const id = await AsyncStorage.getItem(CUSTOM_DATE_KEY(personId, dateId));
-  if (id) {
-    await Notifications.cancelScheduledNotificationAsync(id);
-    await AsyncStorage.removeItem(CUSTOM_DATE_KEY(personId, dateId));
-  }
+  await cancelStoredNotifications(CUSTOM_DATE_KEY(personId, dateId));
 }
