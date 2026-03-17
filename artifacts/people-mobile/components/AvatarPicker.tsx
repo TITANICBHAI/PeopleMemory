@@ -15,18 +15,18 @@ import {
 import C from '@/constants/colors';
 
 export const PRESET_AVATARS = [
-  { id: 'a1', bg: '#1A3A4A', icon: '🌊', label: 'Ocean' },
-  { id: 'a2', bg: '#3A1A1A', icon: '🔥', label: 'Flame' },
-  { id: 'a3', bg: '#1A3A1A', icon: '🌿', label: 'Forest' },
-  { id: 'a4', bg: '#2A1A3A', icon: '⚡', label: 'Storm' },
-  { id: 'a5', bg: '#3A2A1A', icon: '🌙', label: 'Moon' },
-  { id: 'a6', bg: '#1A2A3A', icon: '❄️', label: 'Ice' },
-  { id: 'a7', bg: '#3A1A3A', icon: '🌺', label: 'Bloom' },
-  { id: 'a8', bg: '#2A3A1A', icon: '🍃', label: 'Leaf' },
-  { id: 'a9', bg: '#1A1A3A', icon: '🌌', label: 'Space' },
-  { id: 'a10', bg: '#3A2A2A', icon: '🦊', label: 'Fox' },
-  { id: 'a11', bg: '#2A2A1A', icon: '🐺', label: 'Wolf' },
-  { id: 'a12', bg: '#1A3A3A', icon: '🦋', label: 'Drift' },
+  { id: 'a1',  bg: '#1C3247', icon: '🧑🏻', label: 'Light' },
+  { id: 'a2',  bg: '#2B2218', icon: '🧑🏼', label: 'Sandy' },
+  { id: 'a3',  bg: '#1E2E1E', icon: '🧑🏽', label: 'Olive' },
+  { id: 'a4',  bg: '#27201A', icon: '🧑🏾', label: 'Warm' },
+  { id: 'a5',  bg: '#1A1A2A', icon: '🧑🏿', label: 'Deep' },
+  { id: 'a6',  bg: '#2E1A2E', icon: '👩🏻', label: 'Rose' },
+  { id: 'a7',  bg: '#1A2C2C', icon: '👩🏽', label: 'Jade' },
+  { id: 'a8',  bg: '#1A1E30', icon: '👩🏿', label: 'Indigo' },
+  { id: 'a9',  bg: '#23291A', icon: '👨🏻', label: 'Sage' },
+  { id: 'a10', bg: '#2A1E1E', icon: '👨🏽', label: 'Amber' },
+  { id: 'a11', bg: '#1A2A20', icon: '👨🏿', label: 'Forest' },
+  { id: 'a12', bg: '#28221A', icon: '🧔🏽', label: 'Rugged' },
 ];
 
 export interface AvatarValue {
