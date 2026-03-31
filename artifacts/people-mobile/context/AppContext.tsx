@@ -19,6 +19,12 @@ export interface PersonDate {
   reminderTime?: string;
 }
 
+export interface Interaction {
+  id: string;
+  date: string;
+  note: string;
+}
+
 export interface Person {
   id: string;
   name: string;
@@ -37,6 +43,7 @@ export interface Person {
   nextMeeting?: string;
   nextMeetingTime?: string;
   customDates: PersonDate[];
+  interactions: Interaction[];
   createdAt: string;
   updatedAt: string;
 }
@@ -62,6 +69,10 @@ interface CtxValue extends State {
   deletePerson: (id: string) => Promise<void>;
   getPersonById: (id: string) => Person | undefined;
   clearAllData: () => Promise<void>;
+  addInteraction: (personId: string, note: string) => Promise<void>;
+  deleteInteraction: (personId: string, interactionId: string) => Promise<void>;
+  getRawData: () => { people: Person[]; pinHash: string | null };
+  importRawData: (people: Person[]) => Promise<void>;
 }
 
 const Ctx = createContext<CtxValue | null>(null);
@@ -70,7 +81,7 @@ const PEOPLE_KEY = 'pm_people_v1';
 const PIN_KEY = 'pm_pin_v1';
 const TUTORIAL_KEY = 'pm_tutorial_seen';
 const PRIVACY_KEY = 'pm_privacy_accepted';
-const AUTO_LOCK_MS = 5 * 60 * 1000; // 5 minutes
+const AUTO_LOCK_MS = 5 * 60 * 1000;
 
 async function sha256(text: string): Promise<string> {
   return Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, text);
@@ -78,6 +89,14 @@ async function sha256(text: string): Promise<string> {
 
 export function uid(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+}
+
+function migratePerson(p: any): Person {
+  return {
+    ...p,
+    interactions: p.interactions ?? [],
+    customDates: p.customDates ?? [],
+  };
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
@@ -101,9 +120,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           AsyncStorage.getItem(TUTORIAL_KEY),
           AsyncStorage.getItem(PRIVACY_KEY),
         ]);
+        const parsed: Person[] = rawPeople ? JSON.parse(rawPeople).map(migratePerson) : [];
         setState(s => ({
           ...s,
-          people: rawPeople ? JSON.parse(rawPeople) : [],
+          people: parsed,
           pinHash: rawPin,
           hasSeenTutorial: rawTutorial === '1',
           hasAcceptedPrivacy: rawPrivacy === '1',
@@ -115,7 +135,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     })();
   }, []);
 
-  // Auto-lock when app goes to background
   useEffect(() => {
     const sub = AppState.addEventListener('change', next => {
       if (appStateRef.current === 'active' && next.match(/inactive|background/)) {
@@ -214,11 +233,53 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     router.replace('/dashboard');
   }, []);
 
+  const addInteraction = useCallback(async (personId: string, note: string) => {
+    const interaction: Interaction = {
+      id: uid(),
+      date: new Date().toISOString(),
+      note: note.trim(),
+    };
+    const next = state.people.map(p => {
+      if (p.id !== personId) return p;
+      return {
+        ...p,
+        interactions: [interaction, ...(p.interactions ?? [])],
+        updatedAt: new Date().toISOString(),
+      };
+    });
+    await savePeople(next);
+    setState(s => ({ ...s, people: next }));
+  }, [state.people]);
+
+  const deleteInteraction = useCallback(async (personId: string, interactionId: string) => {
+    const next = state.people.map(p => {
+      if (p.id !== personId) return p;
+      return {
+        ...p,
+        interactions: (p.interactions ?? []).filter(i => i.id !== interactionId),
+        updatedAt: new Date().toISOString(),
+      };
+    });
+    await savePeople(next);
+    setState(s => ({ ...s, people: next }));
+  }, [state.people]);
+
+  const getRawData = useCallback(() => {
+    return { people: state.people, pinHash: state.pinHash };
+  }, [state.people, state.pinHash]);
+
+  const importRawData = useCallback(async (people: Person[]) => {
+    const migrated = people.map(migratePerson);
+    await savePeople(migrated);
+    setState(s => ({ ...s, people: migrated }));
+  }, []);
+
   return (
     <Ctx.Provider value={{
       ...state,
       setupPin, verifyPin, lock, resetInactivity, markTutorialSeen, acceptPrivacy,
       addPerson, updatePerson, deletePerson, getPersonById, clearAllData,
+      addInteraction, deleteInteraction, getRawData, importRawData,
     }}>
       {children}
     </Ctx.Provider>

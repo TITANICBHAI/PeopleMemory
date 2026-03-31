@@ -1,14 +1,17 @@
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { router, useLocalSearchParams } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
+  KeyboardAvoidingView,
+  Modal,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -90,11 +93,28 @@ function formatDate(s?: string) {
   } catch { return s; }
 }
 
+function formatInteractionDate(s: string) {
+  try {
+    const d = new Date(s);
+    const now = new Date();
+    const diffMs = now.getTime() - d.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: diffDays > 365 ? 'numeric' : undefined });
+  } catch { return s; }
+}
+
 export default function ProfileScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getPersonById, deletePerson } = useApp();
+  const { getPersonById, deletePerson, addInteraction, deleteInteraction } = useApp();
   const insets = useSafeAreaInsets();
   const person = getPersonById(id);
+
+  const [logModalVisible, setLogModalVisible] = useState(false);
+  const [logNote, setLogNote] = useState('');
+  const [saving, setSaving] = useState(false);
 
   if (!person) {
     return (
@@ -128,6 +148,28 @@ export default function ProfileScreen() {
     );
   };
 
+  const handleSaveInteraction = async () => {
+    if (!logNote.trim()) return;
+    setSaving(true);
+    await addInteraction(person.id, logNote);
+    setSaving(false);
+    setLogNote('');
+    setLogModalVisible(false);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  };
+
+  const handleDeleteInteraction = (interactionId: string) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+    Alert.alert('Delete entry?', 'This interaction log entry will be removed.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => deleteInteraction(person.id, interactionId),
+      },
+    ]);
+  };
+
   const allDates = [
     ...(person.birthday ? [{ date: person.birthday, label: 'Birthday', extra: undefined as string | undefined }] : []),
     ...(person.firstMet ? [{ date: person.firstMet, label: 'First met', extra: undefined }] : []),
@@ -135,6 +177,8 @@ export default function ProfileScreen() {
     ...(person.nextMeeting ? [{ date: person.nextMeeting, label: 'Next meeting', extra: person.nextMeetingTime }] : []),
     ...person.customDates.map(d => ({ date: d.date, label: d.label, extra: undefined })),
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const interactions = person.interactions ?? [];
 
   return (
     <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0) }]}>
@@ -159,7 +203,6 @@ export default function ProfileScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: insets.bottom + 32 }}
       >
-        {/* Hero: Avatar left, Name + Tags right */}
         <View style={s.hero}>
           <View style={s.avatarRing}>
             <AvatarDisplay
@@ -178,19 +221,16 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        {/* Trust Level */}
         {person.trustLevel !== null && person.trustLevel !== undefined && (
           <TrustBar level={person.trustLevel} />
         )}
 
-        {/* Description */}
         {person.description ? (
           <SectionCard title="Description">
             <Text style={s.bodyText}>{person.description}</Text>
           </SectionCard>
         ) : null}
 
-        {/* Likes & Dislikes side by side */}
         {(person.likes || person.dislikes) ? (
           <View style={s.splitRow}>
             {person.likes ? (
@@ -208,21 +248,18 @@ export default function ProfileScreen() {
           </View>
         ) : null}
 
-        {/* Remember */}
         {person.thingsToRemember ? (
           <SectionCard title="Remember">
             <Text style={s.bodyText}>{person.thingsToRemember}</Text>
           </SectionCard>
         ) : null}
 
-        {/* Quick Facts */}
         {person.quickFacts ? (
           <SectionCard title="Quick Facts">
             <Text style={s.bodyText}>{person.quickFacts}</Text>
           </SectionCard>
         ) : null}
 
-        {/* Timeline */}
         {allDates.length > 0 ? (
           <SectionCard title="Timeline">
             {allDates.map((d, i) => (
@@ -245,10 +282,99 @@ export default function ProfileScreen() {
           </SectionCard>
         ) : null}
 
+        {/* Interaction Log */}
+        <View style={il.wrap}>
+          <View style={il.header}>
+            <Text style={il.headerText}>INTERACTION LOG</Text>
+            <Pressable
+              style={il.addBtn}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setLogModalVisible(true);
+              }}
+            >
+              <Feather name="plus" size={14} color={C.accent} />
+              <Text style={il.addBtnText}>Log</Text>
+            </Pressable>
+          </View>
+
+          <View style={il.card}>
+            {interactions.length === 0 ? (
+              <View style={il.empty}>
+                <Feather name="message-circle" size={28} color={C.textDim} />
+                <Text style={il.emptyText}>No interactions logged yet</Text>
+                <Text style={il.emptySubText}>Tap "Log" to record a conversation or meeting</Text>
+              </View>
+            ) : (
+              interactions.map((item, i) => (
+                <View key={item.id} style={[il.entry, i > 0 && il.entryBorder]}>
+                  <View style={il.entryDot} />
+                  <View style={il.entryContent}>
+                    <Text style={il.entryDate}>{formatInteractionDate(item.date)}</Text>
+                    <Text style={il.entryNote}>{item.note}</Text>
+                  </View>
+                  <Pressable
+                    style={il.deleteEntry}
+                    onPress={() => handleDeleteInteraction(item.id)}
+                    hitSlop={8}
+                  >
+                    <Feather name="x" size={14} color={C.textDim} />
+                  </Pressable>
+                </View>
+              ))
+            )}
+          </View>
+        </View>
+
         <View style={{ marginHorizontal: 16, marginTop: 8 }}>
           <Text style={s.meta}>Added {formatDate(person.createdAt)}</Text>
         </View>
       </ScrollView>
+
+      {/* Add Interaction Modal */}
+      <Modal
+        visible={logModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setLogModalVisible(false)}
+      >
+        <KeyboardAvoidingView
+          style={m.overlay}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          <Pressable style={m.backdrop} onPress={() => setLogModalVisible(false)} />
+          <View style={m.sheet}>
+            <View style={m.handle} />
+            <Text style={m.title}>Log Interaction</Text>
+            <Text style={m.subtitle}>What happened with {person.name}?</Text>
+            <TextInput
+              style={m.input}
+              placeholder="e.g. Had coffee, talked about new job offer..."
+              placeholderTextColor={C.textDim}
+              value={logNote}
+              onChangeText={setLogNote}
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
+              autoFocus
+              maxLength={500}
+            />
+            <Text style={m.charCount}>{logNote.length}/500</Text>
+            <View style={m.actions}>
+              <Pressable style={m.cancelBtn} onPress={() => { setLogModalVisible(false); setLogNote(''); }}>
+                <Text style={m.cancelText}>Cancel</Text>
+              </Pressable>
+              <Pressable
+                style={[m.saveBtn, (!logNote.trim() || saving) && m.saveBtnDisabled]}
+                onPress={handleSaveInteraction}
+                disabled={!logNote.trim() || saving}
+              >
+                <Text style={m.saveText}>{saving ? 'Saving...' : 'Save'}</Text>
+              </Pressable>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }
@@ -264,6 +390,66 @@ const tl = StyleSheet.create({
   bellText: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.green },
 });
 
+const il = StyleSheet.create({
+  wrap: { marginHorizontal: 16, marginBottom: 12 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 },
+  headerText: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2 },
+  addBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 5,
+    backgroundColor: C.accent + '20', borderRadius: 20,
+    paddingHorizontal: 12, paddingVertical: 5,
+    borderWidth: 1, borderColor: C.accent + '40',
+  },
+  addBtnText: { fontSize: 12, fontFamily: 'Inter_600SemiBold', color: C.accent },
+  card: {
+    backgroundColor: C.panel, borderRadius: 14,
+    borderWidth: 1, borderColor: C.border,
+    overflow: 'hidden',
+  },
+  empty: { alignItems: 'center', paddingVertical: 28, gap: 8 },
+  emptyText: { fontSize: 14, fontFamily: 'Inter_500Medium', color: C.textMuted },
+  emptySubText: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textDim, textAlign: 'center', paddingHorizontal: 20 },
+  entry: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, padding: 14 },
+  entryBorder: { borderTopWidth: 1, borderTopColor: C.border },
+  entryDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: C.accentGlow, marginTop: 5 },
+  entryContent: { flex: 1 },
+  entryDate: { fontSize: 11, fontFamily: 'Inter_600SemiBold', color: C.textMuted, marginBottom: 4 },
+  entryNote: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text, lineHeight: 20 },
+  deleteEntry: { padding: 4 },
+});
+
+const m = StyleSheet.create({
+  overlay: { flex: 1, justifyContent: 'flex-end' },
+  backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.6)' },
+  sheet: {
+    backgroundColor: C.panel, borderTopLeftRadius: 24, borderTopRightRadius: 24,
+    padding: 24, paddingBottom: 40,
+    borderWidth: 1, borderColor: C.border,
+  },
+  handle: { width: 40, height: 4, borderRadius: 2, backgroundColor: C.border, alignSelf: 'center', marginBottom: 20 },
+  title: { fontSize: 18, fontFamily: 'Inter_700Bold', color: C.textBright, marginBottom: 4 },
+  subtitle: { fontSize: 13, fontFamily: 'Inter_400Regular', color: C.textMuted, marginBottom: 16 },
+  input: {
+    backgroundColor: C.bg, borderRadius: 12, borderWidth: 1, borderColor: C.border,
+    padding: 14, fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text,
+    minHeight: 100, marginBottom: 6,
+  },
+  charCount: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.textDim, textAlign: 'right', marginBottom: 20 },
+  actions: { flexDirection: 'row', gap: 12 },
+  cancelBtn: {
+    flex: 1, paddingVertical: 14, borderRadius: 12,
+    backgroundColor: C.bg, alignItems: 'center',
+    borderWidth: 1, borderColor: C.border,
+  },
+  cancelText: { fontSize: 15, fontFamily: 'Inter_500Medium', color: C.textMuted },
+  saveBtn: {
+    flex: 1, paddingVertical: 14, borderRadius: 12,
+    backgroundColor: C.accent, alignItems: 'center',
+  },
+  saveBtnDisabled: { opacity: 0.4 },
+  saveText: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: '#fff' },
+});
+
 const s = StyleSheet.create({
   root: { flex: 1, backgroundColor: C.bg },
   navbar: {
@@ -274,71 +460,38 @@ const s = StyleSheet.create({
     paddingVertical: 10,
   },
   navIconBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: C.panel,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: C.border,
+    width: 40, height: 40, borderRadius: 12, backgroundColor: C.panel,
+    alignItems: 'center', justifyContent: 'center',
+    borderWidth: 1, borderColor: C.border,
   },
   backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: C.panel,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: C.border,
+    width: 40, height: 40, borderRadius: 12, backgroundColor: C.panel,
+    alignItems: 'center', justifyContent: 'center',
+    borderWidth: 1, borderColor: C.border,
   },
   navActions: { flexDirection: 'row', gap: 8 },
   deleteBtn: { borderColor: C.red + '44' },
-
   hero: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 24,
-    gap: 18,
+    flexDirection: 'row', alignItems: 'center',
+    paddingHorizontal: 20, paddingVertical: 24, gap: 18,
   },
   avatarRing: {
-    borderRadius: 999,
-    padding: 3,
-    borderWidth: 3,
-    borderColor: '#3A7EFF',
-    shadowColor: '#3A7EFF',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 10,
-    elevation: 8,
+    borderRadius: 999, padding: 3,
+    borderWidth: 3, borderColor: '#3A7EFF',
+    shadowColor: '#3A7EFF', shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6, shadowRadius: 10, elevation: 8,
   },
   heroInfo: { flex: 1, gap: 10 },
   name: { fontSize: 26, fontFamily: 'Inter_700Bold', color: C.textBright, lineHeight: 30 },
   tagRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-
-  splitRow: {
-    flexDirection: 'row',
-    marginHorizontal: 16,
-    marginBottom: 12,
-    gap: 10,
-  },
+  splitRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, gap: 10 },
   splitCard: {
-    flex: 1,
-    backgroundColor: C.panel,
-    borderRadius: 14,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: C.border,
-    gap: 6,
+    flex: 1, backgroundColor: C.panel, borderRadius: 14, padding: 14,
+    borderWidth: 1, borderColor: C.border, gap: 6,
   },
   splitLabel: {
-    fontSize: 10,
-    fontFamily: 'Inter_600SemiBold',
-    color: C.textMuted,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
+    fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted,
+    letterSpacing: 2, textTransform: 'uppercase',
   },
   bodyText: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text, lineHeight: 22 },
   meta: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textDim, textAlign: 'center' },

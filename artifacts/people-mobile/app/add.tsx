@@ -359,6 +359,7 @@ const blank: FormData = {
   quickFacts: '',
   nextMeetingTime: undefined,
   customDates: [],
+  interactions: [],
 };
 
 function avatarValueToPhotoUri(av: AvatarValue): string | undefined {
