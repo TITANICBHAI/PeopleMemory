@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "PeopleMemory",
   "resources": {
-    "hash": "sha256-Iw/CwzZDjkiMfJmpu0PhA2xG9FMMEkiN9KEe7NS+efU=",
+    "hash": "sha256-WRiOPunus9xdS285JrR6XJoszzGeml1yt4GJYBYGIyw=",
     "jsModuleNative": {
       "dotnet.native.8.0.22.te9w5f1aae.js": "sha256-vtotCeXt2UD6oc459laJT32vBgigZ+eLoUmdeFkvYDk="
     },
@@ -208,10 +208,10 @@
       "mscorlib.wasm": "sha256-K9gNrsN9UmPqLs6J/FrkiKpmkVGnHjjqUsc7YGvesCY=",
       "netstandard.wasm": "sha256-4emjlXLM9qW3t2tlII20SDylBgG4ueI0wy9nh5FMd8g=",
       "System.Private.CoreLib.wasm": "sha256-2DN4v7I/tabltDEPdIO8sDBB0tY8zOm+0CvHbMssXW4=",
-      "PeopleMemory.wasm": "sha256-d9tI2p5SHJQyj+4/UIJFPky01TTVIvDrtbGjXTKha+s="
+      "PeopleMemory.wasm": "sha256-j6r+p6NzMoGD6m1ZvFldl2Rnrir18c250EgrecHJI2E="
     },
     "pdb": {
-      "PeopleMemory.pdb": "sha256-dza0/cUnRuvGyHyIJ1bExHoIdImcNm/x78RH0N+/GKs="
+      "PeopleMemory.pdb": "sha256-e9lbpKz4Xv+py4osjivziTR5kf4gTtRcll+Yo5HhzLI="
     }
   },
   "cacheBootResources": true,
