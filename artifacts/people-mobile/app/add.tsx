@@ -15,6 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AvatarPicker, AvatarValue } from '@/components/AvatarPicker';
+import { ContactNameField } from '@/components/ContactNameField';
 import C from '@/constants/colors';
 import { Person, PersonDate, useApp } from '@/context/AppContext';
 import { scheduleNextMeetingNotification } from '@/utils/notifications';
@@ -349,6 +350,7 @@ type FormData = Omit<Person, 'id' | 'createdAt' | 'updatedAt'>;
 
 const blank: FormData = {
   name: '',
+  phone: undefined,
   photoUri: undefined,
   tags: [],
   trustLevel: null,
@@ -431,12 +433,33 @@ export default function AddScreen() {
           onChange={av => set('photoUri', avatarValueToPhotoUri(av))}
         />
 
-        <Field
-          label="Name *"
-          value={form.name}
-          onChange={v => set('name', v)}
-          placeholder="Full name…"
-        />
+        <View style={{ marginBottom: 18 }}>
+          <Text style={fl.text}>Name *</Text>
+          <ContactNameField
+            value={form.name}
+            onChange={v => set('name', v)}
+            onFill={data => {
+              setForm(f => ({
+                ...f,
+                name: data.name,
+                phone: data.phone ?? f.phone,
+                birthday: data.birthday ?? f.birthday,
+              }));
+            }}
+          />
+        </View>
+
+        <View style={{ marginBottom: 18 }}>
+          <Text style={fl.text}>Phone</Text>
+          <TextInput
+            style={f.input}
+            value={form.phone ?? ''}
+            onChangeText={v => set('phone', v || undefined)}
+            placeholder="Mobile number…"
+            placeholderTextColor={C.textDim}
+            keyboardType="phone-pad"
+          />
+        </View>
 
         <TagsEditor
           tags={form.tags}

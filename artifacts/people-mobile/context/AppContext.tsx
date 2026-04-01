@@ -28,6 +28,7 @@ export interface Interaction {
 export interface Person {
   id: string;
   name: string;
+  phone?: string;
   photoUri?: string;
   tags: string[];
   trustLevel: number | null;

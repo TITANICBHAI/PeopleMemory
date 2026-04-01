@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
+  Linking,
   Modal,
   Platform,
   Pressable,
@@ -213,6 +214,21 @@ export default function ProfileScreen() {
           </View>
           <View style={s.heroInfo}>
             <Text style={s.name}>{person.name}</Text>
+            {person.phone ? (
+              <Pressable
+                style={s.phoneRow}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  Linking.openURL(`tel:${person.phone}`);
+                }}
+              >
+                <Feather name="phone" size={13} color={C.green} />
+                <Text style={s.phoneText}>{person.phone}</Text>
+                <View style={s.callBadge}>
+                  <Text style={s.callBadgeText}>Call</Text>
+                </View>
+              </Pressable>
+            ) : null}
             {person.tags.length > 0 && (
               <View style={s.tagRow}>
                 {person.tags.map(t => <TagChip key={t} tag={t} />)}
@@ -484,6 +500,10 @@ const s = StyleSheet.create({
   heroInfo: { flex: 1, gap: 10 },
   name: { fontSize: 26, fontFamily: 'Inter_700Bold', color: C.textBright, lineHeight: 30 },
   tagRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
+  phoneRow: { flexDirection: 'row', alignItems: 'center', gap: 7, marginBottom: 6, marginTop: 2 },
+  phoneText: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.textBright },
+  callBadge: { backgroundColor: C.green + '22', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2, borderWidth: 1, borderColor: C.green + '55' },
+  callBadgeText: { fontSize: 11, fontFamily: 'Inter_600SemiBold', color: C.green },
   splitRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, gap: 10 },
   splitCard: {
     flex: 1, backgroundColor: C.panel, borderRadius: 14, padding: 14,

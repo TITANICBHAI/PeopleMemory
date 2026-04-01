@@ -17,6 +17,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AvatarPicker, AvatarValue } from '@/components/AvatarPicker';
+import { ContactNameField } from '@/components/ContactNameField';
 import C from '@/constants/colors';
 import { Person, PersonDate, useApp } from '@/context/AppContext';
 import {
@@ -695,7 +696,34 @@ export default function EditScreen() {
           name={form.name}
           onChange={av => set('photoUri', avatarValueToPhotoUri(av))}
         />
-        <Field label="Name *" value={form.name} onChange={v => set('name', v)} placeholder="Full name…" />
+        <View style={{ marginBottom: 18 }}>
+          <Text style={fl.text}>Name *</Text>
+          <ContactNameField
+            value={form.name}
+            onChange={v => set('name', v)}
+            onFill={data => {
+              setForm(f => f ? ({
+                ...f,
+                name: data.name,
+                phone: data.phone ?? f.phone,
+                birthday: data.birthday ?? f.birthday,
+              }) : f);
+            }}
+          />
+        </View>
+
+        <View style={{ marginBottom: 18 }}>
+          <Text style={fl.text}>Phone</Text>
+          <TextInput
+            style={fi.input}
+            value={form.phone ?? ''}
+            onChangeText={v => set('phone', v || undefined)}
+            placeholder="Mobile number…"
+            placeholderTextColor={C.textDim}
+            keyboardType="phone-pad"
+          />
+        </View>
+
         <TagsEditor
           tags={form.tags}
           onAdd={t => !form.tags.includes(t) && set('tags', [...form.tags, t])}
