@@ -48,21 +48,22 @@ function FieldLabel({ text }: { text: string }) {
   return <Text style={[fl.text, { color: C.textMuted }]}>{text}</Text>;
 }
 const fl = StyleSheet.create({
-  text: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 },
+  text: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 },
 });
 
 function Field({ label, value, onChange, multiline, placeholder, hint }: {
   label: string; value: string; onChange: (v: string) => void;
   multiline?: boolean; placeholder?: string; hint?: string;
 }) {
+  const C = useColors();
   return (
     <View style={fi.wrap}>
       <View style={fi.labelRow}>
         <FieldLabel text={label} />
-        {hint ? <Text style={fi.hint}>{hint}</Text> : null}
+        {hint ? <Text style={[fi.hint, { color: C.textDim }]}>{hint}</Text> : null}
       </View>
       <TextInput
-        style={[fi.input, multiline && fi.multi]}
+        style={[fi.input, multiline && fi.multi, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]}
         value={value}
         onChangeText={onChange}
         placeholder={placeholder}
@@ -76,12 +77,8 @@ function Field({ label, value, onChange, multiline, placeholder, hint }: {
 const fi = StyleSheet.create({
   wrap: { marginBottom: 18 },
   labelRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 },
-  hint: { fontSize: 10, fontFamily: 'Inter_400Regular', color: C.textDim },
-  input: {
-    backgroundColor: C.panel, borderRadius: 12, borderWidth: 1, borderColor: C.border,
-    color: C.text, fontSize: 15, fontFamily: 'Inter_400Regular',
-    paddingHorizontal: 14, paddingVertical: 12, height: 48,
-  },
+  hint: { fontSize: 10, fontFamily: 'Inter_400Regular' },
+  input: { borderRadius: 12, borderWidth: 1, fontSize: 15, fontFamily: 'Inter_400Regular', paddingHorizontal: 14, paddingVertical: 12, height: 48 },
   multi: { height: 80, lineHeight: 20 },
 });
 
@@ -105,6 +102,7 @@ function DatePickerField({ label, value, onChange, hint, rightSlot }: {
   hint?: string;
   rightSlot?: React.ReactNode;
 }) {
+  const C = useColors();
   const [show, setShow] = useState(false);
   const dateObj = value ? new Date(value + 'T00:00:00') : new Date();
 
@@ -129,8 +127,8 @@ function DatePickerField({ label, value, onChange, hint, rightSlot }: {
         </View>
       </View>
 
-      <View style={dpf.inputRow}>
-        <Text style={[dpf.valueText, !value && dpf.valuePlaceholder]} numberOfLines={1}>
+      <View style={[dpf.inputRow, { backgroundColor: C.panel, borderColor: C.border }]}>
+        <Text style={[dpf.valueText, { color: !value ? C.textDim : C.text }]} numberOfLines={1}>
           {value ? formatDateDisplay(value) : 'Not set'}
         </Text>
         <View style={dpf.inputActions}>
@@ -143,7 +141,7 @@ function DatePickerField({ label, value, onChange, hint, rightSlot }: {
               <Feather name="x" size={13} color={C.textMuted} />
             </Pressable>
           ) : null}
-          <Pressable style={dpf.calBtn} onPress={openPicker} hitSlop={4}>
+          <Pressable style={[dpf.calBtn, { borderLeftColor: C.border, backgroundColor: C.panelHigh }]} onPress={openPicker} hitSlop={4}>
             <Feather name="calendar" size={16} color={C.accent} />
           </Pressable>
         </View>
@@ -152,14 +150,14 @@ function DatePickerField({ label, value, onChange, hint, rightSlot }: {
       {show && Platform.OS === 'ios' && (
         <Modal transparent animationType="slide" visible={show} onRequestClose={() => setShow(false)}>
           <Pressable style={dpf.overlay} onPress={() => setShow(false)} />
-          <View style={dpf.sheet}>
+          <View style={[dpf.sheet, { backgroundColor: C.panel }]}>
             <View style={dpf.sheetHeader}>
               <Pressable onPress={() => { onChange(undefined); setShow(false); }}>
-                <Text style={dpf.sheetClear}>Clear</Text>
+                <Text style={[dpf.sheetClear, { color: C.red }]}>Clear</Text>
               </Pressable>
-              <Text style={dpf.sheetTitle}>{label}</Text>
+              <Text style={[dpf.sheetTitle, { color: C.text }]}>{label}</Text>
               <Pressable onPress={() => setShow(false)}>
-                <Text style={dpf.sheetDone}>Done</Text>
+                <Text style={[dpf.sheetDone, { color: C.accent }]}>Done</Text>
               </Pressable>
             </View>
             <DateTimePicker
@@ -190,43 +188,21 @@ const dpf = StyleSheet.create({
   wrap: { marginBottom: 18 },
   labelRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 },
   labelRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  inputRow: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: C.panel, borderRadius: 12, borderWidth: 1, borderColor: C.border,
-    paddingLeft: 14, height: 48, overflow: 'hidden',
-  },
-  valueText: { flex: 1, fontSize: 15, fontFamily: 'Inter_400Regular', color: C.text },
-  valuePlaceholder: { color: C.textDim },
+  inputRow: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, borderWidth: 1, paddingLeft: 14, height: 48, overflow: 'hidden' },
+  valueText: { flex: 1, fontSize: 15, fontFamily: 'Inter_400Regular' },
   inputActions: { flexDirection: 'row', alignItems: 'center', gap: 0 },
-  clearBtn: {
-    width: 36, height: 48, alignItems: 'center', justifyContent: 'center',
-  },
-  calBtn: {
-    width: 48, height: 48, alignItems: 'center', justifyContent: 'center',
-    borderLeftWidth: 1, borderLeftColor: C.border,
-    backgroundColor: C.panelHigh,
-  },
+  clearBtn: { width: 36, height: 48, alignItems: 'center', justifyContent: 'center' },
+  calBtn: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center', borderLeftWidth: 1 },
   overlay: { flex: 1, backgroundColor: '#00000066' },
-  sheet: {
-    backgroundColor: C.panel,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingBottom: 32,
-  },
-  sheetHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 8,
-  },
-  sheetTitle: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: C.text },
-  sheetClear: { fontSize: 15, fontFamily: 'Inter_400Regular', color: C.red, minWidth: 48 },
-  sheetDone: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: C.accent, minWidth: 48, textAlign: 'right' },
+  sheet: { borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingBottom: 32 },
+  sheetHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 16, paddingBottom: 8 },
+  sheetTitle: { fontSize: 15, fontFamily: 'Inter_600SemiBold' },
+  sheetClear: { fontSize: 15, fontFamily: 'Inter_400Regular', minWidth: 48 },
+  sheetDone: { fontSize: 15, fontFamily: 'Inter_600SemiBold', minWidth: 48, textAlign: 'right' },
 });
 
 function TagsEditor({ tags, onAdd, onRemove }: { tags: string[]; onAdd: (t: string) => void; onRemove: (t: string) => void }) {
+  const C = useColors();
   const [custom, setCustom] = useState('');
   return (
     <View style={te.wrap}>
@@ -237,10 +213,10 @@ function TagsEditor({ tags, onAdd, onRemove }: { tags: string[]; onAdd: (t: stri
           return (
             <Pressable
               key={t}
-              style={[te.preset, active && te.presetActive]}
+              style={[te.preset, { backgroundColor: C.panel, borderColor: C.border }, active && { backgroundColor: C.accent + '22', borderColor: C.accent }]}
               onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); active ? onRemove(t) : onAdd(t); }}
             >
-              <Text style={[te.presetText, active && te.presetTextActive]}>{t}</Text>
+              <Text style={[te.presetText, { color: active ? C.accent : C.textMuted }]}>{t}</Text>
             </Pressable>
           );
         })}
@@ -248,8 +224,8 @@ function TagsEditor({ tags, onAdd, onRemove }: { tags: string[]; onAdd: (t: stri
       {tags.filter(t => !PRESET_TAGS.includes(t)).length > 0 && (
         <View style={te.customs}>
           {tags.filter(t => !PRESET_TAGS.includes(t)).map(t => (
-            <Pressable key={t} style={te.customTag} onPress={() => onRemove(t)}>
-              <Text style={te.customTagText}>{t}</Text>
+            <Pressable key={t} style={[te.customTag, { backgroundColor: C.panelHigh, borderColor: C.border }]} onPress={() => onRemove(t)}>
+              <Text style={[te.customTagText, { color: C.text }]}>{t}</Text>
               <Feather name="x" size={12} color={C.textMuted} />
             </Pressable>
           ))}
@@ -257,7 +233,7 @@ function TagsEditor({ tags, onAdd, onRemove }: { tags: string[]; onAdd: (t: stri
       )}
       <View style={te.addRow}>
         <TextInput
-          style={te.input}
+          style={[te.input, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]}
           value={custom}
           onChangeText={setCustom}
           placeholder="Custom tag…"
@@ -265,7 +241,7 @@ function TagsEditor({ tags, onAdd, onRemove }: { tags: string[]; onAdd: (t: stri
           returnKeyType="done"
           onSubmitEditing={() => { if (custom.trim()) { onAdd(custom.trim()); setCustom(''); } }}
         />
-        <Pressable style={te.addBtn} onPress={() => { if (custom.trim()) { onAdd(custom.trim()); setCustom(''); } }}>
+        <Pressable style={[te.addBtn, { backgroundColor: C.panel, borderColor: C.border }]} onPress={() => { if (custom.trim()) { onAdd(custom.trim()); setCustom(''); } }}>
           <Feather name="plus" size={18} color={C.accent} />
         </Pressable>
       </View>
@@ -275,19 +251,18 @@ function TagsEditor({ tags, onAdd, onRemove }: { tags: string[]; onAdd: (t: stri
 const te = StyleSheet.create({
   wrap: { marginBottom: 18 },
   presets: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8 },
-  preset: { borderRadius: 20, paddingHorizontal: 14, paddingVertical: 8, backgroundColor: C.panel, borderWidth: 1, borderColor: C.border },
-  presetActive: { backgroundColor: C.accent + '22', borderColor: C.accent },
-  presetText: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.textMuted },
-  presetTextActive: { color: C.accent },
+  preset: { borderRadius: 20, paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1 },
+  presetText: { fontSize: 13, fontFamily: 'Inter_500Medium' },
   customs: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 8 },
-  customTag: { flexDirection: 'row', alignItems: 'center', gap: 5, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6, backgroundColor: C.panelHigh, borderWidth: 1, borderColor: C.border },
-  customTagText: { fontSize: 12, fontFamily: 'Inter_500Medium', color: C.text },
+  customTag: { flexDirection: 'row', alignItems: 'center', gap: 5, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6, borderWidth: 1 },
+  customTagText: { fontSize: 12, fontFamily: 'Inter_500Medium' },
   addRow: { flexDirection: 'row', gap: 8, alignItems: 'center' },
-  input: { flex: 1, backgroundColor: C.panel, borderRadius: 12, borderWidth: 1, borderColor: C.border, color: C.text, fontSize: 14, fontFamily: 'Inter_400Regular', paddingHorizontal: 14, height: 44 },
-  addBtn: { width: 44, height: 44, borderRadius: 12, backgroundColor: C.panel, borderWidth: 1, borderColor: C.border, alignItems: 'center', justifyContent: 'center' },
+  input: { flex: 1, borderRadius: 12, borderWidth: 1, fontSize: 14, fontFamily: 'Inter_400Regular', paddingHorizontal: 14, height: 44 },
+  addBtn: { width: 44, height: 44, borderRadius: 12, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
 });
 
 function TrustSlider({ value, onChange }: { value: number | null; onChange: (v: number | null) => void }) {
+  const C = useColors();
   const active = value !== null;
   const num = value ?? 5;
   const color = num <= 3 ? C.red : num <= 6 ? C.yellow : C.green;
@@ -296,10 +271,10 @@ function TrustSlider({ value, onChange }: { value: number | null; onChange: (v: 
       <View style={ts.header}>
         <FieldLabel text={active ? `Trust Level — ${num}/10` : 'Trust Level'} />
         <Pressable
-          style={[ts.naBtn, !active && ts.naBtnOn]}
+          style={[ts.naBtn, { borderColor: C.border, backgroundColor: C.panel }, !active && { borderColor: C.accent, backgroundColor: C.accent + '22' }]}
           onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onChange(active ? null : 5); }}
         >
-          <Text style={[ts.naBtnText, !active && ts.naBtnTextOn]}>N/A</Text>
+          <Text style={[ts.naBtnText, { color: active ? C.textMuted : C.accent }]}>N/A</Text>
         </Pressable>
       </View>
       {active && (
@@ -314,9 +289,9 @@ function TrustSlider({ value, onChange }: { value: number | null; onChange: (v: 
             ))}
           </View>
           <View style={ts.labels}>
-            <Text style={ts.labelText}>No trust</Text>
+            <Text style={[ts.labelText, { color: C.textDim }]}>No trust</Text>
             <Text style={[ts.levelText, { color }]}>{num <= 3 ? 'Low' : num <= 6 ? 'Moderate' : 'High'}</Text>
-            <Text style={ts.labelText}>Full trust</Text>
+            <Text style={[ts.labelText, { color: C.textDim }]}>Full trust</Text>
           </View>
         </>
       )}
@@ -326,25 +301,24 @@ function TrustSlider({ value, onChange }: { value: number | null; onChange: (v: 
 const ts = StyleSheet.create({
   wrap: { marginBottom: 18 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
-  naBtn: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, borderWidth: 1, borderColor: C.border, backgroundColor: C.panel },
-  naBtnOn: { borderColor: C.accent, backgroundColor: C.accent + '22' },
-  naBtnText: { fontSize: 11, fontFamily: 'Inter_600SemiBold', color: C.textMuted },
-  naBtnTextOn: { color: C.accent },
+  naBtn: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, borderWidth: 1 },
+  naBtnText: { fontSize: 11, fontFamily: 'Inter_600SemiBold' },
   track: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 2, height: 36 },
   pip: { width: 12, height: 12, borderRadius: 6 },
   labels: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 },
-  labelText: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.textDim },
+  labelText: { fontSize: 11, fontFamily: 'Inter_400Regular' },
   levelText: { fontSize: 12, fontFamily: 'Inter_600SemiBold' },
 });
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 9); }
 
 function TimeInput({ value, onChange, placeholder }: { value?: string; onChange: (v?: string) => void; placeholder?: string }) {
+  const C = useColors();
   return (
-    <View style={ds.timeRow}>
+    <View style={[ds.timeRow, { backgroundColor: C.panel, borderColor: C.border }]}>
       <Feather name="clock" size={14} color={C.textDim} />
       <TextInput
-        style={ds.timeInput}
+        style={[ds.timeInput, { color: C.text }]}
         value={value ?? ''}
         onChangeText={v => onChange(v || undefined)}
         placeholder={placeholder ?? 'HH:MM'}
@@ -366,6 +340,7 @@ function DatesSection({
   onLastMet: (v?: string) => void; onNextMeeting: (v?: string) => void;
   onNextMeetingTime: (v?: string) => void; onCustomDates: (d: PersonDate[]) => void;
 }) {
+  const C = useColors();
   const [open, setOpen] = useState(false);
   const [newLabel, setNewLabel] = useState('');
   const [newCustomDate, setNewCustomDate] = useState<string | undefined>();
@@ -391,13 +366,13 @@ function DatesSection({
   return (
     <View style={ds.wrap}>
       <Pressable
-        style={ds.header}
+        style={[ds.header, { backgroundColor: C.panel, borderColor: C.border }]}
         onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setOpen(o => !o); }}
       >
         <View style={ds.headerLeft}>
           <Feather name="calendar" size={15} color={C.accent} />
-          <Text style={ds.headerText}>Dates & Meetings</Text>
-          {hasDates && <View style={ds.dot} />}
+          <Text style={[ds.headerText, { color: C.text }]}>Dates & Meetings</Text>
+          {hasDates && <View style={[ds.dot, { backgroundColor: C.accent }]} />}
         </View>
         <Feather name={open ? 'chevron-up' : 'chevron-down'} size={18} color={C.textMuted} />
       </Pressable>
@@ -419,7 +394,7 @@ function DatesSection({
               />
               <View style={[ds.notifHint, { marginTop: -10, marginBottom: 14 }]}>
                 <Feather name="bell" size={12} color={C.green} />
-                <Text style={ds.notifHintText}>
+                <Text style={[ds.notifHintText, { color: C.green }]}>
                   {birthdayReminderTime ? `Birthday reminder set at ${birthdayReminderTime}` : 'Reminder at 9:00 AM — set a time to change'}
                 </Text>
               </View>
@@ -446,7 +421,7 @@ function DatesSection({
             {nextMeeting && nextMeetingTime ? (
               <View style={ds.notifHint}>
                 <Feather name="bell" size={12} color={C.green} />
-                <Text style={ds.notifHintText}>Reminder will be set for this meeting</Text>
+                <Text style={[ds.notifHintText, { color: C.green }]}>Reminder will be set for this meeting</Text>
               </View>
             ) : nextMeeting ? (
               <View style={ds.notifHint}>
@@ -459,14 +434,14 @@ function DatesSection({
           <FieldLabel text="Custom Events" />
           {customDates.map(d => (
             <View key={d.id}>
-              <View style={ds.item}>
+              <View style={[ds.item, { backgroundColor: C.panel, borderColor: C.border }]}>
                 <View style={ds.itemText}>
-                  <Text style={ds.itemLabel}>{d.label}</Text>
-                  <Text style={ds.itemDate}>{formatDateDisplay(d.date)}</Text>
+                  <Text style={[ds.itemLabel, { color: C.text }]}>{d.label}</Text>
+                  <Text style={[ds.itemDate, { color: C.textMuted }]}>{formatDateDisplay(d.date)}</Text>
                 </View>
                 <View style={ds.itemActions}>
                   <Pressable
-                    style={[ds.bellBtn, d.reminder && ds.bellBtnOn]}
+                    style={[ds.bellBtn, { backgroundColor: C.panel, borderColor: C.border }, d.reminder && { borderColor: C.accent, backgroundColor: C.accent + '22' }]}
                     onPress={() => {
                       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                       onCustomDates(customDates.map(x => x.id === d.id
@@ -494,30 +469,30 @@ function DatesSection({
 
           <View style={ds.addCustomWrap}>
             <TextInput
-              style={[ds.smallInput, { flex: 1 }]}
+              style={[ds.smallInput, { flex: 1, backgroundColor: C.panel, borderColor: C.border, color: C.text }]}
               value={newLabel}
               onChangeText={setNewLabel}
               placeholder="Event name…"
               placeholderTextColor={C.textDim}
             />
             <Pressable
-              style={[ds.datePickBtn, newCustomDate && ds.datePickBtnSet]}
+              style={[ds.datePickBtn, { backgroundColor: C.panel, borderColor: newCustomDate ? C.accent : C.border }]}
               onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setShowCustomPicker(true); }}
             >
               <Feather name="calendar" size={14} color={newCustomDate ? C.accent : C.textDim} />
-              <Text style={[ds.datePickBtnText, !newCustomDate && { color: C.textDim }]}>
+              <Text style={[ds.datePickBtnText, { color: newCustomDate ? C.accent : C.textDim }]}>
                 {newCustomDate ? newCustomDate : 'Date'}
               </Text>
             </Pressable>
             <Pressable
-              style={[ds.bellBtn, newReminder && ds.bellBtnOn]}
+              style={[ds.bellBtn, { backgroundColor: C.panel, borderColor: C.border }, newReminder && { borderColor: C.accent, backgroundColor: C.accent + '22' }]}
               onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setNewReminder(r => !r); if (newReminder) setNewReminderTime(undefined); }}
               hitSlop={6}
             >
               <Feather name={newReminder ? 'bell' : 'bell-off'} size={15} color={newReminder ? C.accent : C.textDim} />
             </Pressable>
             <Pressable
-              style={[ds.addBtn, !(newLabel.trim() && newCustomDate) && { opacity: 0.4 }]}
+              style={[ds.addBtn, { backgroundColor: C.panel, borderColor: C.border }, !(newLabel.trim() && newCustomDate) && { opacity: 0.4 }]}
               onPress={handleAddCustom}
               disabled={!(newLabel.trim() && newCustomDate)}
             >
@@ -571,45 +546,27 @@ function DatesSection({
 
 const ds = StyleSheet.create({
   wrap: { marginBottom: 18 },
-  header: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    backgroundColor: C.panel, borderRadius: 12, padding: 14,
-    borderWidth: 1, borderColor: C.border,
-  },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 12, padding: 14, borderWidth: 1 },
   headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  headerText: { fontSize: 14, fontFamily: 'Inter_500Medium', color: C.text },
-  dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: C.accent },
+  headerText: { fontSize: 14, fontFamily: 'Inter_500Medium' },
+  dot: { width: 7, height: 7, borderRadius: 4 },
   body: { marginTop: 10, gap: 0 },
   nextMeetWrap: { marginBottom: 18 },
-  timeRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: C.panel, borderRadius: 12, borderWidth: 1, borderColor: C.border,
-    paddingHorizontal: 14, height: 44, marginTop: -8, marginBottom: 6,
-  },
-  timeInput: { flex: 1, color: C.text, fontSize: 14, fontFamily: 'Inter_400Regular' },
+  timeRow: { flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, height: 44, marginTop: -8, marginBottom: 6 },
+  timeInput: { flex: 1, fontSize: 14, fontFamily: 'Inter_400Regular' },
   notifHint: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4 },
-  notifHintText: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.green },
-  item: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    backgroundColor: C.panel, borderRadius: 10, padding: 12, marginBottom: 6,
-    borderWidth: 1, borderColor: C.border,
-  },
+  notifHintText: { fontSize: 11, fontFamily: 'Inter_400Regular' },
+  item: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 10, padding: 12, marginBottom: 6, borderWidth: 1 },
   itemText: { gap: 2 },
-  itemLabel: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.text },
-  itemDate: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.textMuted },
+  itemLabel: { fontSize: 13, fontFamily: 'Inter_500Medium' },
+  itemDate: { fontSize: 11, fontFamily: 'Inter_400Regular' },
   addCustomWrap: { flexDirection: 'row', gap: 8, alignItems: 'center', marginTop: 6 },
-  smallInput: { backgroundColor: C.panel, borderRadius: 12, borderWidth: 1, borderColor: C.border, color: C.text, fontSize: 13, fontFamily: 'Inter_400Regular', paddingHorizontal: 12, height: 44 },
-  datePickBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: C.panel, borderRadius: 12, borderWidth: 1, borderColor: C.border,
-    paddingHorizontal: 10, height: 44,
-  },
-  datePickBtnSet: { borderColor: C.accent },
-  datePickBtnText: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.accent },
-  addBtn: { width: 44, height: 44, borderRadius: 12, backgroundColor: C.panel, borderWidth: 1, borderColor: C.border, alignItems: 'center', justifyContent: 'center' },
+  smallInput: { borderRadius: 12, borderWidth: 1, fontSize: 13, fontFamily: 'Inter_400Regular', paddingHorizontal: 12, height: 44 },
+  datePickBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, borderRadius: 12, borderWidth: 1, paddingHorizontal: 10, height: 44 },
+  datePickBtnText: { fontSize: 12, fontFamily: 'Inter_400Regular' },
+  addBtn: { width: 44, height: 44, borderRadius: 12, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   itemActions: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  bellBtn: { width: 32, height: 32, borderRadius: 8, alignItems: 'center', justifyContent: 'center', backgroundColor: C.panel, borderWidth: 1, borderColor: C.border },
-  bellBtnOn: { borderColor: C.accent, backgroundColor: C.accent + '22' },
+  bellBtn: { width: 32, height: 32, borderRadius: 8, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
 });
 
 export default function EditScreen() {
@@ -699,7 +656,7 @@ export default function EditScreen() {
           onChange={av => set('photoUri', avatarValueToPhotoUri(av))}
         />
         <View style={{ marginBottom: 18 }}>
-          <Text style={fl.text}>Name *</Text>
+          <Text style={[fl.text, { color: C.textMuted }]}>Name *</Text>
           <ContactNameField
             value={form.name}
             onChange={v => set('name', v)}
@@ -715,9 +672,9 @@ export default function EditScreen() {
         </View>
 
         <View style={{ marginBottom: 18 }}>
-          <Text style={fl.text}>Phone</Text>
+          <Text style={[fl.text, { color: C.textMuted }]}>Phone</Text>
           <TextInput
-            style={fi.input}
+            style={[fi.input, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]}
             value={form.phone ?? ''}
             onChangeText={v => set('phone', v || undefined)}
             placeholder="Mobile number…"
@@ -762,13 +719,12 @@ export default function EditScreen() {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg },
-  navbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: C.border },
-  closeBtn: { width: 40, height: 40, borderRadius: 12, backgroundColor: C.panel, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: C.border },
-  title: { fontSize: 12, fontFamily: 'Inter_700Bold', color: C.textMuted, letterSpacing: 3 },
-  saveBtn: { backgroundColor: C.accent, borderRadius: 10, paddingHorizontal: 18, paddingVertical: 9 },
-  saveBtnDisabled: { backgroundColor: C.border },
-  saveBtnText: { fontSize: 14, fontFamily: 'Inter_600SemiBold', color: C.textBright },
-  divider: { borderBottomWidth: 1, borderBottomColor: C.border, marginBottom: 18, paddingBottom: 8 },
-  dividerText: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2 },
+  root: { flex: 1 },
+  navbar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1 },
+  closeBtn: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
+  title: { fontSize: 12, fontFamily: 'Inter_700Bold', letterSpacing: 3 },
+  saveBtn: { borderRadius: 10, paddingHorizontal: 18, paddingVertical: 9 },
+  saveBtnText: { fontSize: 14, fontFamily: 'Inter_600SemiBold' },
+  divider: { borderBottomWidth: 1, marginBottom: 18, paddingBottom: 8 },
+  dividerText: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2 },
 });

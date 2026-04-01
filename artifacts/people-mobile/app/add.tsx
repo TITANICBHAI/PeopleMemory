@@ -30,7 +30,6 @@ const fl = StyleSheet.create({
   text: {
     fontSize: 10,
     fontFamily: 'Inter_600SemiBold',
-    color: C.textMuted,
     letterSpacing: 2,
     textTransform: 'uppercase',
     marginBottom: 6,
@@ -60,11 +59,8 @@ function Field({ label, value, onChange, multiline, placeholder }: {
 const f = StyleSheet.create({
   wrap: { marginBottom: 18 },
   input: {
-    backgroundColor: C.panel,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: C.border,
-    color: C.text,
     fontSize: 15,
     fontFamily: 'Inter_400Regular',
     paddingHorizontal: 14,
@@ -134,57 +130,14 @@ function TagsEditor({
 const te = StyleSheet.create({
   wrap: { marginBottom: 18 },
   presets: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8 },
-  preset: {
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    backgroundColor: C.panel,
-    borderWidth: 1,
-    borderColor: C.border,
-  },
-  presetActive: { backgroundColor: C.accent + '22', borderColor: C.accent },
-  presetText: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.textMuted },
-  presetTextActive: { color: C.accent },
+  preset: { borderRadius: 20, paddingHorizontal: 14, paddingVertical: 8, borderWidth: 1 },
+  presetText: { fontSize: 13, fontFamily: 'Inter_500Medium' },
   customs: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 8 },
-  customTag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    backgroundColor: C.panelHigh,
-    borderWidth: 1,
-    borderColor: C.border,
-  },
-  customTagText: { fontSize: 12, fontFamily: 'Inter_500Medium', color: C.text },
-  addRow: {
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    backgroundColor: C.panel,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: C.border,
-    color: C.text,
-    fontSize: 14,
-    fontFamily: 'Inter_400Regular',
-    paddingHorizontal: 14,
-    height: 44,
-  },
-  addBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    backgroundColor: C.panel,
-    borderWidth: 1,
-    borderColor: C.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  customTag: { flexDirection: 'row', alignItems: 'center', gap: 5, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6, borderWidth: 1 },
+  customTagText: { fontSize: 12, fontFamily: 'Inter_500Medium' },
+  addRow: { flexDirection: 'row', gap: 8, alignItems: 'center' },
+  input: { flex: 1, borderRadius: 12, borderWidth: 1, fontSize: 14, fontFamily: 'Inter_400Regular', paddingHorizontal: 14, height: 44 },
+  addBtn: { width: 44, height: 44, borderRadius: 12, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
 });
 
 function TrustSlider({ value, onChange }: { value: number | null; onChange: (v: number | null) => void }) {
@@ -227,14 +180,12 @@ function TrustSlider({ value, onChange }: { value: number | null; onChange: (v: 
 const ts = StyleSheet.create({
   wrap: { marginBottom: 18 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
-  naBtn: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, borderWidth: 1, borderColor: C.border, backgroundColor: C.panel },
-  naBtnOn: { borderColor: C.accent, backgroundColor: C.accent + '22' },
-  naBtnText: { fontSize: 11, fontFamily: 'Inter_600SemiBold', color: C.textMuted },
-  naBtnTextOn: { color: C.accent },
+  naBtn: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, borderWidth: 1 },
+  naBtnText: { fontSize: 11, fontFamily: 'Inter_600SemiBold' },
   track: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 2, height: 36 },
   pip: { width: 12, height: 12, borderRadius: 6 },
   labels: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 },
-  labelText: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.textDim },
+  labelText: { fontSize: 11, fontFamily: 'Inter_400Regular' },
   levelText: { fontSize: 12, fontFamily: 'Inter_600SemiBold' },
 });
 
@@ -286,17 +237,17 @@ function DatesSection({
           </View>
 
           <View style={ds.nextMeetWrap}>
-            <Text style={ds.dateLabel}>NEXT MEETING</Text>
+            <Text style={[ds.dateLabel, { color: C.textMuted }]}>NEXT MEETING</Text>
             <View style={ds.nextMeetRow}>
-              <TextInput style={[ds.dateInput, { flex: 1 }]} value={nextMeeting ?? ''} onChangeText={v => onNextMeeting(v || undefined)} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
+              <TextInput style={[ds.dateInput, { flex: 1, backgroundColor: C.panel, borderColor: C.border, color: C.text }]} value={nextMeeting ?? ''} onChangeText={v => onNextMeeting(v || undefined)} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
               {nextMeeting ? (
-                <TextInput style={[ds.dateInput, { width: 110 }]} value={nextMeetingTime ?? ''} onChangeText={v => onNextMeetingTime(v || undefined)} placeholder="HH:MM" placeholderTextColor={C.textDim} keyboardType="numbers-and-punctuation" />
+                <TextInput style={[ds.dateInput, { width: 110, backgroundColor: C.panel, borderColor: C.border, color: C.text }]} value={nextMeetingTime ?? ''} onChangeText={v => onNextMeetingTime(v || undefined)} placeholder="HH:MM" placeholderTextColor={C.textDim} keyboardType="numbers-and-punctuation" />
               ) : null}
             </View>
             {nextMeeting && nextMeetingTime ? (
               <View style={ds.notifHint}>
                 <Feather name="bell" size={12} color={C.green} />
-                <Text style={ds.notifHintText}>Reminder will be set for this meeting</Text>
+                <Text style={[ds.notifHintText, { color: C.green }]}>Reminder will be set for this meeting</Text>
               </View>
             ) : nextMeeting ? (
               <View style={ds.notifHint}>
@@ -306,12 +257,12 @@ function DatesSection({
             ) : null}
           </View>
 
-          <Text style={ds.dateLabel}>CUSTOM EVENTS</Text>
+          <Text style={[ds.dateLabel, { color: C.textMuted }]}>CUSTOM EVENTS</Text>
           {customDates.map(d => (
-            <View key={d.id} style={ds.item}>
+            <View key={d.id} style={[ds.item, { backgroundColor: C.panel, borderColor: C.border }]}>
               <View>
-                <Text style={ds.itemLabel}>{d.label}</Text>
-                <Text style={ds.itemDate}>{d.date}</Text>
+                <Text style={[ds.itemLabel, { color: C.text }]}>{d.label}</Text>
+                <Text style={[ds.itemDate, { color: C.textMuted }]}>{d.date}</Text>
               </View>
               <Pressable onPress={() => onCustomDates(customDates.filter(x => x.id !== d.id))}>
                 <Feather name="x" size={16} color={C.red} />
@@ -319,9 +270,9 @@ function DatesSection({
             </View>
           ))}
           <View style={ds.addRow}>
-            <TextInput style={[ds.dateInput, { flex: 1 }]} value={newLabel} onChangeText={setNewLabel} placeholder="Event name…" placeholderTextColor={C.textDim} />
-            <TextInput style={[ds.dateInput, { width: 120 }]} value={newDate} onChangeText={setNewDate} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
-            <Pressable style={ds.addBtn} onPress={() => { if (newLabel.trim() && newDate.trim()) { onCustomDates([...customDates, { id: uid(), label: newLabel.trim(), date: newDate.trim() }]); setNewLabel(''); setNewDate(''); } }}>
+            <TextInput style={[ds.dateInput, { flex: 1, backgroundColor: C.panel, borderColor: C.border, color: C.text }]} value={newLabel} onChangeText={setNewLabel} placeholder="Event name…" placeholderTextColor={C.textDim} />
+            <TextInput style={[ds.dateInput, { width: 120, backgroundColor: C.panel, borderColor: C.border, color: C.text }]} value={newDate} onChangeText={setNewDate} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
+            <Pressable style={[ds.addBtn, { backgroundColor: C.panel, borderColor: C.border }]} onPress={() => { if (newLabel.trim() && newDate.trim()) { onCustomDates([...customDates, { id: uid(), label: newLabel.trim(), date: newDate.trim() }]); setNewLabel(''); setNewDate(''); } }}>
               <Feather name="plus" size={18} color={C.accent} />
             </Pressable>
           </View>
@@ -332,23 +283,23 @@ function DatesSection({
 }
 const ds = StyleSheet.create({
   wrap: { marginBottom: 18 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: C.panel, borderRadius: 12, padding: 14, borderWidth: 1, borderColor: C.border },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 12, padding: 14, borderWidth: 1 },
   headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  headerText: { fontSize: 14, fontFamily: 'Inter_500Medium', color: C.text },
-  dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: C.accent },
+  headerText: { fontSize: 14, fontFamily: 'Inter_500Medium' },
+  dot: { width: 7, height: 7, borderRadius: 4 },
   body: { marginTop: 10 },
   dateField: { marginBottom: 12 },
-  dateLabel: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2, marginBottom: 6 },
-  dateInput: { backgroundColor: C.panel, borderRadius: 12, borderWidth: 1, borderColor: C.border, color: C.text, fontSize: 14, fontFamily: 'Inter_400Regular', paddingHorizontal: 14, height: 46 },
+  dateLabel: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2, marginBottom: 6 },
+  dateInput: { borderRadius: 12, borderWidth: 1, fontSize: 14, fontFamily: 'Inter_400Regular', paddingHorizontal: 14, height: 46 },
   nextMeetWrap: { marginBottom: 12 },
   nextMeetRow: { flexDirection: 'row', gap: 8 },
   notifHint: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 6 },
-  notifHintText: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.green },
-  item: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: C.panel, borderRadius: 10, padding: 12, marginBottom: 6, borderWidth: 1, borderColor: C.border },
-  itemLabel: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.text },
-  itemDate: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.textMuted, marginTop: 2 },
+  notifHintText: { fontSize: 11, fontFamily: 'Inter_400Regular' },
+  item: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 10, padding: 12, marginBottom: 6, borderWidth: 1 },
+  itemLabel: { fontSize: 13, fontFamily: 'Inter_500Medium' },
+  itemDate: { fontSize: 11, fontFamily: 'Inter_400Regular', marginTop: 2 },
   addRow: { flexDirection: 'row', gap: 8, alignItems: 'center', marginTop: 6 },
-  addBtn: { width: 44, height: 44, borderRadius: 12, backgroundColor: C.panel, borderWidth: 1, borderColor: C.border, alignItems: 'center', justifyContent: 'center' },
+  addBtn: { width: 44, height: 44, borderRadius: 12, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
 });
 
 type FormData = Omit<Person, 'id' | 'createdAt' | 'updatedAt'>;
@@ -440,7 +391,7 @@ export default function AddScreen() {
         />
 
         <View style={{ marginBottom: 18 }}>
-          <Text style={fl.text}>Name *</Text>
+          <Text style={[fl.text, { color: C.textMuted }]}>Name *</Text>
           <ContactNameField
             value={form.name}
             onChange={v => set('name', v)}
@@ -456,7 +407,7 @@ export default function AddScreen() {
         </View>
 
         <View style={{ marginBottom: 18 }}>
-          <Text style={fl.text}>Phone</Text>
+          <Text style={[fl.text, { color: C.textMuted }]}>Phone</Text>
           <TextInput
             style={[f.input, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]}
             value={form.phone ?? ''}
@@ -503,7 +454,7 @@ export default function AddScreen() {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg },
+  root: { flex: 1 },
   navbar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -511,32 +462,11 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: C.border,
   },
-  closeBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: C.panel,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: C.border,
-  },
-  title: { fontSize: 12, fontFamily: 'Inter_700Bold', color: C.textMuted, letterSpacing: 3 },
-  saveBtn: {
-    backgroundColor: C.accent,
-    borderRadius: 10,
-    paddingHorizontal: 18,
-    paddingVertical: 9,
-  },
-  saveBtnDisabled: { backgroundColor: C.border },
-  saveBtnText: { fontSize: 14, fontFamily: 'Inter_600SemiBold', color: C.textBright },
-  divider: { borderBottomWidth: 1, borderBottomColor: C.border, marginBottom: 18, paddingBottom: 8 },
-  dividerText: {
-    fontSize: 10,
-    fontFamily: 'Inter_600SemiBold',
-    color: C.textMuted,
-    letterSpacing: 2,
-  },
+  closeBtn: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
+  title: { fontSize: 12, fontFamily: 'Inter_700Bold', letterSpacing: 3 },
+  saveBtn: { borderRadius: 10, paddingHorizontal: 18, paddingVertical: 9 },
+  saveBtnText: { fontSize: 14, fontFamily: 'Inter_600SemiBold' },
+  divider: { borderBottomWidth: 1, marginBottom: 18, paddingBottom: 8 },
+  dividerText: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2 },
 });

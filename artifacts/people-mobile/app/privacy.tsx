@@ -83,17 +83,17 @@ export default function PrivacyScreen() {
 }
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg },
+  root: { flex: 1 },
   navbar: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: 16, paddingVertical: 10,
-    borderBottomWidth: 1, borderBottomColor: C.border,
+    borderBottomWidth: 1,
   },
-  backBtn: { width: 40, height: 40, borderRadius: 12, backgroundColor: C.panel, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: C.border },
-  title: { fontSize: 12, fontFamily: 'Inter_700Bold', color: C.textMuted, letterSpacing: 3 },
-  lastUpdated: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textDim, marginBottom: 12 },
-  intro: { fontSize: 15, fontFamily: 'Inter_500Medium', color: C.textBright, lineHeight: 24, marginBottom: 24, padding: 16, backgroundColor: C.panel, borderRadius: 12, borderWidth: 1, borderColor: C.accent + '44' },
+  backBtn: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
+  title: { fontSize: 12, fontFamily: 'Inter_700Bold', letterSpacing: 3 },
+  lastUpdated: { fontSize: 12, fontFamily: 'Inter_400Regular', marginBottom: 12 },
+  intro: { fontSize: 15, fontFamily: 'Inter_500Medium', lineHeight: 24, marginBottom: 24, padding: 16, borderRadius: 12, borderWidth: 1 },
   section: { marginBottom: 20 },
-  sectionTitle: { fontSize: 13, fontFamily: 'Inter_700Bold', color: C.textBright, marginBottom: 6 },
-  sectionBody: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text, lineHeight: 22 },
+  sectionTitle: { fontSize: 13, fontFamily: 'Inter_700Bold', marginBottom: 6 },
+  sectionBody: { fontSize: 14, fontFamily: 'Inter_400Regular', lineHeight: 22 },
 });

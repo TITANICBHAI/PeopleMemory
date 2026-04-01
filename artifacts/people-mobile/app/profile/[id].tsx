@@ -62,9 +62,9 @@ function TrustBar({ level }: { level: number }) {
 }
 const tr = StyleSheet.create({
   wrap: { paddingHorizontal: 16, marginBottom: 20 },
-  heading: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8 },
+  heading: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  barBg: { flex: 1, height: 8, backgroundColor: C.border, borderRadius: 4, overflow: 'hidden' },
+  barBg: { flex: 1, height: 8, borderRadius: 4, overflow: 'hidden' },
   barFill: { height: '100%', borderRadius: 4 },
   label: { fontSize: 13, fontFamily: 'Inter_600SemiBold', minWidth: 80, textAlign: 'right' },
 });
@@ -80,13 +80,11 @@ function SectionCard({ title, children }: { title: string; children: React.React
 }
 const sc = StyleSheet.create({
   wrap: { marginHorizontal: 16, marginBottom: 12 },
-  title: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8 },
+  title: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 8 },
   card: {
-    backgroundColor: C.panel,
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
-    borderColor: C.border,
   },
 });
 
@@ -123,12 +121,12 @@ export default function ProfileScreen() {
 
   if (!person) {
     return (
-      <View style={[s.root, { paddingTop: insets.top }]}>
-        <Pressable style={s.backBtn} onPress={() => router.back()}>
+      <View style={[s.root, { paddingTop: insets.top, backgroundColor: C.bg }]}>
+        <Pressable style={[s.backBtn, { backgroundColor: C.panel, borderColor: C.border }]} onPress={() => router.back()}>
           <Feather name="arrow-left" size={20} color={C.text} />
         </Pressable>
         <View style={s.notFound}>
-          <Text style={s.notFoundText}>Person not found</Text>
+          <Text style={[s.notFoundText, { color: C.textMuted }]}>Person not found</Text>
         </View>
       </View>
     );
@@ -227,9 +225,9 @@ export default function ProfileScreen() {
                 }}
               >
                 <Feather name="phone" size={13} color={C.green} />
-                <Text style={s.phoneText}>{person.phone}</Text>
-                <View style={s.callBadge}>
-                  <Text style={s.callBadgeText}>Call</Text>
+                <Text style={[s.phoneText, { color: C.textBright }]}>{person.phone}</Text>
+                <View style={[s.callBadge, { backgroundColor: C.green + '22', borderColor: C.green + '55' }]}>
+                  <Text style={[s.callBadgeText, { color: C.green }]}>Call</Text>
                 </View>
               </Pressable>
             ) : null}
@@ -247,22 +245,22 @@ export default function ProfileScreen() {
 
         {person.description ? (
           <SectionCard title="Description">
-            <Text style={s.bodyText}>{person.description}</Text>
+            <Text style={[s.bodyText, { color: C.text }]}>{person.description}</Text>
           </SectionCard>
         ) : null}
 
         {(person.likes || person.dislikes) ? (
           <View style={s.splitRow}>
             {person.likes ? (
-              <View style={s.splitCard}>
-                <Text style={s.splitLabel}>Likes</Text>
-                <Text style={s.bodyText}>{person.likes}</Text>
+              <View style={[s.splitCard, { backgroundColor: C.panel, borderColor: C.border }]}>
+                <Text style={[s.splitLabel, { color: C.textMuted }]}>Likes</Text>
+                <Text style={[s.bodyText, { color: C.text }]}>{person.likes}</Text>
               </View>
             ) : null}
             {person.dislikes ? (
-              <View style={s.splitCard}>
-                <Text style={s.splitLabel}>Dislikes</Text>
-                <Text style={s.bodyText}>{person.dislikes}</Text>
+              <View style={[s.splitCard, { backgroundColor: C.panel, borderColor: C.border }]}>
+                <Text style={[s.splitLabel, { color: C.textMuted }]}>Dislikes</Text>
+                <Text style={[s.bodyText, { color: C.text }]}>{person.dislikes}</Text>
               </View>
             ) : null}
           </View>
@@ -270,30 +268,30 @@ export default function ProfileScreen() {
 
         {person.thingsToRemember ? (
           <SectionCard title="Remember">
-            <Text style={s.bodyText}>{person.thingsToRemember}</Text>
+            <Text style={[s.bodyText, { color: C.text }]}>{person.thingsToRemember}</Text>
           </SectionCard>
         ) : null}
 
         {person.quickFacts ? (
           <SectionCard title="Quick Facts">
-            <Text style={s.bodyText}>{person.quickFacts}</Text>
+            <Text style={[s.bodyText, { color: C.text }]}>{person.quickFacts}</Text>
           </SectionCard>
         ) : null}
 
         {allDates.length > 0 ? (
           <SectionCard title="Timeline">
             {allDates.map((d, i) => (
-              <View key={i} style={[tl.item, i > 0 && tl.itemBorder]}>
-                <View style={tl.dot} />
+              <View key={i} style={[tl.item, i > 0 && [tl.itemBorder, { borderTopColor: C.border }]]}>
+                <View style={[tl.dot, { backgroundColor: C.accent }]} />
                 <View style={tl.content}>
-                  <Text style={tl.dateLabel}>{d.label}</Text>
-                  <Text style={tl.date}>
+                  <Text style={[tl.dateLabel, { color: C.text }]}>{d.label}</Text>
+                  <Text style={[tl.date, { color: C.textMuted }]}>
                     {formatDate(d.date)}{d.extra ? `  ·  ${d.extra}` : ''}
                   </Text>
                   {d.extra && (
                     <View style={tl.bellRow}>
                       <Feather name="bell" size={11} color={C.green} />
-                      <Text style={tl.bellText}>Reminder set</Text>
+                      <Text style={[tl.bellText, { color: C.green }]}>Reminder set</Text>
                     </View>
                   )}
                 </View>
@@ -305,33 +303,33 @@ export default function ProfileScreen() {
         {/* Interaction Log */}
         <View style={il.wrap}>
           <View style={il.header}>
-            <Text style={il.headerText}>INTERACTION LOG</Text>
+            <Text style={[il.headerText, { color: C.textMuted }]}>INTERACTION LOG</Text>
             <Pressable
-              style={il.addBtn}
+              style={[il.addBtn, { backgroundColor: C.accent + '20', borderColor: C.accent + '40' }]}
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 setLogModalVisible(true);
               }}
             >
               <Feather name="plus" size={14} color={C.accent} />
-              <Text style={il.addBtnText}>Log</Text>
+              <Text style={[il.addBtnText, { color: C.accent }]}>Log</Text>
             </Pressable>
           </View>
 
-          <View style={il.card}>
+          <View style={[il.card, { backgroundColor: C.panel, borderColor: C.border }]}>
             {interactions.length === 0 ? (
               <View style={il.empty}>
                 <Feather name="message-circle" size={28} color={C.textDim} />
-                <Text style={il.emptyText}>No interactions logged yet</Text>
-                <Text style={il.emptySubText}>Tap "Log" to record a conversation or meeting</Text>
+                <Text style={[il.emptyText, { color: C.textMuted }]}>No interactions logged yet</Text>
+                <Text style={[il.emptySubText, { color: C.textDim }]}>Tap "Log" to record a conversation or meeting</Text>
               </View>
             ) : (
               interactions.map((item, i) => (
-                <View key={item.id} style={[il.entry, i > 0 && il.entryBorder]}>
-                  <View style={il.entryDot} />
+                <View key={item.id} style={[il.entry, i > 0 && [il.entryBorder, { borderTopColor: C.border }]]}>
+                  <View style={[il.entryDot, { backgroundColor: C.accentGlow }]} />
                   <View style={il.entryContent}>
-                    <Text style={il.entryDate}>{formatInteractionDate(item.date)}</Text>
-                    <Text style={il.entryNote}>{item.note}</Text>
+                    <Text style={[il.entryDate, { color: C.textMuted }]}>{formatInteractionDate(item.date)}</Text>
+                    <Text style={[il.entryNote, { color: C.text }]}>{item.note}</Text>
                   </View>
                   <Pressable
                     style={il.deleteEntry}
@@ -347,7 +345,7 @@ export default function ProfileScreen() {
         </View>
 
         <View style={{ marginHorizontal: 16, marginTop: 8 }}>
-          <Text style={s.meta}>Added {formatDate(person.createdAt)}</Text>
+          <Text style={[s.meta, { color: C.textDim }]}>Added {formatDate(person.createdAt)}</Text>
         </View>
       </ScrollView>
 
@@ -363,12 +361,12 @@ export default function ProfileScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <Pressable style={m.backdrop} onPress={() => setLogModalVisible(false)} />
-          <View style={m.sheet}>
-            <View style={m.handle} />
-            <Text style={m.title}>Log Interaction</Text>
-            <Text style={m.subtitle}>What happened with {person.name}?</Text>
+          <View style={[m.sheet, { backgroundColor: C.panel, borderColor: C.border }]}>
+            <View style={[m.handle, { backgroundColor: C.border }]} />
+            <Text style={[m.title, { color: C.textBright }]}>Log Interaction</Text>
+            <Text style={[m.subtitle, { color: C.textMuted }]}>What happened with {person.name}?</Text>
             <TextInput
-              style={m.input}
+              style={[m.input, { backgroundColor: C.bg, borderColor: C.border, color: C.text }]}
               placeholder="e.g. Had coffee, talked about new job offer..."
               placeholderTextColor={C.textDim}
               value={logNote}
@@ -379,13 +377,13 @@ export default function ProfileScreen() {
               autoFocus
               maxLength={500}
             />
-            <Text style={m.charCount}>{logNote.length}/500</Text>
+            <Text style={[m.charCount, { color: C.textDim }]}>{logNote.length}/500</Text>
             <View style={m.actions}>
-              <Pressable style={m.cancelBtn} onPress={() => { setLogModalVisible(false); setLogNote(''); }}>
-                <Text style={m.cancelText}>Cancel</Text>
+              <Pressable style={[m.cancelBtn, { backgroundColor: C.bg, borderColor: C.border }]} onPress={() => { setLogModalVisible(false); setLogNote(''); }}>
+                <Text style={[m.cancelText, { color: C.textMuted }]}>Cancel</Text>
               </Pressable>
               <Pressable
-                style={[m.saveBtn, (!logNote.trim() || saving) && m.saveBtnDisabled]}
+                style={[m.saveBtn, { backgroundColor: C.accent }, (!logNote.trim() || saving) && m.saveBtnDisabled]}
                 onPress={handleSaveInteraction}
                 disabled={!logNote.trim() || saving}
               >
@@ -401,124 +399,81 @@ export default function ProfileScreen() {
 
 const tl = StyleSheet.create({
   item: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6 },
-  itemBorder: { borderTopWidth: 1, borderTopColor: C.border },
-  dot: { width: 8, height: 8, borderRadius: 4, backgroundColor: C.accent },
+  itemBorder: { borderTopWidth: 1 },
+  dot: { width: 8, height: 8, borderRadius: 4 },
   content: { flex: 1 },
-  dateLabel: { fontSize: 13, fontFamily: 'Inter_600SemiBold', color: C.text },
-  date: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textMuted, marginTop: 2 },
+  dateLabel: { fontSize: 13, fontFamily: 'Inter_600SemiBold' },
+  date: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 2 },
   bellRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
-  bellText: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.green },
+  bellText: { fontSize: 11, fontFamily: 'Inter_400Regular' },
 });
 
 const il = StyleSheet.create({
   wrap: { marginHorizontal: 16, marginBottom: 12 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 },
-  headerText: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2 },
+  headerText: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2 },
   addBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: C.accent + '20', borderRadius: 20,
-    paddingHorizontal: 12, paddingVertical: 5,
-    borderWidth: 1, borderColor: C.accent + '40',
+    borderRadius: 20, paddingHorizontal: 12, paddingVertical: 5, borderWidth: 1,
   },
-  addBtnText: { fontSize: 12, fontFamily: 'Inter_600SemiBold', color: C.accent },
-  card: {
-    backgroundColor: C.panel, borderRadius: 14,
-    borderWidth: 1, borderColor: C.border,
-    overflow: 'hidden',
-  },
+  addBtnText: { fontSize: 12, fontFamily: 'Inter_600SemiBold' },
+  card: { borderRadius: 14, borderWidth: 1, overflow: 'hidden' },
   empty: { alignItems: 'center', paddingVertical: 28, gap: 8 },
-  emptyText: { fontSize: 14, fontFamily: 'Inter_500Medium', color: C.textMuted },
-  emptySubText: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textDim, textAlign: 'center', paddingHorizontal: 20 },
+  emptyText: { fontSize: 14, fontFamily: 'Inter_500Medium' },
+  emptySubText: { fontSize: 12, fontFamily: 'Inter_400Regular', textAlign: 'center', paddingHorizontal: 20 },
   entry: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, padding: 14 },
-  entryBorder: { borderTopWidth: 1, borderTopColor: C.border },
-  entryDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: C.accentGlow, marginTop: 5 },
+  entryBorder: { borderTopWidth: 1 },
+  entryDot: { width: 8, height: 8, borderRadius: 4, marginTop: 5 },
   entryContent: { flex: 1 },
-  entryDate: { fontSize: 11, fontFamily: 'Inter_600SemiBold', color: C.textMuted, marginBottom: 4 },
-  entryNote: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text, lineHeight: 20 },
+  entryDate: { fontSize: 11, fontFamily: 'Inter_600SemiBold', marginBottom: 4 },
+  entryNote: { fontSize: 14, fontFamily: 'Inter_400Regular', lineHeight: 20 },
   deleteEntry: { padding: 4 },
 });
 
 const m = StyleSheet.create({
   overlay: { flex: 1, justifyContent: 'flex-end' },
   backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.6)' },
-  sheet: {
-    backgroundColor: C.panel, borderTopLeftRadius: 24, borderTopRightRadius: 24,
-    padding: 24, paddingBottom: 40,
-    borderWidth: 1, borderColor: C.border,
-  },
-  handle: { width: 40, height: 4, borderRadius: 2, backgroundColor: C.border, alignSelf: 'center', marginBottom: 20 },
-  title: { fontSize: 18, fontFamily: 'Inter_700Bold', color: C.textBright, marginBottom: 4 },
-  subtitle: { fontSize: 13, fontFamily: 'Inter_400Regular', color: C.textMuted, marginBottom: 16 },
-  input: {
-    backgroundColor: C.bg, borderRadius: 12, borderWidth: 1, borderColor: C.border,
-    padding: 14, fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text,
-    minHeight: 100, marginBottom: 6,
-  },
-  charCount: { fontSize: 11, fontFamily: 'Inter_400Regular', color: C.textDim, textAlign: 'right', marginBottom: 20 },
+  sheet: { borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, paddingBottom: 40, borderWidth: 1 },
+  handle: { width: 40, height: 4, borderRadius: 2, alignSelf: 'center', marginBottom: 20 },
+  title: { fontSize: 18, fontFamily: 'Inter_700Bold', marginBottom: 4 },
+  subtitle: { fontSize: 13, fontFamily: 'Inter_400Regular', marginBottom: 16 },
+  input: { borderRadius: 12, borderWidth: 1, padding: 14, fontSize: 14, fontFamily: 'Inter_400Regular', minHeight: 100, marginBottom: 6 },
+  charCount: { fontSize: 11, fontFamily: 'Inter_400Regular', textAlign: 'right', marginBottom: 20 },
   actions: { flexDirection: 'row', gap: 12 },
-  cancelBtn: {
-    flex: 1, paddingVertical: 14, borderRadius: 12,
-    backgroundColor: C.bg, alignItems: 'center',
-    borderWidth: 1, borderColor: C.border,
-  },
-  cancelText: { fontSize: 15, fontFamily: 'Inter_500Medium', color: C.textMuted },
-  saveBtn: {
-    flex: 1, paddingVertical: 14, borderRadius: 12,
-    backgroundColor: C.accent, alignItems: 'center',
-  },
+  cancelBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center', borderWidth: 1 },
+  cancelText: { fontSize: 15, fontFamily: 'Inter_500Medium' },
+  saveBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
   saveBtnDisabled: { opacity: 0.4 },
   saveText: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: '#fff' },
 });
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg },
+  root: { flex: 1 },
   navbar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingHorizontal: 16, paddingVertical: 10,
   },
-  navIconBtn: {
-    width: 40, height: 40, borderRadius: 12, backgroundColor: C.panel,
-    alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: C.border,
-  },
-  backBtn: {
-    width: 40, height: 40, borderRadius: 12, backgroundColor: C.panel,
-    alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: C.border,
-  },
+  navIconBtn: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
+  backBtn: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
   navActions: { flexDirection: 'row', gap: 8 },
-  deleteBtn: { borderColor: C.red + '44' },
-  hero: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: 20, paddingVertical: 24, gap: 18,
-  },
+  hero: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 24, gap: 18 },
   avatarRing: {
-    borderRadius: 999, padding: 3,
-    borderWidth: 3, borderColor: '#3A7EFF',
+    borderRadius: 999, padding: 3, borderWidth: 3,
     shadowColor: '#3A7EFF', shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.6, shadowRadius: 10, elevation: 8,
   },
   heroInfo: { flex: 1, gap: 10 },
-  name: { fontSize: 26, fontFamily: 'Inter_700Bold', color: C.textBright, lineHeight: 30 },
+  name: { fontSize: 26, fontFamily: 'Inter_700Bold', lineHeight: 30 },
   tagRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
   phoneRow: { flexDirection: 'row', alignItems: 'center', gap: 7, marginBottom: 6, marginTop: 2 },
-  phoneText: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.textBright },
-  callBadge: { backgroundColor: C.green + '22', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2, borderWidth: 1, borderColor: C.green + '55' },
-  callBadgeText: { fontSize: 11, fontFamily: 'Inter_600SemiBold', color: C.green },
+  phoneText: { fontSize: 14, fontFamily: 'Inter_400Regular' },
+  callBadge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2, borderWidth: 1 },
+  callBadgeText: { fontSize: 11, fontFamily: 'Inter_600SemiBold' },
   splitRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, gap: 10 },
-  splitCard: {
-    flex: 1, backgroundColor: C.panel, borderRadius: 14, padding: 14,
-    borderWidth: 1, borderColor: C.border, gap: 6,
-  },
-  splitLabel: {
-    fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted,
-    letterSpacing: 2, textTransform: 'uppercase',
-  },
-  bodyText: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text, lineHeight: 22 },
-  meta: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textDim, textAlign: 'center' },
+  splitCard: { flex: 1, borderRadius: 14, padding: 14, borderWidth: 1, gap: 6 },
+  splitLabel: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2, textTransform: 'uppercase' },
+  bodyText: { fontSize: 14, fontFamily: 'Inter_400Regular', lineHeight: 22 },
+  meta: { fontSize: 12, fontFamily: 'Inter_400Regular', textAlign: 'center' },
   notFound: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  notFoundText: { color: C.textMuted, fontFamily: 'Inter_400Regular' },
+  notFoundText: { fontFamily: 'Inter_400Regular' },
 });

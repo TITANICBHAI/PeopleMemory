@@ -196,20 +196,12 @@ function ComingUpStrip({ events, onPress }: {
 }
 const cu = StyleSheet.create({
   wrap: { marginBottom: 4 },
-  label: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2, marginHorizontal: 18, marginBottom: 8 },
+  label: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2, marginHorizontal: 18, marginBottom: 8 },
   scroll: { paddingHorizontal: 14, gap: 10 },
-  card: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: C.panel, borderRadius: 14,
-    paddingHorizontal: 12, paddingVertical: 10,
-    borderWidth: 1, borderColor: C.border,
-    minWidth: 200,
-  },
-  cardPressed: { backgroundColor: C.panelHigh },
-  cardToday: { borderColor: C.accent + '55' },
+  card: { flexDirection: 'row', alignItems: 'center', gap: 10, borderRadius: 14, paddingHorizontal: 12, paddingVertical: 10, borderWidth: 1, minWidth: 200 },
   iconWrap: { width: 32, height: 32, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
   cardContent: { flex: 1 },
-  cardName: { fontSize: 13, fontFamily: 'Inter_600SemiBold', color: C.textBright },
+  cardName: { fontSize: 13, fontFamily: 'Inter_600SemiBold' },
   cardType: { fontSize: 11, fontFamily: 'Inter_400Regular', marginTop: 1 },
   daysBadge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 },
   daysText: { fontSize: 11, fontFamily: 'Inter_600SemiBold' },
@@ -239,8 +231,7 @@ function SortHeader({
 }
 const ssh = StyleSheet.create({
   cell: { flexDirection: 'row', alignItems: 'center', gap: 3, paddingVertical: 8, paddingHorizontal: 6 },
-  text: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 1.5, textTransform: 'uppercase' },
-  active: { color: C.accent },
+  text: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 1.5, textTransform: 'uppercase' },
 });
 
 // ─── Card View Row ────────────────────────────────────────────────────────────
@@ -281,18 +272,12 @@ function PersonCard({ person, onPress, onDelete }: {
   );
 }
 const pcard = StyleSheet.create({
-  row: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: C.panel, borderRadius: 14,
-    padding: 13, marginHorizontal: 14, marginVertical: 4,
-    borderWidth: 1, borderColor: C.border,
-  },
-  pressed: { backgroundColor: C.panelHigh, borderColor: C.borderLight },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 14, padding: 13, marginHorizontal: 14, marginVertical: 4, borderWidth: 1 },
   info: { flex: 1, gap: 5 },
   nameRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
-  name: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: C.textBright, flex: 1 },
+  name: { fontSize: 15, fontFamily: 'Inter_600SemiBold', flex: 1 },
   tagRow: { flexDirection: 'row', gap: 5, flexWrap: 'wrap' },
-  desc: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textMuted },
+  desc: { fontSize: 12, fontFamily: 'Inter_400Regular' },
 });
 
 // ─── Table View Row ───────────────────────────────────────────────────────────
@@ -332,11 +317,9 @@ function TableRow({ person, onPress, onDelete, isEven }: {
   );
 }
 const trow = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: C.border },
-  even: { backgroundColor: C.panel + '55' },
-  pressed: { backgroundColor: C.accent + '15' },
-  name: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.textBright },
-  cell: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textMuted },
+  row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1 },
+  name: { fontSize: 13, fontFamily: 'Inter_500Medium' },
+  cell: { fontSize: 12, fontFamily: 'Inter_400Regular' },
 });
 
 // ─── App Logo ─────────────────────────────────────────────────────────────────
@@ -360,13 +343,13 @@ function AppLogo() {
 const logo = StyleSheet.create({
   wrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   iconWrap: { width: 28, height: 28, position: 'relative' },
-  dot1: { position: 'absolute', top: 0, left: 4, width: 8, height: 8, borderRadius: 4, backgroundColor: C.accent },
-  dot2: { position: 'absolute', top: 0, right: 4, width: 8, height: 8, borderRadius: 4, backgroundColor: C.accentGlow },
-  dot3: { position: 'absolute', bottom: 0, left: 4, width: 8, height: 8, borderRadius: 4, backgroundColor: C.accentGlow + 'AA' },
-  center: { position: 'absolute', bottom: 0, right: 4, width: 8, height: 8, borderRadius: 4, backgroundColor: C.accent + '88' },
-  line1: { position: 'absolute', top: 3, left: 11, width: 10, height: 1.5, backgroundColor: C.accent + '66', transform: [{ rotate: '20deg' }] },
-  line2: { position: 'absolute', top: 14, left: 8, width: 12, height: 1.5, backgroundColor: C.accentGlow + '55', transform: [{ rotate: '-15deg' }] },
-  text: { fontSize: 24, fontFamily: 'Inter_700Bold', color: C.textBright, letterSpacing: 4 },
+  dot1: { position: 'absolute', top: 0, left: 4, width: 8, height: 8, borderRadius: 4 },
+  dot2: { position: 'absolute', top: 0, right: 4, width: 8, height: 8, borderRadius: 4 },
+  dot3: { position: 'absolute', bottom: 0, left: 4, width: 8, height: 8, borderRadius: 4 },
+  center: { position: 'absolute', bottom: 0, right: 4, width: 8, height: 8, borderRadius: 4 },
+  line1: { position: 'absolute', top: 3, left: 11, width: 10, height: 1.5, transform: [{ rotate: '20deg' }] },
+  line2: { position: 'absolute', top: 14, left: 8, width: 12, height: 1.5, transform: [{ rotate: '-15deg' }] },
+  text: { fontSize: 24, fontFamily: 'Inter_700Bold', letterSpacing: 4 },
 });
 
 // ─── Add Tag Modal ─────────────────────────────────────────────────────────────
@@ -396,8 +379,7 @@ function AddTagModal({ visible, onClose, onAdd }: { visible: boolean; onClose: (
           <Pressable style={[atm.cancel, { backgroundColor: C.panelHigh }]} onPress={onClose}>
             <Text style={[atm.cancelText, { color: C.textMuted }]}>Cancel</Text>
           </Pressable>
-          <Pressable style={[atm.confirm, { backgroundColor: C.accent }]} onPress={submit}>
-            <Text style={atm.confirmText}>Filter</Text>
+m.confirmText}>Filter</Text>
           </Pressable>
         </View>
       </View>
@@ -406,22 +388,14 @@ function AddTagModal({ visible, onClose, onAdd }: { visible: boolean; onClose: (
 }
 const atm = StyleSheet.create({
   overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: '#00000088' },
-  box: {
-    position: 'absolute', left: 20, right: 20, top: '38%',
-    backgroundColor: C.panel, borderRadius: 16, padding: 20,
-    borderWidth: 1, borderColor: C.border,
-  },
-  title: { fontSize: 14, fontFamily: 'Inter_600SemiBold', color: C.textBright, marginBottom: 12 },
-  input: {
-    backgroundColor: C.bg, borderRadius: 10, borderWidth: 1, borderColor: C.border,
-    color: C.text, fontSize: 14, fontFamily: 'Inter_400Regular',
-    paddingHorizontal: 12, height: 44, marginBottom: 14,
-  },
+  box: { position: 'absolute', left: 20, right: 20, top: '38%', borderRadius: 16, padding: 20, borderWidth: 1 },
+  title: { fontSize: 14, fontFamily: 'Inter_600SemiBold', marginBottom: 12 },
+  input: { borderRadius: 10, borderWidth: 1, fontSize: 14, fontFamily: 'Inter_400Regular', paddingHorizontal: 12, height: 44, marginBottom: 14 },
   row: { flexDirection: 'row', gap: 10 },
-  cancel: { flex: 1, height: 40, borderRadius: 10, backgroundColor: C.panelHigh, alignItems: 'center', justifyContent: 'center' },
-  cancelText: { fontSize: 14, fontFamily: 'Inter_500Medium', color: C.textMuted },
-  confirm: { flex: 1, height: 40, borderRadius: 10, backgroundColor: C.accent, alignItems: 'center', justifyContent: 'center' },
-  confirmText: { fontSize: 14, fontFamily: 'Inter_600SemiBold', color: C.textBright },
+  cancel: { flex: 1, height: 40, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+  cancelText: { fontSize: 14, fontFamily: 'Inter_500Medium' },
+  confirm: { flex: 1, height: 40, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+  confirmText: { fontSize: 14, fontFamily: 'Inter_600SemiBold' },
 });
 
 // ─── Quick Log Modal ──────────────────────────────────────────────────────────
@@ -546,41 +520,25 @@ function QuickLogModal({ visible, people, onClose, onSave }: {
 const ql = StyleSheet.create({
   overlay: { flex: 1, justifyContent: 'flex-end' },
   backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.6)' },
-  sheet: {
-    backgroundColor: C.panel, borderTopLeftRadius: 24, borderTopRightRadius: 24,
-    padding: 24, paddingBottom: 40, maxHeight: '80%',
-    borderWidth: 1, borderColor: C.border,
-  },
-  handle: { width: 40, height: 4, borderRadius: 2, backgroundColor: C.border, alignSelf: 'center', marginBottom: 20 },
-  title: { fontSize: 17, fontFamily: 'Inter_700Bold', color: C.textBright, marginBottom: 14 },
-  searchWrap: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: C.bg, borderRadius: 12, borderWidth: 1, borderColor: C.border,
-    paddingHorizontal: 12, height: 44, marginBottom: 12,
-  },
-  searchInput: { flex: 1, fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text },
+  sheet: { borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, paddingBottom: 40, maxHeight: '80%', borderWidth: 1 },
+  handle: { width: 40, height: 4, borderRadius: 2, alignSelf: 'center', marginBottom: 20 },
+  title: { fontSize: 17, fontFamily: 'Inter_700Bold', marginBottom: 14 },
+  searchWrap: { flexDirection: 'row', alignItems: 'center', gap: 10, borderRadius: 12, borderWidth: 1, paddingHorizontal: 12, height: 44, marginBottom: 12 },
+  searchInput: { flex: 1, fontSize: 14, fontFamily: 'Inter_400Regular' },
   list: { maxHeight: 280 },
-  empty: { fontSize: 13, fontFamily: 'Inter_400Regular', color: C.textMuted, textAlign: 'center', paddingVertical: 20 },
-  personRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: C.border,
-  },
-  personPressed: { backgroundColor: C.panelHigh },
+  empty: { fontSize: 13, fontFamily: 'Inter_400Regular', textAlign: 'center', paddingVertical: 20 },
+  personRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12, borderBottomWidth: 1 },
   personAvatar: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   personInitials: { fontSize: 13, fontFamily: 'Inter_700Bold' },
-  personName: { flex: 1, fontSize: 15, fontFamily: 'Inter_500Medium', color: C.textBright },
+  personName: { flex: 1, fontSize: 15, fontFamily: 'Inter_500Medium' },
   backRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 },
-  backText: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.accent },
-  noteInput: {
-    backgroundColor: C.bg, borderRadius: 12, borderWidth: 1, borderColor: C.border,
-    padding: 14, fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text,
-    minHeight: 100, marginBottom: 6,
-  },
-  charCount: { fontSize: 11, color: C.textDim, fontFamily: 'Inter_400Regular', textAlign: 'right', marginBottom: 16 },
+  backText: { fontSize: 13, fontFamily: 'Inter_500Medium' },
+  noteInput: { borderRadius: 12, borderWidth: 1, padding: 14, fontSize: 14, fontFamily: 'Inter_400Regular', minHeight: 100, marginBottom: 6 },
+  charCount: { fontSize: 11, fontFamily: 'Inter_400Regular', textAlign: 'right', marginBottom: 16 },
   actions: { flexDirection: 'row', gap: 12 },
-  cancelBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, backgroundColor: C.bg, alignItems: 'center', borderWidth: 1, borderColor: C.border },
-  cancelText: { fontSize: 15, fontFamily: 'Inter_500Medium', color: C.textMuted },
-  saveBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, backgroundColor: C.accent, alignItems: 'center' },
+  cancelBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center', borderWidth: 1 },
+  cancelText: { fontSize: 15, fontFamily: 'Inter_500Medium' },
+  saveBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
   saveBtnDisabled: { opacity: 0.4 },
   saveText: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: '#fff' },
 });
@@ -883,69 +841,46 @@ export default function Dashboard() {
 
 const tbl = StyleSheet.create({
   header: {
-    flexDirection: 'row', borderBottomWidth: 2, borderBottomColor: C.border,
-    backgroundColor: C.header, borderRadius: 10, overflow: 'hidden', marginBottom: 4,
+    flexDirection: 'row', borderBottomWidth: 2,
+    borderRadius: 10, overflow: 'hidden', marginBottom: 4,
   },
 });
 
 const s = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.bg },
+  root: { flex: 1 },
   header: {
     flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between',
     paddingHorizontal: 18, paddingTop: 8, paddingBottom: 14,
   },
-  count: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textMuted, marginTop: 4 },
+  count: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 4 },
   headerActions: { flexDirection: 'row', gap: 8 },
-  iconBtn: {
-    width: 38, height: 38, borderRadius: 11,
-    backgroundColor: C.panel, alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: C.border,
-  },
-  iconBtnActive: { borderColor: C.accent + '55', backgroundColor: C.accent + '18' },
+  iconBtn: { width: 38, height: 38, borderRadius: 11, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
   searchWrap: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
     marginHorizontal: 14, marginBottom: 10,
-    backgroundColor: C.panel, borderRadius: 13,
-    paddingHorizontal: 14, height: 44,
-    borderWidth: 1, borderColor: C.border,
+    borderRadius: 13, paddingHorizontal: 14, height: 44, borderWidth: 1,
   },
-  search: { flex: 1, fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text },
+  search: { flex: 1, fontSize: 14, fontFamily: 'Inter_400Regular' },
   tagFiltersContainer: { maxHeight: 42, marginBottom: 6 },
   tagFilters: { paddingHorizontal: 14, gap: 8, alignItems: 'center' },
-  tagFilter: {
-    borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6,
-    backgroundColor: C.panel, borderWidth: 1, borderColor: C.border,
-  },
-  tagFilterActive: { backgroundColor: C.accent + '20', borderColor: C.accent + '55' },
-  tagFilterText: { fontSize: 12, fontFamily: 'Inter_500Medium', color: C.textMuted },
-  tagFilterTextActive: { color: C.accent },
-  tagFilterAdd: {
-    width: 32, height: 32, borderRadius: 16,
-    backgroundColor: C.panel, borderWidth: 1, borderColor: C.border,
-    alignItems: 'center', justifyContent: 'center',
-  },
+  tagFilter: { borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6, borderWidth: 1 },
+  tagFilterText: { fontSize: 12, fontFamily: 'Inter_500Medium' },
+  tagFilterAdd: { width: 32, height: 32, borderRadius: 16, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 },
-  emptyTitle: { fontSize: 18, fontFamily: 'Inter_600SemiBold', color: C.textMuted },
-  emptyText: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.textDim },
+  emptyTitle: { fontSize: 18, fontFamily: 'Inter_600SemiBold' },
+  emptyText: { fontSize: 14, fontFamily: 'Inter_400Regular' },
   fabGroup: { position: 'absolute', right: 20, alignItems: 'flex-end', gap: 12 },
   fab: {
-    width: 58, height: 58, borderRadius: 29,
-    backgroundColor: C.accent, alignItems: 'center', justifyContent: 'center',
-    shadowColor: C.accent, shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5, shadowRadius: 12, elevation: 8,
+    width: 58, height: 58, borderRadius: 29, alignItems: 'center', justifyContent: 'center',
+    shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.5, shadowRadius: 12, elevation: 8,
   },
   fabPressed: { opacity: 0.85 },
-  fabActive: { backgroundColor: C.accentDim },
   fabOption: {
-    width: 48, height: 48, borderRadius: 24,
-    backgroundColor: C.accentDim, alignItems: 'center', justifyContent: 'center',
+    width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center',
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3, shadowRadius: 6, elevation: 5,
   },
   fabOptionRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  fabLabel: {
-    backgroundColor: C.panel, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5,
-    borderWidth: 1, borderColor: C.border,
-  },
-  fabLabelText: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.textBright },
+  fabLabel: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1 },
+  fabLabelText: { fontSize: 13, fontFamily: 'Inter_500Medium' },
 });
