@@ -245,10 +245,19 @@ export default function SettingsScreen() {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         copyToCacheDirectory: true,
-        type: Platform.OS === 'ios' ? '*/*' : 'application/octet-stream',
+        type: Platform.OS === 'ios' ? 'public.data' : 'application/octet-stream',
       });
       if (result.canceled || !result.assets?.[0]?.uri) return;
-      setPendingFile(result.assets[0].uri);
+      const asset = result.assets[0];
+      const name = asset.name ?? asset.uri.split('/').pop() ?? '';
+      if (!name.toLowerCase().endsWith('.pmbackup')) {
+        Alert.alert(
+          'Wrong file type',
+          'Please select a People Memory backup file (.pmbackup). You can create one from Settings → Export Backup.',
+        );
+        return;
+      }
+      setPendingFile(asset.uri);
       setPassword(''); setConfirmPassword(''); setPasswordModal('import');
     } catch {
       Alert.alert('Error', 'Could not open the file. Please try again.');
