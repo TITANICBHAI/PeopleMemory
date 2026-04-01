@@ -379,7 +379,8 @@ function AddTagModal({ visible, onClose, onAdd }: { visible: boolean; onClose: (
           <Pressable style={[atm.cancel, { backgroundColor: C.panelHigh }]} onPress={onClose}>
             <Text style={[atm.cancelText, { color: C.textMuted }]}>Cancel</Text>
           </Pressable>
-m.confirmText}>Filter</Text>
+          <Pressable style={[atm.confirm, { backgroundColor: C.accent }]} onPress={submit}>
+            <Text style={[atm.confirmText, { color: '#fff' }]}>Filter</Text>
           </Pressable>
         </View>
       </View>
