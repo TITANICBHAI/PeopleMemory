@@ -1,5 +1,5 @@
 kind = "mobile"
-previewPath = "/people-mobile/"
+previewPath = "/"
 title = "People Memory"
 version = "1.0.0"
 id = "artifacts/people-mobile"
@@ -13,14 +13,14 @@ version = "1.0.0"
 ensurePreviewReachable = "/status"
 localPort = 21989
 name = "expo"
-paths = ["/people-mobile/"]
+paths = ["/"]
 
 [services.development]
 run = "pnpm --filter @workspace/people-mobile run dev"
 
 [services.env]
 PORT = "21989"
-BASE_PATH = "/people-mobile/"
+BASE_PATH = "/"
 
 [services.production]
 build = ["pnpm", "--filter", "@workspace/people-mobile", "run", "build"]
