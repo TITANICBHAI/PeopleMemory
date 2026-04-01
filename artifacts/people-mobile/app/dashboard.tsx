@@ -6,6 +6,7 @@ import {
   Alert,
   FlatList,
   Image,
+  KeyboardAvoidingView,
   Modal,
   Platform,
   Pressable,
@@ -41,6 +42,20 @@ function formatDate(s?: string) {
 function notesCount(p: Person) {
   return [p.description, p.likes, p.dislikes, p.thingsToRemember, p.quickFacts]
     .filter(Boolean).length + p.customDates.length;
+}
+
+function daysUntil(date: Date): number {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((d.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function daysLabel(days: number): string {
+  if (days === 0) return 'Today!';
+  if (days === 1) return 'Tomorrow';
+  return `In ${days} days`;
 }
 
 // ─── micro-components ────────────────────────────────────────────────────────
@@ -85,41 +100,115 @@ const chip = StyleSheet.create({
 
 function PersonAvatar({ person, size = 44 }: { person: Person; size?: number }) {
   const initials = person.name.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('');
-  const color = trustColor(person.trustLevel);
+  const tColor = trustColor(person.trustLevel);
+  const ringColor = person.trustLevel !== null && person.trustLevel !== undefined
+    ? tColor + 'BB'
+    : C.border;
 
   if (person.photoUri && person.photoUri.startsWith('preset:')) {
     const id = person.photoUri.slice(7);
     const preset = PRESET_AVATARS.find(a => a.id === id);
     if (preset) {
       return (
-        <Image
-          source={{ uri: preset.uri }}
-          style={[av.photo, { width: size, height: size, borderRadius: size / 2, borderColor: color + '77' }]}
-        />
+        <View style={[av.ring, { width: size + 6, height: size + 6, borderRadius: (size + 6) / 2, borderColor: ringColor }]}>
+          <Image source={{ uri: preset.uri }} style={[av.photo, { width: size, height: size, borderRadius: size / 2 }]} />
+        </View>
       );
     }
   }
 
   if (person.photoUri && !person.photoUri.startsWith('preset:')) {
     return (
-      <Image
-        source={{ uri: person.photoUri }}
-        style={[av.photo, { width: size, height: size, borderRadius: size / 2, borderColor: color + '77' }]}
-      />
+      <View style={[av.ring, { width: size + 6, height: size + 6, borderRadius: (size + 6) / 2, borderColor: ringColor }]}>
+        <Image source={{ uri: person.photoUri }} style={[av.photo, { width: size, height: size, borderRadius: size / 2 }]} />
+      </View>
     );
   }
 
   const nameColors = avatarColorForName(person.name);
   return (
-    <View style={[av.wrap, { width: size, height: size, borderRadius: size / 2, backgroundColor: nameColors.bg, borderColor: nameColors.text + '77' }]}>
-      <Text style={[av.text, { fontSize: size * 0.35, color: nameColors.text }]}>{initials}</Text>
+    <View style={[av.ring, { width: size + 6, height: size + 6, borderRadius: (size + 6) / 2, borderColor: ringColor }]}>
+      <View style={[av.wrap, { width: size, height: size, borderRadius: size / 2, backgroundColor: nameColors.bg }]}>
+        <Text style={[av.text, { fontSize: size * 0.35, color: nameColors.text }]}>{initials}</Text>
+      </View>
     </View>
   );
 }
 const av = StyleSheet.create({
-  wrap: { borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
-  photo: { borderWidth: 2 },
+  ring: { borderWidth: 2.5, alignItems: 'center', justifyContent: 'center' },
+  wrap: { alignItems: 'center', justifyContent: 'center' },
+  photo: {},
   text: { fontFamily: 'Inter_700Bold' },
+});
+
+// ─── Coming Up Strip ──────────────────────────────────────────────────────────
+
+interface UpcomingEvent {
+  person: Person;
+  type: 'birthday' | 'meeting';
+  date: Date;
+  days: number;
+}
+
+function ComingUpStrip({ events, onPress }: {
+  events: UpcomingEvent[];
+  onPress: (person: Person) => void;
+}) {
+  if (events.length === 0) return null;
+  return (
+    <View style={cu.wrap}>
+      <Text style={cu.label}>COMING UP</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={cu.scroll}>
+        {events.map((ev, i) => {
+          const isBirthday = ev.type === 'birthday';
+          const isToday = ev.days === 0;
+          const accent = isBirthday ? '#C678DD' : C.accent;
+          return (
+            <Pressable
+              key={`${ev.person.id}-${ev.type}`}
+              style={({ pressed }) => [cu.card, pressed && cu.cardPressed, isToday && cu.cardToday]}
+              onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onPress(ev.person); }}
+            >
+              <View style={[cu.iconWrap, { backgroundColor: accent + '22' }]}>
+                <Feather name={isBirthday ? 'gift' : 'calendar'} size={14} color={accent} />
+              </View>
+              <View style={cu.cardContent}>
+                <Text style={cu.cardName} numberOfLines={1}>{ev.person.name}</Text>
+                <Text style={[cu.cardType, { color: accent }]}>
+                  {isBirthday ? 'Birthday' : 'Meeting'}
+                </Text>
+              </View>
+              <View style={[cu.daysBadge, isToday && { backgroundColor: accent + '33' }]}>
+                <Text style={[cu.daysText, { color: isToday ? accent : C.textMuted }]}>
+                  {daysLabel(ev.days)}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+    </View>
+  );
+}
+const cu = StyleSheet.create({
+  wrap: { marginBottom: 4 },
+  label: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2, marginHorizontal: 18, marginBottom: 8 },
+  scroll: { paddingHorizontal: 14, gap: 10 },
+  card: {
+    flexDirection: 'row', alignItems: 'center', gap: 10,
+    backgroundColor: C.panel, borderRadius: 14,
+    paddingHorizontal: 12, paddingVertical: 10,
+    borderWidth: 1, borderColor: C.border,
+    minWidth: 200,
+  },
+  cardPressed: { backgroundColor: C.panelHigh },
+  cardToday: { borderColor: C.accent + '55' },
+  iconWrap: { width: 32, height: 32, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
+  cardContent: { flex: 1 },
+  cardName: { fontSize: 13, fontFamily: 'Inter_600SemiBold', color: C.textBright },
+  cardType: { fontSize: 11, fontFamily: 'Inter_400Regular', marginTop: 1 },
+  daysBadge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 },
+  daysText: { fontSize: 11, fontFamily: 'Inter_600SemiBold' },
 });
 
 // ─── Sort Header Cell ─────────────────────────────────────────────────────────
@@ -135,15 +224,15 @@ function SortHeader({
 }) {
   const active = current === sortKey;
   return (
-    <Pressable style={[sh.cell, { flex }]} onPress={() => onPress(sortKey)}>
-      <Text style={[sh.text, active && sh.active]}>{label}</Text>
+    <Pressable style={[ssh.cell, { flex }]} onPress={() => onPress(sortKey)}>
+      <Text style={[ssh.text, active && ssh.active]}>{label}</Text>
       {active ? (
         <Feather name={dir === 'asc' ? 'chevron-up' : 'chevron-down'} size={12} color={C.accent} />
       ) : null}
     </Pressable>
   );
 }
-const sh = StyleSheet.create({
+const ssh = StyleSheet.create({
   cell: { flexDirection: 'row', alignItems: 'center', gap: 3, paddingVertical: 8, paddingHorizontal: 6 },
   text: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 1.5, textTransform: 'uppercase' },
   active: { color: C.accent },
@@ -156,7 +245,7 @@ function PersonCard({ person, onPress, onDelete }: {
 }) {
   return (
     <Pressable
-      style={({ pressed }) => [card.row, pressed && card.pressed]}
+      style={({ pressed }) => [pcard.row, pressed && pcard.pressed]}
       onPress={onPress}
       onLongPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -167,25 +256,25 @@ function PersonCard({ person, onPress, onDelete }: {
       }}
     >
       <PersonAvatar person={person} />
-      <View style={card.info}>
-        <View style={card.nameRow}>
-          <Text style={card.name} numberOfLines={1}>{person.name}</Text>
+      <View style={pcard.info}>
+        <View style={pcard.nameRow}>
+          <Text style={pcard.name} numberOfLines={1}>{person.name}</Text>
           <TrustBadge level={person.trustLevel} />
         </View>
         {person.tags.length > 0 && (
-          <View style={card.tagRow}>
+          <View style={pcard.tagRow}>
             {person.tags.slice(0, 3).map(t => <TagChip key={t} tag={t} />)}
           </View>
         )}
         {person.description ? (
-          <Text style={card.desc} numberOfLines={1}>{person.description}</Text>
+          <Text style={pcard.desc} numberOfLines={1}>{person.description}</Text>
         ) : null}
       </View>
       <Feather name="chevron-right" size={16} color={C.textDim} />
     </Pressable>
   );
 }
-const card = StyleSheet.create({
+const pcard = StyleSheet.create({
   row: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
     backgroundColor: C.panel, borderRadius: 14,
@@ -207,11 +296,7 @@ function TableRow({ person, onPress, onDelete, isEven }: {
 }) {
   return (
     <Pressable
-      style={({ pressed }) => [
-        tr.row,
-        isEven && tr.even,
-        pressed && tr.pressed,
-      ]}
+      style={({ pressed }) => [trow.row, isEven && trow.even, pressed && trow.pressed]}
       onPress={onPress}
       onLongPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -222,7 +307,7 @@ function TableRow({ person, onPress, onDelete, isEven }: {
       }}
     >
       <View style={{ flex: 3, paddingHorizontal: 6 }}>
-        <Text style={tr.name} numberOfLines={1}>{person.name}</Text>
+        <Text style={trow.name} numberOfLines={1}>{person.name}</Text>
       </View>
       <View style={{ flex: 2, flexDirection: 'row', flexWrap: 'wrap', gap: 3, paddingHorizontal: 4 }}>
         {person.tags.slice(0, 2).map(t => <TagChip key={t} tag={t} small />)}
@@ -231,19 +316,16 @@ function TableRow({ person, onPress, onDelete, isEven }: {
         <TrustBadge level={person.trustLevel} />
       </View>
       <View style={{ flex: 2, paddingHorizontal: 6 }}>
-        <Text style={tr.cell} numberOfLines={1}>{formatDate(person.lastMet)}</Text>
+        <Text style={trow.cell} numberOfLines={1}>{formatDate(person.lastMet)}</Text>
       </View>
       <View style={{ flex: 1, alignItems: 'center' }}>
-        <Text style={tr.cell}>{notesCount(person)}</Text>
+        <Text style={trow.cell}>{notesCount(person)}</Text>
       </View>
     </Pressable>
   );
 }
-const tr = StyleSheet.create({
-  row: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: C.border,
-  },
+const trow = StyleSheet.create({
+  row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: C.border },
   even: { backgroundColor: C.panel + '55' },
   pressed: { backgroundColor: C.accent + '15' },
   name: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.textBright },
@@ -316,13 +398,9 @@ function AddTagModal({ visible, onClose, onAdd }: { visible: boolean; onClose: (
 const atm = StyleSheet.create({
   overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: '#00000088' },
   box: {
-    position: 'absolute', left: 20, right: 20,
-    top: '38%',
-    backgroundColor: C.panel,
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: C.border,
+    position: 'absolute', left: 20, right: 20, top: '38%',
+    backgroundColor: C.panel, borderRadius: 16, padding: 20,
+    borderWidth: 1, borderColor: C.border,
   },
   title: { fontSize: 14, fontFamily: 'Inter_600SemiBold', color: C.textBright, marginBottom: 12 },
   input: {
@@ -337,10 +415,170 @@ const atm = StyleSheet.create({
   confirmText: { fontSize: 14, fontFamily: 'Inter_600SemiBold', color: C.textBright },
 });
 
+// ─── Quick Log Modal ──────────────────────────────────────────────────────────
+
+function QuickLogModal({ visible, people, onClose, onSave }: {
+  visible: boolean;
+  people: Person[];
+  onClose: () => void;
+  onSave: (personId: string, note: string) => Promise<void>;
+}) {
+  const [step, setStep] = useState<'pick' | 'note'>('pick');
+  const [selected, setSelected] = useState<Person | null>(null);
+  const [note, setNote] = useState('');
+  const [search, setSearch] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const reset = () => { setStep('pick'); setSelected(null); setNote(''); setSearch(''); };
+  const handleClose = () => { reset(); onClose(); };
+
+  const filtered = useMemo(() =>
+    people.filter(p => p.name.toLowerCase().includes(search.toLowerCase())),
+    [people, search]
+  );
+
+  const handlePick = (person: Person) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setSelected(person);
+    setStep('note');
+  };
+
+  const handleSave = async () => {
+    if (!selected || !note.trim()) return;
+    setSaving(true);
+    await onSave(selected.id, note);
+    setSaving(false);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    reset();
+    onClose();
+  };
+
+  return (
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={handleClose}>
+      <KeyboardAvoidingView style={ql.overlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <Pressable style={ql.backdrop} onPress={handleClose} />
+        <View style={ql.sheet}>
+          <View style={ql.handle} />
+
+          {step === 'pick' ? (
+            <>
+              <Text style={ql.title}>Who did you interact with?</Text>
+              <View style={ql.searchWrap}>
+                <Feather name="search" size={14} color={C.textDim} />
+                <TextInput
+                  style={ql.searchInput}
+                  value={search}
+                  onChangeText={setSearch}
+                  placeholder="Search name…"
+                  placeholderTextColor={C.textDim}
+                  autoFocus
+                />
+              </View>
+              <ScrollView style={ql.list} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+                {filtered.length === 0 ? (
+                  <Text style={ql.empty}>No people found</Text>
+                ) : (
+                  filtered.map(p => {
+                    const initials = p.name.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('');
+                    const nc = avatarColorForName(p.name);
+                    return (
+                      <Pressable key={p.id} style={({ pressed }) => [ql.personRow, pressed && ql.personPressed]} onPress={() => handlePick(p)}>
+                        <View style={[ql.personAvatar, { backgroundColor: nc.bg }]}>
+                          <Text style={[ql.personInitials, { color: nc.text }]}>{initials}</Text>
+                        </View>
+                        <Text style={ql.personName}>{p.name}</Text>
+                        <Feather name="chevron-right" size={15} color={C.textDim} />
+                      </Pressable>
+                    );
+                  })
+                )}
+              </ScrollView>
+            </>
+          ) : (
+            <>
+              <Pressable style={ql.backRow} onPress={() => setStep('pick')}>
+                <Feather name="arrow-left" size={16} color={C.accent} />
+                <Text style={ql.backText}>Change person</Text>
+              </Pressable>
+              <Text style={ql.title}>What happened with <Text style={{ color: C.accentGlow }}>{selected?.name}</Text>?</Text>
+              <TextInput
+                style={ql.noteInput}
+                value={note}
+                onChangeText={setNote}
+                placeholder="e.g. Caught up over coffee, talked about the move to Berlin…"
+                placeholderTextColor={C.textDim}
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+                autoFocus
+                maxLength={500}
+              />
+              <Text style={ql.charCount}>{note.length}/500</Text>
+              <View style={ql.actions}>
+                <Pressable style={ql.cancelBtn} onPress={handleClose}>
+                  <Text style={ql.cancelText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={[ql.saveBtn, (!note.trim() || saving) && ql.saveBtnDisabled]}
+                  onPress={handleSave}
+                  disabled={!note.trim() || saving}
+                >
+                  <Text style={ql.saveText}>{saving ? 'Saving…' : 'Save'}</Text>
+                </Pressable>
+              </View>
+            </>
+          )}
+        </View>
+      </KeyboardAvoidingView>
+    </Modal>
+  );
+}
+const ql = StyleSheet.create({
+  overlay: { flex: 1, justifyContent: 'flex-end' },
+  backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.6)' },
+  sheet: {
+    backgroundColor: C.panel, borderTopLeftRadius: 24, borderTopRightRadius: 24,
+    padding: 24, paddingBottom: 40, maxHeight: '80%',
+    borderWidth: 1, borderColor: C.border,
+  },
+  handle: { width: 40, height: 4, borderRadius: 2, backgroundColor: C.border, alignSelf: 'center', marginBottom: 20 },
+  title: { fontSize: 17, fontFamily: 'Inter_700Bold', color: C.textBright, marginBottom: 14 },
+  searchWrap: {
+    flexDirection: 'row', alignItems: 'center', gap: 10,
+    backgroundColor: C.bg, borderRadius: 12, borderWidth: 1, borderColor: C.border,
+    paddingHorizontal: 12, height: 44, marginBottom: 12,
+  },
+  searchInput: { flex: 1, fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text },
+  list: { maxHeight: 280 },
+  empty: { fontSize: 13, fontFamily: 'Inter_400Regular', color: C.textMuted, textAlign: 'center', paddingVertical: 20 },
+  personRow: {
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: C.border,
+  },
+  personPressed: { backgroundColor: C.panelHigh },
+  personAvatar: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  personInitials: { fontSize: 13, fontFamily: 'Inter_700Bold' },
+  personName: { flex: 1, fontSize: 15, fontFamily: 'Inter_500Medium', color: C.textBright },
+  backRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 },
+  backText: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.accent },
+  noteInput: {
+    backgroundColor: C.bg, borderRadius: 12, borderWidth: 1, borderColor: C.border,
+    padding: 14, fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text,
+    minHeight: 100, marginBottom: 6,
+  },
+  charCount: { fontSize: 11, color: C.textDim, fontFamily: 'Inter_400Regular', textAlign: 'right', marginBottom: 16 },
+  actions: { flexDirection: 'row', gap: 12 },
+  cancelBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, backgroundColor: C.bg, alignItems: 'center', borderWidth: 1, borderColor: C.border },
+  cancelText: { fontSize: 15, fontFamily: 'Inter_500Medium', color: C.textMuted },
+  saveBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, backgroundColor: C.accent, alignItems: 'center' },
+  saveBtnDisabled: { opacity: 0.4 },
+  saveText: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: '#fff' },
+});
+
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 
 export default function Dashboard() {
-  const { people, deletePerson, lock, hasSeenTutorial, markTutorialSeen } = useApp();
+  const { people, deletePerson, lock, hasSeenTutorial, markTutorialSeen, addInteraction } = useApp();
   const insets = useSafeAreaInsets();
 
   const [query, setQuery] = useState('');
@@ -349,6 +587,8 @@ export default function Dashboard() {
   const [sortKey, setSortKey] = useState<SortKey>('name');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
   const [addTagOpen, setAddTagOpen] = useState(false);
+  const [fabOpen, setFabOpen] = useState(false);
+  const [quickLogOpen, setQuickLogOpen] = useState(false);
 
   const handleSort = useCallback((key: SortKey) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -371,7 +611,6 @@ export default function Dashboard() {
       );
       return matchTag && matchQ;
     });
-
     list.sort((a, b) => {
       let cmp = 0;
       switch (sortKey) {
@@ -382,7 +621,6 @@ export default function Dashboard() {
       }
       return sortDir === 'asc' ? cmp : -cmp;
     });
-
     return list;
   }, [people, query, activeTag, sortKey, sortDir]);
 
@@ -392,8 +630,35 @@ export default function Dashboard() {
     return [...set].sort();
   }, [people]);
 
+  const upcomingEvents = useMemo<UpcomingEvent[]>(() => {
+    const events: UpcomingEvent[] = [];
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const in30 = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+    for (const person of people) {
+      if (person.birthday) {
+        const bd = new Date(person.birthday);
+        const thisYear = new Date(now.getFullYear(), bd.getMonth(), bd.getDate());
+        if (thisYear < now) thisYear.setFullYear(now.getFullYear() + 1);
+        if (thisYear <= in30) {
+          events.push({ person, type: 'birthday', date: thisYear, days: daysUntil(thisYear) });
+        }
+      }
+      if (person.nextMeeting) {
+        const nm = new Date(person.nextMeeting);
+        if (nm >= now && nm <= in30) {
+          events.push({ person, type: 'meeting', date: nm, days: daysUntil(nm) });
+        }
+      }
+    }
+    return events.sort((a, b) => a.date.getTime() - b.date.getTime());
+  }, [people]);
+
   const topPadding = insets.top + (Platform.OS === 'web' ? 67 : 0);
   const bottomPadding = insets.bottom + (Platform.OS === 'web' ? 34 : 0);
+
+  const closeFab = () => setFabOpen(false);
 
   return (
     <View style={[s.root, { paddingTop: topPadding }]}>
@@ -441,10 +706,9 @@ export default function Dashboard() {
         )}
       </View>
 
-      {/* Tag Filters — always visible */}
+      {/* Tag Filters */}
       <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
+        horizontal showsHorizontalScrollIndicator={false}
         contentContainerStyle={s.tagFilters}
         style={s.tagFiltersContainer}
       >
@@ -468,19 +732,12 @@ export default function Dashboard() {
             </Pressable>
           );
         })}
-        <Pressable
-          style={s.tagFilterAdd}
-          onPress={() => setAddTagOpen(true)}
-        >
+        <Pressable style={s.tagFilterAdd} onPress={() => setAddTagOpen(true)}>
           <Feather name="plus" size={14} color={C.textMuted} />
         </Pressable>
       </ScrollView>
 
-      <AddTagModal
-        visible={addTagOpen}
-        onClose={() => setAddTagOpen(false)}
-        onAdd={tag => { setActiveTag(tag); }}
-      />
+      <AddTagModal visible={addTagOpen} onClose={() => setAddTagOpen(false)} onAdd={tag => setActiveTag(tag)} />
 
       {/* Content */}
       {people.length === 0 ? (
@@ -499,6 +756,12 @@ export default function Dashboard() {
         <FlatList
           data={filtered}
           keyExtractor={p => p.id}
+          ListHeaderComponent={
+            <ComingUpStrip
+              events={upcomingEvents}
+              onPress={p => router.push({ pathname: '/profile/[id]', params: { id: p.id } })}
+            />
+          }
           renderItem={({ item }) => (
             <PersonCard
               person={item}
@@ -511,10 +774,16 @@ export default function Dashboard() {
         />
       ) : (
         <View style={{ flex: 1 }}>
+          {upcomingEvents.length > 0 && (
+            <ComingUpStrip
+              events={upcomingEvents}
+              onPress={p => router.push({ pathname: '/profile/[id]', params: { id: p.id } })}
+            />
+          )}
           <View style={[tbl.header, { marginHorizontal: 14 }]}>
             <SortHeader label="NAME" sortKey="name" current={sortKey} dir={sortDir} onPress={handleSort} flex={3} />
             <View style={{ flex: 2, paddingHorizontal: 6, paddingVertical: 8 }}>
-              <Text style={sh.text}>TAGS</Text>
+              <Text style={ssh.text}>TAGS</Text>
             </View>
             <SortHeader label="TRUST" sortKey="trustLevel" current={sortKey} dir={sortDir} onPress={handleSort} flex={1} />
             <SortHeader label="LAST MET" sortKey="lastMet" current={sortKey} dir={sortDir} onPress={handleSort} flex={2} />
@@ -537,34 +806,70 @@ export default function Dashboard() {
         </View>
       )}
 
-      {/* FAB */}
-      <Pressable
-        style={({ pressed }) => [s.fab, pressed && s.fabPressed]}
-        onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          router.push('/add');
-        }}
-      >
-        <Feather name="plus" size={26} color={C.textBright} />
-      </Pressable>
+      {/* Expandable FAB */}
+      {fabOpen && (
+        <Pressable style={StyleSheet.absoluteFill} onPress={closeFab} />
+      )}
+      <View style={[s.fabGroup, { bottom: bottomPadding + 24 }]}>
+        {fabOpen && (
+          <>
+            <View style={s.fabOptionRow}>
+              <View style={s.fabLabel}><Text style={s.fabLabelText}>Log Interaction</Text></View>
+              <Pressable
+                style={s.fabOption}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setFabOpen(false);
+                  setQuickLogOpen(true);
+                }}
+              >
+                <Feather name="message-circle" size={20} color={C.textBright} />
+              </Pressable>
+            </View>
+            <View style={s.fabOptionRow}>
+              <View style={s.fabLabel}><Text style={s.fabLabelText}>Add Person</Text></View>
+              <Pressable
+                style={s.fabOption}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setFabOpen(false);
+                  router.push('/add');
+                }}
+              >
+                <Feather name="user-plus" size={20} color={C.textBright} />
+              </Pressable>
+            </View>
+          </>
+        )}
+        <Pressable
+          style={({ pressed }) => [s.fab, pressed && s.fabPressed, fabOpen && s.fabActive]}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setFabOpen(v => !v);
+          }}
+        >
+          <Feather name={fabOpen ? 'x' : 'plus'} size={26} color={C.textBright} />
+        </Pressable>
+      </View>
+
+      {/* Quick Log Modal */}
+      <QuickLogModal
+        visible={quickLogOpen}
+        people={people}
+        onClose={() => setQuickLogOpen(false)}
+        onSave={addInteraction}
+      />
 
       {/* One-time tutorial */}
-      {!hasSeenTutorial && (
-        <Tutorial onDone={markTutorialSeen} />
-      )}
+      {!hasSeenTutorial && <Tutorial onDone={markTutorialSeen} />}
     </View>
   );
 }
 
 const tbl = StyleSheet.create({
   header: {
-    flexDirection: 'row',
-    borderBottomWidth: 2,
-    borderBottomColor: C.border,
-    backgroundColor: C.header,
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginBottom: 4,
+    flexDirection: 'row', borderBottomWidth: 2, borderBottomColor: C.border,
+    backgroundColor: C.header, borderRadius: 10, overflow: 'hidden', marginBottom: 4,
   },
 });
 
@@ -581,56 +886,51 @@ const s = StyleSheet.create({
     backgroundColor: C.panel, alignItems: 'center', justifyContent: 'center',
     borderWidth: 1, borderColor: C.border,
   },
-  iconBtnActive: { borderColor: C.accent, backgroundColor: C.accent + '22' },
+  iconBtnActive: { borderColor: C.accent + '55', backgroundColor: C.accent + '18' },
   searchWrap: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: C.panel, borderRadius: 12,
-    marginHorizontal: 14, marginBottom: 4,
-    paddingHorizontal: 14, borderWidth: 1, borderColor: C.border, height: 44,
+    marginHorizontal: 14, marginBottom: 10,
+    backgroundColor: C.panel, borderRadius: 13,
+    paddingHorizontal: 14, height: 44,
+    borderWidth: 1, borderColor: C.border,
   },
-  search: { flex: 1, color: C.text, fontSize: 14, fontFamily: 'Inter_400Regular', height: 44 },
-  tagFiltersContainer: { flexGrow: 0, flexShrink: 0 },
-  tagFilters: {
-    paddingHorizontal: 14,
-    paddingTop: 2,
-    paddingBottom: 8,
-    gap: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  search: { flex: 1, fontSize: 14, fontFamily: 'Inter_400Regular', color: C.text },
+  tagFiltersContainer: { maxHeight: 42, marginBottom: 6 },
+  tagFilters: { paddingHorizontal: 14, gap: 8, alignItems: 'center' },
   tagFilter: {
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-    backgroundColor: C.panel,
-    borderWidth: 1,
-    borderColor: C.border,
+    borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6,
+    backgroundColor: C.panel, borderWidth: 1, borderColor: C.border,
   },
-  tagFilterActive: { backgroundColor: C.accent + '22', borderColor: C.accent },
-  tagFilterAdd: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: C.panel,
-    borderWidth: 1,
-    borderColor: C.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tagFilterText: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.textMuted },
+  tagFilterActive: { backgroundColor: C.accent + '20', borderColor: C.accent + '55' },
+  tagFilterText: { fontSize: 12, fontFamily: 'Inter_500Medium', color: C.textMuted },
   tagFilterTextActive: { color: C.accent },
-  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, paddingBottom: 80 },
-  emptyTitle: { fontSize: 18, fontFamily: 'Inter_600SemiBold', color: C.text },
-  emptyText: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.textMuted },
+  tagFilterAdd: {
+    width: 32, height: 32, borderRadius: 16,
+    backgroundColor: C.panel, borderWidth: 1, borderColor: C.border,
+    alignItems: 'center', justifyContent: 'center',
+  },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 },
+  emptyTitle: { fontSize: 18, fontFamily: 'Inter_600SemiBold', color: C.textMuted },
+  emptyText: { fontSize: 14, fontFamily: 'Inter_400Regular', color: C.textDim },
+  fabGroup: { position: 'absolute', right: 20, alignItems: 'flex-end', gap: 12 },
   fab: {
-    position: 'absolute', bottom: 28, right: 22,
     width: 58, height: 58, borderRadius: 29,
     backgroundColor: C.accent, alignItems: 'center', justifyContent: 'center',
-    elevation: 8,
-    ...Platform.select({
-      ios: { shadowColor: C.accent, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 12 },
-      default: {},
-    }),
+    shadowColor: C.accent, shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5, shadowRadius: 12, elevation: 8,
   },
-  fabPressed: { backgroundColor: C.accentDim, transform: [{ scale: 0.94 }] },
+  fabPressed: { opacity: 0.85 },
+  fabActive: { backgroundColor: C.accentDim },
+  fabOption: {
+    width: 48, height: 48, borderRadius: 24,
+    backgroundColor: C.accentDim, alignItems: 'center', justifyContent: 'center',
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3, shadowRadius: 6, elevation: 5,
+  },
+  fabOptionRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  fabLabel: {
+    backgroundColor: C.panel, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 5,
+    borderWidth: 1, borderColor: C.border,
+  },
+  fabLabelText: { fontSize: 13, fontFamily: 'Inter_500Medium', color: C.textBright },
 });
