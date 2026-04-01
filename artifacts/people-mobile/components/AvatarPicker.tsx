@@ -135,7 +135,7 @@ export function AvatarDisplay({ value, name, size = 72 }: { value: AvatarValue; 
 }
 
 const ad = StyleSheet.create({
-  circle: { borderWidth: 2, borderColor: C.accent + '77' },
+  circle: { borderWidth: 2 },
   initials: { alignItems: 'center', justifyContent: 'center' },
   initialsText: { fontFamily: 'Inter_700Bold' },
 });
@@ -254,34 +254,32 @@ const p = StyleSheet.create({
   editBadge: {
     position: 'absolute', bottom: 0, right: 0,
     width: 24, height: 24, borderRadius: 12,
-    backgroundColor: C.accent,
     alignItems: 'center', justifyContent: 'center',
-    borderWidth: 2, borderColor: C.bg,
+    borderWidth: 2,
   },
 });
 
 const m = StyleSheet.create({
   overlay: { flex: 1, backgroundColor: '#00000088' },
   sheet: {
-    backgroundColor: C.bg,
     borderTopLeftRadius: 22,
     borderTopRightRadius: 22,
     paddingHorizontal: 16,
     paddingBottom: 32,
     maxHeight: '80%',
   },
-  handle: { width: 36, height: 4, borderRadius: 2, backgroundColor: C.border, alignSelf: 'center', marginTop: 10, marginBottom: 16 },
-  title: { fontSize: 16, fontFamily: 'Inter_700Bold', color: C.textBright, marginBottom: 14, textAlign: 'center' },
+  handle: { width: 36, height: 4, borderRadius: 2, alignSelf: 'center', marginTop: 10, marginBottom: 16 },
+  title: { fontSize: 16, fontFamily: 'Inter_700Bold', marginBottom: 14, textAlign: 'center' },
   deviceBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: C.panel, borderRadius: 12,
+    borderRadius: 12,
     paddingHorizontal: 16, paddingVertical: 14,
-    borderWidth: 1, borderColor: C.accent + '55',
+    borderWidth: 1,
     marginBottom: 18,
   },
-  deviceBtnText: { fontSize: 14, fontFamily: 'Inter_500Medium', color: C.accent },
-  sectionLabel: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2, marginBottom: 10 },
-  sectionLabel2: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2, marginBottom: 10, marginTop: 20 },
+  deviceBtnText: { fontSize: 14, fontFamily: 'Inter_500Medium' },
+  sectionLabel: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2, marginBottom: 10 },
+  sectionLabel2: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2, marginBottom: 10, marginTop: 20 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   gridItem: {
     width: '22%',
@@ -292,24 +290,21 @@ const m = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'transparent',
   },
-  gridItemActive: { borderColor: C.accent, backgroundColor: C.accent + '18' },
   avatarWrap: {
     width: 58, height: 58, borderRadius: 29,
     backgroundColor: '#1a3a6b',
     overflow: 'hidden',
     borderWidth: 2,
-    borderColor: C.border,
   },
   avatarImg: { width: 58, height: 58 },
-  gridLabel: { fontSize: 10, fontFamily: 'Inter_400Regular', color: C.textMuted, textAlign: 'center' },
+  gridLabel: { fontSize: 10, fontFamily: 'Inter_400Regular', textAlign: 'center' },
   initialsBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: C.panel, borderRadius: 12,
+    borderRadius: 12,
     paddingHorizontal: 16, paddingVertical: 12,
-    borderWidth: 1, borderColor: C.border,
+    borderWidth: 1,
   },
-  initialsBtnActive: { borderColor: C.accent, backgroundColor: C.accent + '15' },
   initialsCircle: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
   initialsText: { fontSize: 16, fontFamily: 'Inter_700Bold' },
-  initialsBtnLabel: { fontSize: 14, fontFamily: 'Inter_500Medium', color: C.text },
+  initialsBtnLabel: { fontSize: 14, fontFamily: 'Inter_500Medium' },
 });
