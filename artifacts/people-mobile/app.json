@@ -80,7 +80,6 @@
           "cameraPermission": "People Memory needs access to your camera so you can take a profile photo."
         }
       ],
-      "@react-native-community/datetimepicker",
       [
         "expo-contacts",
         {
