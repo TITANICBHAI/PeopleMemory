@@ -186,12 +186,6 @@ const s = StyleSheet.create({
     height: 52,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: C.accent + '99',
-    backgroundColor: C.accent + '10',
-    ...(Platform.select({
-      ios: { shadowColor: C.accent, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.6, shadowRadius: 16 },
-      default: {},
-    })),
   },
   spotTop: { top: 140 },
   spotMid: { top: 195 },
@@ -214,17 +208,14 @@ const s = StyleSheet.create({
   skipText: {
     fontSize: 14,
     fontFamily: 'Inter_500Medium',
-    color: C.textMuted,
   },
   card: {
     position: 'absolute',
     left: (W - CARD_W) / 2,
     width: CARD_W,
-    backgroundColor: C.panel,
     borderRadius: 20,
     padding: 22,
     borderWidth: 1,
-    borderColor: C.accent + '44',
     alignItems: 'center',
     gap: 10,
     ...(Platform.select({
@@ -236,9 +227,7 @@ const s = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: C.accent + '22',
     borderWidth: 1,
-    borderColor: C.accent + '44',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
@@ -246,13 +235,11 @@ const s = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontFamily: 'Inter_700Bold',
-    color: C.textBright,
     textAlign: 'center',
   },
   cardBody: {
     fontSize: 14,
     fontFamily: 'Inter_400Regular',
-    color: C.textMuted,
     textAlign: 'center',
     lineHeight: 21,
   },
@@ -265,17 +252,14 @@ const s = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: C.border,
   },
   dotActive: {
     width: 18,
-    backgroundColor: C.accent,
   },
   nextBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: C.accent,
     borderRadius: 12,
     paddingHorizontal: 22,
     paddingVertical: 12,
@@ -286,6 +270,5 @@ const s = StyleSheet.create({
   nextText: {
     fontSize: 15,
     fontFamily: 'Inter_600SemiBold',
-    color: C.textBright,
   },
 });
