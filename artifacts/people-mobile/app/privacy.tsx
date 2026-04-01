@@ -4,7 +4,7 @@ import React from 'react';
 import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import C from '@/constants/colors';
+import { useColors } from '@/constants/colors';
 
 const SECTIONS = [
   {
@@ -50,14 +50,15 @@ const SECTIONS = [
 ];
 
 export default function PrivacyScreen() {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   return (
-    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0) }]}>
-      <View style={s.navbar}>
-        <Pressable style={s.backBtn} onPress={() => router.back()}>
+    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0), backgroundColor: C.bg }]}>
+      <View style={[s.navbar, { borderBottomColor: C.border }]}>
+        <Pressable style={[s.backBtn, { backgroundColor: C.panel, borderColor: C.border }]} onPress={() => router.back()}>
           <Feather name="arrow-left" size={20} color={C.text} />
         </Pressable>
-        <Text style={s.title}>PRIVACY POLICY</Text>
+        <Text style={[s.title, { color: C.textMuted }]}>PRIVACY POLICY</Text>
         <View style={{ width: 40 }} />
       </View>
 
@@ -65,15 +66,15 @@ export default function PrivacyScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ padding: 20, paddingBottom: insets.bottom + 40 }}
       >
-        <Text style={s.lastUpdated}>Last updated: March 2026</Text>
-        <Text style={s.intro}>
+        <Text style={[s.lastUpdated, { color: C.textDim }]}>Last updated: March 2026</Text>
+        <Text style={[s.intro, { color: C.textBright, backgroundColor: C.panel, borderColor: C.accent + '44' }]}>
           People Memory is designed with privacy as a core principle. Your data belongs to you and stays on your device.
         </Text>
 
         {SECTIONS.map((sec, i) => (
           <View key={i} style={s.section}>
-            <Text style={s.sectionTitle}>{sec.title}</Text>
-            <Text style={s.sectionBody}>{sec.body}</Text>
+            <Text style={[s.sectionTitle, { color: C.textBright }]}>{sec.title}</Text>
+            <Text style={[s.sectionBody, { color: C.text }]}>{sec.body}</Text>
           </View>
         ))}
       </ScrollView>

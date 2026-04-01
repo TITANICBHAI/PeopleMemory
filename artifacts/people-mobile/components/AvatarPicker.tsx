@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 
-import C, { avatarColorForName } from '@/constants/colors';
+import { useColors, avatarColorForName } from '@/constants/colors';
 
 const BASE = 'https://api.dicebear.com/9.x/avataaars/png?size=200&backgroundColor=1a3a6b';
 
@@ -99,6 +99,7 @@ interface Props {
 }
 
 export function AvatarDisplay({ value, name, size = 72 }: { value: AvatarValue; name: string; size?: number }) {
+  const C = useColors();
   const initials = name.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('') || '?';
 
   if (value.type === 'photo' && value.photoUri) {
@@ -143,6 +144,7 @@ const MALES = PRESET_AVATARS.filter(a => a.gender === 'male');
 const FEMALES = PRESET_AVATARS.filter(a => a.gender === 'female');
 
 export function AvatarPicker({ value, onChange, name, size = 72 }: Props) {
+  const C = useColors();
   const [open, setOpen] = useState(false);
 
   const pickFromDevice = async () => {
@@ -172,58 +174,58 @@ export function AvatarPicker({ value, onChange, name, size = 72 }: Props) {
     <>
       <Pressable style={p.wrap} onPress={() => setOpen(true)}>
         <AvatarDisplay value={value} name={name} size={size} />
-        <View style={p.editBadge}>
+        <View style={[p.editBadge, { backgroundColor: C.accent, borderColor: C.bg }]}>
           <Feather name="camera" size={12} color={C.textBright} />
         </View>
       </Pressable>
 
       <Modal visible={open} transparent animationType="slide" onRequestClose={() => setOpen(false)}>
         <Pressable style={m.overlay} onPress={() => setOpen(false)} />
-        <View style={m.sheet}>
-          <View style={m.handle} />
-          <Text style={m.title}>Choose Avatar</Text>
+        <View style={[m.sheet, { backgroundColor: C.bg }]}>
+          <View style={[m.handle, { backgroundColor: C.border }]} />
+          <Text style={[m.title, { color: C.textBright }]}>Choose Avatar</Text>
 
-          <Pressable style={m.deviceBtn} onPress={pickFromDevice}>
+          <Pressable style={[m.deviceBtn, { backgroundColor: C.panel, borderColor: C.accent + '55' }]} onPress={pickFromDevice}>
             <Feather name="image" size={18} color={C.accent} />
-            <Text style={m.deviceBtnText}>Pick from Device Photos</Text>
+            <Text style={[m.deviceBtnText, { color: C.accent }]}>Pick from Device Photos</Text>
           </Pressable>
 
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={m.sectionLabel}>MALE</Text>
+            <Text style={[m.sectionLabel, { color: C.textMuted }]}>MALE</Text>
             <View style={m.grid}>
               {MALES.map(a => (
                 <Pressable
                   key={a.id}
-                  style={[m.gridItem, value.type === 'preset' && value.presetId === a.id && m.gridItemActive]}
+                  style={[m.gridItem, value.type === 'preset' && value.presetId === a.id && { borderColor: C.accent, backgroundColor: C.accent + '18' }]}
                   onPress={() => select(a.id)}
                 >
-                  <View style={m.avatarWrap}>
+                  <View style={[m.avatarWrap, { borderColor: C.border }]}>
                     <Image source={{ uri: a.uri }} style={m.avatarImg} resizeMode="cover" />
                   </View>
-                  <Text style={m.gridLabel}>{a.label}</Text>
+                  <Text style={[m.gridLabel, { color: C.textMuted }]}>{a.label}</Text>
                 </Pressable>
               ))}
             </View>
 
-            <Text style={[m.sectionLabel, { marginTop: 16 }]}>FEMALE</Text>
+            <Text style={[m.sectionLabel, { color: C.textMuted, marginTop: 16 }]}>FEMALE</Text>
             <View style={m.grid}>
               {FEMALES.map(a => (
                 <Pressable
                   key={a.id}
-                  style={[m.gridItem, value.type === 'preset' && value.presetId === a.id && m.gridItemActive]}
+                  style={[m.gridItem, value.type === 'preset' && value.presetId === a.id && { borderColor: C.accent, backgroundColor: C.accent + '18' }]}
                   onPress={() => select(a.id)}
                 >
-                  <View style={m.avatarWrap}>
+                  <View style={[m.avatarWrap, { borderColor: C.border }]}>
                     <Image source={{ uri: a.uri }} style={m.avatarImg} resizeMode="cover" />
                   </View>
-                  <Text style={m.gridLabel}>{a.label}</Text>
+                  <Text style={[m.gridLabel, { color: C.textMuted }]}>{a.label}</Text>
                 </Pressable>
               ))}
             </View>
 
-            <Text style={m.sectionLabel2}>OR USE INITIALS</Text>
+            <Text style={[m.sectionLabel2, { color: C.textMuted }]}>OR USE INITIALS</Text>
             <Pressable
-              style={[m.initialsBtn, value.type === 'initials' && m.initialsBtnActive]}
+              style={[m.initialsBtn, { backgroundColor: C.panel, borderColor: C.border }, value.type === 'initials' && { borderColor: C.accent, backgroundColor: C.accent + '15' }]}
               onPress={() => { onChange({ type: 'initials' }); setOpen(false); }}
             >
               {(() => {
@@ -236,7 +238,7 @@ export function AvatarPicker({ value, onChange, name, size = 72 }: Props) {
                   </View>
                 );
               })()}
-              <Text style={m.initialsBtnLabel}>Use Initials</Text>
+              <Text style={[m.initialsBtnLabel, { color: C.text }]}>Use Initials</Text>
             </Pressable>
 
             <View style={{ height: 16 }} />

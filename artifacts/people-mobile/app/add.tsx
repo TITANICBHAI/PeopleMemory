@@ -16,14 +16,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AvatarPicker, AvatarValue } from '@/components/AvatarPicker';
 import { ContactNameField } from '@/components/ContactNameField';
-import C from '@/constants/colors';
+import { useColors } from '@/constants/colors';
 import { Person, PersonDate, useApp } from '@/context/AppContext';
 import { scheduleNextMeetingNotification } from '@/utils/notifications';
 
 const PRESET_TAGS = ['Friend', 'Work', 'Family', 'Online'];
 
 function FieldLabel({ text }: { text: string }) {
-  return <Text style={fl.text}>{text}</Text>;
+  const C = useColors();
+  return <Text style={[fl.text, { color: C.textMuted }]}>{text}</Text>;
 }
 const fl = StyleSheet.create({
   text: {
@@ -40,11 +41,12 @@ function Field({ label, value, onChange, multiline, placeholder }: {
   label: string; value: string; onChange: (v: string) => void;
   multiline?: boolean; placeholder?: string;
 }) {
+  const C = useColors();
   return (
     <View style={f.wrap}>
       <FieldLabel text={label} />
       <TextInput
-        style={[f.input, multiline && f.multi]}
+        style={[f.input, multiline && f.multi, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]}
         value={value}
         onChangeText={onChange}
         placeholder={placeholder}
@@ -78,6 +80,7 @@ const f = StyleSheet.create({
 function TagsEditor({
   tags, onAdd, onRemove,
 }: { tags: string[]; onAdd: (t: string) => void; onRemove: (t: string) => void }) {
+  const C = useColors();
   const [custom, setCustom] = useState('');
   return (
     <View style={te.wrap}>
@@ -88,10 +91,10 @@ function TagsEditor({
           return (
             <Pressable
               key={t}
-              style={[te.preset, active && te.presetActive]}
+              style={[te.preset, { backgroundColor: C.panel, borderColor: C.border }, active && { backgroundColor: C.accent + '22', borderColor: C.accent }]}
               onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); active ? onRemove(t) : onAdd(t); }}
             >
-              <Text style={[te.presetText, active && te.presetTextActive]}>{t}</Text>
+              <Text style={[te.presetText, { color: C.textMuted }, active && { color: C.accent }]}>{t}</Text>
             </Pressable>
           );
         })}
@@ -99,8 +102,8 @@ function TagsEditor({
       {tags.filter(t => !PRESET_TAGS.includes(t)).length > 0 && (
         <View style={te.customs}>
           {tags.filter(t => !PRESET_TAGS.includes(t)).map(t => (
-            <Pressable key={t} style={te.customTag} onPress={() => onRemove(t)}>
-              <Text style={te.customTagText}>{t}</Text>
+            <Pressable key={t} style={[te.customTag, { backgroundColor: C.panelHigh, borderColor: C.border }]} onPress={() => onRemove(t)}>
+              <Text style={[te.customTagText, { color: C.text }]}>{t}</Text>
               <Feather name="x" size={12} color={C.textMuted} />
             </Pressable>
           ))}
@@ -108,7 +111,7 @@ function TagsEditor({
       )}
       <View style={te.addRow}>
         <TextInput
-          style={te.input}
+          style={[te.input, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]}
           value={custom}
           onChangeText={setCustom}
           placeholder="Custom tag…"
@@ -119,7 +122,7 @@ function TagsEditor({
           }}
         />
         <Pressable
-          style={te.addBtn}
+          style={[te.addBtn, { backgroundColor: C.panel, borderColor: C.border }]}
           onPress={() => { if (custom.trim()) { onAdd(custom.trim()); setCustom(''); } }}
         >
           <Feather name="plus" size={18} color={C.accent} />
@@ -185,6 +188,7 @@ const te = StyleSheet.create({
 });
 
 function TrustSlider({ value, onChange }: { value: number | null; onChange: (v: number | null) => void }) {
+  const C = useColors();
   const active = value !== null;
   const num = value ?? 5;
   const color = num <= 3 ? C.red : num <= 6 ? C.yellow : C.green;
@@ -193,10 +197,10 @@ function TrustSlider({ value, onChange }: { value: number | null; onChange: (v: 
       <View style={ts.header}>
         <FieldLabel text={active ? `Trust Level — ${num}/10` : 'Trust Level'} />
         <Pressable
-          style={[ts.naBtn, !active && ts.naBtnOn]}
+          style={[ts.naBtn, { borderColor: C.border, backgroundColor: C.panel }, !active && { borderColor: C.accent, backgroundColor: C.accent + '22' }]}
           onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onChange(active ? null : 5); }}
         >
-          <Text style={[ts.naBtnText, !active && ts.naBtnTextOn]}>N/A</Text>
+          <Text style={[ts.naBtnText, { color: C.textMuted }, !active && { color: C.accent }]}>N/A</Text>
         </Pressable>
       </View>
       {active && (
@@ -246,6 +250,7 @@ function DatesSection({
   onLastMet: (v?: string) => void; onNextMeeting: (v?: string) => void;
   onNextMeetingTime: (v?: string) => void; onCustomDates: (d: PersonDate[]) => void;
 }) {
+  const C = useColors();
   const [open, setOpen] = useState(false);
   const [newLabel, setNewLabel] = useState('');
   const [newDate, setNewDate] = useState('');
@@ -254,13 +259,13 @@ function DatesSection({
   return (
     <View style={ds.wrap}>
       <Pressable
-        style={ds.header}
+        style={[ds.header, { backgroundColor: C.panel, borderColor: C.border }]}
         onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setOpen(o => !o); }}
       >
         <View style={ds.headerLeft}>
           <Feather name="calendar" size={15} color={C.accent} />
-          <Text style={ds.headerText}>Dates & Meetings</Text>
-          {hasDates && <View style={ds.dot} />}
+          <Text style={[ds.headerText, { color: C.text }]}>Dates & Meetings</Text>
+          {hasDates && <View style={[ds.dot, { backgroundColor: C.accent }]} />}
         </View>
         <Feather name={open ? 'chevron-up' : 'chevron-down'} size={18} color={C.textMuted} />
       </Pressable>
@@ -268,16 +273,16 @@ function DatesSection({
       {open && (
         <View style={ds.body}>
           <View style={ds.dateField}>
-            <Text style={ds.dateLabel}>BIRTHDAY</Text>
-            <TextInput style={ds.dateInput} value={birthday ?? ''} onChangeText={v => onBirthday(v || undefined)} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
+            <Text style={[ds.dateLabel, { color: C.textMuted }]}>BIRTHDAY</Text>
+            <TextInput style={[ds.dateInput, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]} value={birthday ?? ''} onChangeText={v => onBirthday(v || undefined)} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
           </View>
           <View style={ds.dateField}>
-            <Text style={ds.dateLabel}>FIRST MET</Text>
-            <TextInput style={ds.dateInput} value={firstMet ?? ''} onChangeText={v => onFirstMet(v || undefined)} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
+            <Text style={[ds.dateLabel, { color: C.textMuted }]}>FIRST MET</Text>
+            <TextInput style={[ds.dateInput, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]} value={firstMet ?? ''} onChangeText={v => onFirstMet(v || undefined)} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
           </View>
           <View style={ds.dateField}>
-            <Text style={ds.dateLabel}>LAST MET</Text>
-            <TextInput style={ds.dateInput} value={lastMet ?? ''} onChangeText={v => onLastMet(v || undefined)} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
+            <Text style={[ds.dateLabel, { color: C.textMuted }]}>LAST MET</Text>
+            <TextInput style={[ds.dateInput, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]} value={lastMet ?? ''} onChangeText={v => onLastMet(v || undefined)} placeholder="YYYY-MM-DD" placeholderTextColor={C.textDim} />
           </View>
 
           <View style={ds.nextMeetWrap}>
@@ -377,6 +382,7 @@ function photoUriToAvatarValue(uri?: string): AvatarValue {
 }
 
 export default function AddScreen() {
+  const C = useColors();
   const { addPerson } = useApp();
   const insets = useSafeAreaInsets();
   const [form, setForm] = useState<FormData>(blank);
@@ -406,18 +412,18 @@ export default function AddScreen() {
   };
 
   return (
-    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0) }]}>
-      <View style={s.navbar}>
-        <Pressable style={s.closeBtn} onPress={() => router.back()}>
+    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0), backgroundColor: C.bg }]}>
+      <View style={[s.navbar, { borderBottomColor: C.border }]}>
+        <Pressable style={[s.closeBtn, { backgroundColor: C.panel, borderColor: C.border }]} onPress={() => router.back()}>
           <Feather name="x" size={20} color={C.text} />
         </Pressable>
-        <Text style={s.title}>ADD PERSON</Text>
+        <Text style={[s.title, { color: C.textMuted }]}>ADD PERSON</Text>
         <Pressable
-          style={[s.saveBtn, (!form.name.trim() || saving) && s.saveBtnDisabled]}
+          style={[s.saveBtn, { backgroundColor: C.accent }, (!form.name.trim() || saving) && { opacity: 0.4 }]}
           onPress={handleSave}
           disabled={!form.name.trim() || saving}
         >
-          <Text style={s.saveBtnText}>{saving ? 'Saving…' : 'Save'}</Text>
+          <Text style={[s.saveBtnText, { color: C.textBright }]}>{saving ? 'Saving…' : 'Save'}</Text>
         </Pressable>
       </View>
 
@@ -452,7 +458,7 @@ export default function AddScreen() {
         <View style={{ marginBottom: 18 }}>
           <Text style={fl.text}>Phone</Text>
           <TextInput
-            style={f.input}
+            style={[f.input, { backgroundColor: C.panel, borderColor: C.border, color: C.text }]}
             value={form.phone ?? ''}
             onChangeText={v => set('phone', v || undefined)}
             placeholder="Mobile number…"
@@ -469,7 +475,7 @@ export default function AddScreen() {
 
         <TrustSlider value={form.trustLevel} onChange={v => set('trustLevel', v)} />
 
-        <View style={s.divider}><Text style={s.dividerText}>NOTES</Text></View>
+        <View style={[s.divider, { borderTopColor: C.border }]}><Text style={[s.dividerText, { color: C.textDim, backgroundColor: C.bg }]}>NOTES</Text></View>
 
         <Field label="Description" value={form.description} onChange={v => set('description', v)} multiline placeholder="Who is this person?" />
         <Field label="Likes" value={form.likes} onChange={v => set('likes', v)} multiline placeholder="Interests, hobbies…" />

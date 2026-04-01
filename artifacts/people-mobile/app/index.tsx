@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import C from '@/constants/colors';
+import { useColors } from '@/constants/colors';
 import { useApp } from '@/context/AppContext';
 
 const KEYS = [
@@ -55,6 +55,7 @@ const PRIVACY_SECTIONS = [
 ];
 
 function PrivacyAcceptScreen({ onAccept }: { onAccept: () => void }) {
+  const C = useColors();
   const insets = useSafeAreaInsets();
   const [scrolledToBottom, setScrolledToBottom] = useState(false);
 
@@ -65,13 +66,13 @@ function PrivacyAcceptScreen({ onAccept }: { onAccept: () => void }) {
   };
 
   return (
-    <View style={[pv.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0) }]}>
+    <View style={[pv.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0), backgroundColor: C.bg }]}>
       <View style={pv.header}>
-        <View style={pv.logoWrap}>
+        <View style={[pv.logoWrap, { backgroundColor: C.panel, borderColor: C.accent + '55' }]}>
           <Feather name="shield" size={22} color={C.accent} />
         </View>
-        <Text style={pv.title}>Privacy Policy</Text>
-        <Text style={pv.subtitle}>Please read before you continue</Text>
+        <Text style={[pv.title, { color: C.textBright }]}>Privacy Policy</Text>
+        <Text style={[pv.subtitle, { color: C.textMuted }]}>Please read before you continue</Text>
       </View>
 
       <ScrollView
@@ -81,31 +82,31 @@ function PrivacyAcceptScreen({ onAccept }: { onAccept: () => void }) {
         onScroll={handleScroll}
         scrollEventThrottle={16}
       >
-        <View style={pv.highlight}>
+        <View style={[pv.highlight, { backgroundColor: C.accent + '18', borderColor: C.accent + '44' }]}>
           <Feather name="lock" size={14} color={C.accent} />
-          <Text style={pv.highlightText}>
+          <Text style={[pv.highlightText, { color: C.textBright }]}>
             Your data stays on your device. Nothing is ever sent to any server.
           </Text>
         </View>
 
         {PRIVACY_SECTIONS.map((sec, i) => (
           <View key={i} style={pv.section}>
-            <Text style={pv.sectionTitle}>{sec.title}</Text>
-            <Text style={pv.sectionBody}>{sec.body}</Text>
+            <Text style={[pv.sectionTitle, { color: C.textBright }]}>{sec.title}</Text>
+            <Text style={[pv.sectionBody, { color: C.text }]}>{sec.body}</Text>
           </View>
         ))}
 
-        <View style={pv.lastUpdated}>
-          <Text style={pv.lastUpdatedText}>Last updated: March 2026 · Version 1.0</Text>
+        <View style={[pv.lastUpdated, { borderTopColor: C.border }]}>
+          <Text style={[pv.lastUpdatedText, { color: C.textDim }]}>Last updated: March 2026 · Version 1.0</Text>
         </View>
       </ScrollView>
 
-      <View style={[pv.footer, { paddingBottom: insets.bottom + 16 }]}>
+      <View style={[pv.footer, { paddingBottom: insets.bottom + 16, borderTopColor: C.border }]}>
         {!scrolledToBottom && (
-          <Text style={pv.scrollHint}>↓ Scroll to read the full policy</Text>
+          <Text style={[pv.scrollHint, { color: C.textDim }]}>↓ Scroll to read the full policy</Text>
         )}
         <Pressable
-          style={[pv.acceptBtn, !scrolledToBottom && pv.acceptBtnDim]}
+          style={[pv.acceptBtn, !scrolledToBottom ? { backgroundColor: C.border } : { backgroundColor: C.accent }]}
           onPress={() => {
             if (!scrolledToBottom) return;
             Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -113,9 +114,9 @@ function PrivacyAcceptScreen({ onAccept }: { onAccept: () => void }) {
           }}
         >
           <Feather name="check" size={18} color={C.textBright} />
-          <Text style={pv.acceptBtnText}>I Accept & Continue</Text>
+          <Text style={[pv.acceptBtnText, { color: C.textBright }]}>I Accept & Continue</Text>
         </Pressable>
-        <Text style={pv.footerNote}>
+        <Text style={[pv.footerNote, { color: C.textDim }]}>
           By continuing, you agree to this privacy policy.
         </Text>
       </View>
@@ -154,6 +155,7 @@ const pv = StyleSheet.create({
 });
 
 export default function PinScreen() {
+  const C = useColors();
   const { pinHash, isUnlocked, isLoading, hasAcceptedPrivacy, setupPin, verifyPin, acceptPrivacy } = useApp();
   const insets = useSafeAreaInsets();
   const [pin, setPin] = useState('');
@@ -262,20 +264,20 @@ export default function PinScreen() {
       ? 'Enter the same PIN again'
       : 'Your data is locked';
 
-  if (isLoading) return <View style={[s.root, { backgroundColor: C.bg }]} />;
+  if (isLoading) return <View style={{ flex: 1, backgroundColor: C.bg }} />;
 
   if (isSetup && !hasAcceptedPrivacy) {
     return <PrivacyAcceptScreen onAccept={acceptPrivacy} />;
   }
 
   return (
-    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0), paddingBottom: insets.bottom + (Platform.OS === 'web' ? 34 : 0) }]}>
+    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0), paddingBottom: insets.bottom + (Platform.OS === 'web' ? 34 : 0), backgroundColor: C.bg }]}>
       <View style={s.top}>
-        <View style={s.iconWrap}>
+        <View style={[s.iconWrap, { backgroundColor: C.panel, borderColor: C.border }]}>
           <Feather name="lock" size={28} color={C.accent} />
         </View>
-        <Text style={s.title}>{title}</Text>
-        <Text style={s.subtitle}>{subtitle}</Text>
+        <Text style={[s.title, { color: C.textBright }]}>{title}</Text>
+        <Text style={[s.subtitle, { color: C.textMuted }]}>{subtitle}</Text>
       </View>
 
       <Animated.View style={[s.dots, { transform: [{ translateX: shakeAnim }] }]}>
@@ -284,14 +286,14 @@ export default function PinScreen() {
             key={i}
             style={[
               s.dot,
-              i < currentLen ? s.dotFilled : s.dotEmpty,
+              i < currentLen ? [s.dotFilled, { backgroundColor: C.accent }] : [s.dotEmpty, { backgroundColor: C.border }],
               { transform: [{ scale: i < currentLen ? dotScale[i] : 1 }] },
             ]}
           />
         ))}
       </Animated.View>
 
-      {error ? <Text style={s.error}>{error}</Text> : <View style={{ height: 22 }} />}
+      {error ? <Text style={[s.error, { color: C.red }]}>{error}</Text> : <View style={{ height: 22 }} />}
 
       <View style={s.pad}>
         {KEYS.map((row, ri) => (
@@ -301,8 +303,9 @@ export default function PinScreen() {
                 key={ki}
                 style={({ pressed }) => [
                   s.key,
+                  { backgroundColor: C.panel, borderColor: C.border },
                   k === '' && s.keyInvisible,
-                  pressed && k !== '' && s.keyPressed,
+                  pressed && k !== '' && { backgroundColor: C.panelHigh, borderColor: C.accent },
                 ]}
                 onPress={() => handleKey(k)}
                 disabled={k === ''}
@@ -310,7 +313,7 @@ export default function PinScreen() {
                 {k === 'del' ? (
                   <Feather name="delete" size={22} color={C.text} />
                 ) : (
-                  <Text style={s.keyText}>{k}</Text>
+                  <Text style={[s.keyText, { color: C.textBright }]}>{k}</Text>
                 )}
               </Pressable>
             ))}

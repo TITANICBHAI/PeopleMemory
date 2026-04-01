@@ -3,7 +3,7 @@ import * as Contacts from 'expo-contacts';
 import React, { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import C from '@/constants/colors';
+import { useColors } from '@/constants/colors';
 
 export interface ContactFill {
   name: string;
@@ -18,6 +18,7 @@ interface Props {
 }
 
 export function ContactNameField({ value, onChange, onFill }: Props) {
+  const C = useColors();
   const [suggestions, setSuggestions] = useState<Contacts.Contact[]>([]);
   const [granted, setGranted] = useState<boolean | null>(null);
   const debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -71,9 +72,9 @@ export function ContactNameField({ value, onChange, onFill }: Props) {
 
   return (
     <View>
-      <View style={s.inputRow}>
+      <View style={[s.inputRow, { backgroundColor: C.panel, borderColor: C.border }]}>
         <TextInput
-          style={s.input}
+          style={[s.input, { color: C.text }]}
           value={value}
           onChangeText={onChange}
           onFocus={requestPermission}
@@ -82,28 +83,28 @@ export function ContactNameField({ value, onChange, onFill }: Props) {
           autoCapitalize="words"
         />
         {granted && (
-          <View style={s.badge}>
+          <View style={[s.badge, { backgroundColor: C.accent + '22', borderColor: C.accent + '44' }]}>
             <Feather name="users" size={12} color={C.accent} />
           </View>
         )}
       </View>
       {suggestions.length > 0 && (
-        <View style={s.dropdown}>
+        <View style={[s.dropdown, { backgroundColor: C.panel, borderColor: C.accent + '44' }]}>
           {suggestions.map((c, i) => (
             <Pressable
               key={i}
-              style={({ pressed }) => [s.row, pressed && s.rowPressed, i > 0 && s.rowBorder]}
+              style={({ pressed }) => [s.row, pressed && { backgroundColor: C.panelHigh }, i > 0 && { borderTopColor: C.border, borderTopWidth: 1 }]}
               onPress={() => handleSelect(c)}
             >
-              <View style={s.initials}>
-                <Text style={s.initialsText}>
+              <View style={[s.initials, { backgroundColor: C.accent + '22' }]}>
+                <Text style={[s.initialsText, { color: C.accent }]}>
                   {(c.name ?? '?').split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('')}
                 </Text>
               </View>
               <View style={s.info}>
-                <Text style={s.name}>{c.name}</Text>
+                <Text style={[s.name, { color: C.textBright }]}>{c.name}</Text>
                 {c.phoneNumbers?.[0]?.number ? (
-                  <Text style={s.phone}>{c.phoneNumbers[0].number}</Text>
+                  <Text style={[s.phone, { color: C.textMuted }]}>{c.phoneNumbers[0].number}</Text>
                 ) : null}
               </View>
               <Feather name="corner-left-down" size={13} color={C.accent} />

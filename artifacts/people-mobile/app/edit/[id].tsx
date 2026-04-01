@@ -18,7 +18,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AvatarPicker, AvatarValue } from '@/components/AvatarPicker';
 import { ContactNameField } from '@/components/ContactNameField';
-import C from '@/constants/colors';
+import { useColors } from '@/constants/colors';
 import { Person, PersonDate, useApp } from '@/context/AppContext';
 import {
   cancelBirthdayNotification,
@@ -44,7 +44,8 @@ function photoUriToAvatarValue(uri?: string): AvatarValue {
 const PRESET_TAGS = ['Friend', 'Work', 'Family', 'Online'];
 
 function FieldLabel({ text }: { text: string }) {
-  return <Text style={fl.text}>{text}</Text>;
+  const C = useColors();
+  return <Text style={[fl.text, { color: C.textMuted }]}>{text}</Text>;
 }
 const fl = StyleSheet.create({
   text: { fontSize: 10, fontFamily: 'Inter_600SemiBold', color: C.textMuted, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 },
@@ -612,6 +613,7 @@ const ds = StyleSheet.create({
 });
 
 export default function EditScreen() {
+  const C = useColors();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getPersonById, updatePerson } = useApp();
   const insets = useSafeAreaInsets();
@@ -674,14 +676,14 @@ export default function EditScreen() {
   };
 
   return (
-    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0) }]}>
-      <View style={s.navbar}>
-        <Pressable style={s.closeBtn} onPress={() => router.back()}>
+    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0), backgroundColor: C.bg }]}>
+      <View style={[s.navbar, { borderBottomColor: C.border }]}>
+        <Pressable style={[s.closeBtn, { backgroundColor: C.panel, borderColor: C.border }]} onPress={() => router.back()}>
           <Feather name="x" size={20} color={C.text} />
         </Pressable>
-        <Text style={s.title}>EDIT PERSON</Text>
-        <Pressable style={[s.saveBtn, saving && s.saveBtnDisabled]} onPress={handleSave} disabled={saving}>
-          <Text style={s.saveBtnText}>{saving ? 'Saving…' : 'Save'}</Text>
+        <Text style={[s.title, { color: C.textMuted }]}>EDIT PERSON</Text>
+        <Pressable style={[s.saveBtn, { backgroundColor: C.accent }, saving && { opacity: 0.4 }]} onPress={handleSave} disabled={saving}>
+          <Text style={[s.saveBtnText, { color: C.textBright }]}>{saving ? 'Saving…' : 'Save'}</Text>
         </Pressable>
       </View>
 
@@ -731,7 +733,7 @@ export default function EditScreen() {
         />
         <TrustSlider value={form.trustLevel} onChange={v => set('trustLevel', v)} />
 
-        <View style={s.divider}><Text style={s.dividerText}>NOTES</Text></View>
+        <View style={[s.divider, { borderTopColor: C.border }]}><Text style={[s.dividerText, { color: C.textDim, backgroundColor: C.bg }]}>NOTES</Text></View>
         <Field label="Description" value={form.description} onChange={v => set('description', v)} multiline placeholder="Who is this person?" />
         <Field label="Likes" value={form.likes} onChange={v => set('likes', v)} multiline placeholder="Interests, hobbies…" />
         <Field label="Dislikes" value={form.dislikes} onChange={v => set('dislikes', v)} multiline placeholder="Pet peeves, avoidances…" />

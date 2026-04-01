@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 
-import C from '@/constants/colors';
+import { useColors } from '@/constants/colors';
 
 const { width: W, height: H } = Dimensions.get('window');
 
@@ -54,6 +54,7 @@ interface Props {
 }
 
 export default function Tutorial({ onDone }: Props) {
+  const C = useColors();
   const [step, setStep] = useState(0);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const cardAnim = useRef(new Animated.Value(40)).current;
@@ -115,6 +116,7 @@ export default function Tutorial({ onDone }: Props) {
       {/* Glowing spotlight based on position */}
       <View style={[
         s.spotlight,
+        { borderColor: C.accent + '99', backgroundColor: C.accent + '10' },
         current.hintPosition === 'top' && s.spotTop,
         current.hintPosition === 'middle' && s.spotMid,
         current.hintPosition === 'bottom' && s.spotBot,
@@ -122,13 +124,14 @@ export default function Tutorial({ onDone }: Props) {
 
       {/* Skip button */}
       <Pressable style={s.skipBtn} onPress={skip}>
-        <Text style={s.skipText}>Skip</Text>
+        <Text style={[s.skipText, { color: C.textMuted }]}>Skip</Text>
       </Pressable>
 
       {/* Step card */}
       <Animated.View
         style={[
           s.card,
+          { backgroundColor: C.panel, borderColor: C.accent + '44' },
           {
             top: cardTop,
             opacity: fadeAnim,
@@ -136,24 +139,24 @@ export default function Tutorial({ onDone }: Props) {
           },
         ]}
       >
-        <View style={s.iconCircle}>
+        <View style={[s.iconCircle, { backgroundColor: C.accent + '22', borderColor: C.accent + '44' }]}>
           <Feather name={current.icon} size={22} color={C.accent} />
         </View>
-        <Text style={s.cardTitle}>{current.title}</Text>
-        <Text style={s.cardBody}>{current.body}</Text>
+        <Text style={[s.cardTitle, { color: C.textBright }]}>{current.title}</Text>
+        <Text style={[s.cardBody, { color: C.textMuted }]}>{current.body}</Text>
 
         {/* Dots */}
         <View style={s.dots}>
           {STEPS.map((_, i) => (
             <View
               key={i}
-              style={[s.dot, i === step && s.dotActive]}
+              style={[s.dot, { backgroundColor: C.border }, i === step && { width: 18, backgroundColor: C.accent }]}
             />
           ))}
         </View>
 
-        <Pressable style={s.nextBtn} onPress={next}>
-          <Text style={s.nextText}>{isLast ? 'Get Started' : 'Next'}</Text>
+        <Pressable style={[s.nextBtn, { backgroundColor: C.accent }]} onPress={next}>
+          <Text style={[s.nextText, { color: C.textBright }]}>{isLast ? 'Get Started' : 'Next'}</Text>
           <Feather
             name={isLast ? 'check' : 'arrow-right'}
             size={16}

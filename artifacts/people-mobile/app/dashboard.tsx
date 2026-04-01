@@ -20,12 +20,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PRESET_AVATARS } from '@/components/AvatarPicker';
 import Tutorial from '@/components/Tutorial';
-import C, { avatarColorForName } from '@/constants/colors';
+import { useColors, avatarColorForName } from '@/constants/colors';
 import { Person, useApp } from '@/context/AppContext';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
-function trustColor(n: number | null) {
+function trustColor(n: number | null, C: { textDim: string; red: string; yellow: string; green: string }) {
   if (n === null || n === undefined) return C.textDim;
   return n <= 3 ? C.red : n <= 6 ? C.yellow : C.green;
 }
@@ -61,6 +61,7 @@ function daysLabel(days: number): string {
 // ─── micro-components ────────────────────────────────────────────────────────
 
 function TrustBadge({ level }: { level: number | null }) {
+  const C = useColors();
   if (level === null || level === undefined) {
     return (
       <View style={[tb.wrap, { borderColor: C.border }]}>
@@ -68,7 +69,7 @@ function TrustBadge({ level }: { level: number | null }) {
       </View>
     );
   }
-  const color = trustColor(level);
+  const color = trustColor(level, C);
   return (
     <View style={[tb.wrap, { borderColor: color + '55' }]}>
       <View style={[tb.dot, { backgroundColor: color }]} />
@@ -83,6 +84,7 @@ const tb = StyleSheet.create({
 });
 
 function TagChip({ tag, small }: { tag: string; small?: boolean }) {
+  const C = useColors();
   const key = tag.toLowerCase() as keyof typeof C.tag;
   const colors = C.tag[key] ?? C.tag.custom;
   return (
@@ -99,8 +101,9 @@ const chip = StyleSheet.create({
 });
 
 function PersonAvatar({ person, size = 44 }: { person: Person; size?: number }) {
+  const C = useColors();
   const initials = person.name.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('');
-  const tColor = trustColor(person.trustLevel);
+  const tColor = trustColor(person.trustLevel, C);
   const ringColor = person.trustLevel !== null && person.trustLevel !== undefined
     ? tColor + 'BB'
     : C.border;
@@ -154,10 +157,11 @@ function ComingUpStrip({ events, onPress }: {
   events: UpcomingEvent[];
   onPress: (person: Person) => void;
 }) {
+  const C = useColors();
   if (events.length === 0) return null;
   return (
     <View style={cu.wrap}>
-      <Text style={cu.label}>COMING UP</Text>
+      <Text style={[cu.label, { color: C.textMuted }]}>COMING UP</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={cu.scroll}>
         {events.map((ev, i) => {
           const isBirthday = ev.type === 'birthday';
@@ -166,14 +170,14 @@ function ComingUpStrip({ events, onPress }: {
           return (
             <Pressable
               key={`${ev.person.id}-${ev.type}`}
-              style={({ pressed }) => [cu.card, pressed && cu.cardPressed, isToday && cu.cardToday]}
+              style={({ pressed }) => [cu.card, { backgroundColor: C.panel, borderColor: C.border }, pressed && { backgroundColor: C.panelHigh }, isToday && { borderColor: accent + '55' }]}
               onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onPress(ev.person); }}
             >
               <View style={[cu.iconWrap, { backgroundColor: accent + '22' }]}>
                 <Feather name={isBirthday ? 'gift' : 'calendar'} size={14} color={accent} />
               </View>
               <View style={cu.cardContent}>
-                <Text style={cu.cardName} numberOfLines={1}>{ev.person.name}</Text>
+                <Text style={[cu.cardName, { color: C.textBright }]} numberOfLines={1}>{ev.person.name}</Text>
                 <Text style={[cu.cardType, { color: accent }]}>
                   {isBirthday ? 'Birthday' : 'Meeting'}
                 </Text>
@@ -222,10 +226,11 @@ function SortHeader({
   label: string; sortKey: SortKey; current: SortKey; dir: SortDir;
   onPress: (k: SortKey) => void; flex: number;
 }) {
+  const C = useColors();
   const active = current === sortKey;
   return (
     <Pressable style={[ssh.cell, { flex }]} onPress={() => onPress(sortKey)}>
-      <Text style={[ssh.text, active && ssh.active]}>{label}</Text>
+      <Text style={[ssh.text, { color: active ? C.accent : C.textMuted }]}>{label}</Text>
       {active ? (
         <Feather name={dir === 'asc' ? 'chevron-up' : 'chevron-down'} size={12} color={C.accent} />
       ) : null}
@@ -243,9 +248,10 @@ const ssh = StyleSheet.create({
 function PersonCard({ person, onPress, onDelete }: {
   person: Person; onPress: () => void; onDelete: () => void;
 }) {
+  const C = useColors();
   return (
     <Pressable
-      style={({ pressed }) => [pcard.row, pressed && pcard.pressed]}
+      style={({ pressed }) => [pcard.row, { backgroundColor: C.panel, borderColor: C.border }, pressed && { backgroundColor: C.panelHigh, borderColor: C.borderLight }]}
       onPress={onPress}
       onLongPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -258,7 +264,7 @@ function PersonCard({ person, onPress, onDelete }: {
       <PersonAvatar person={person} />
       <View style={pcard.info}>
         <View style={pcard.nameRow}>
-          <Text style={pcard.name} numberOfLines={1}>{person.name}</Text>
+          <Text style={[pcard.name, { color: C.textBright }]} numberOfLines={1}>{person.name}</Text>
           <TrustBadge level={person.trustLevel} />
         </View>
         {person.tags.length > 0 && (
@@ -267,7 +273,7 @@ function PersonCard({ person, onPress, onDelete }: {
           </View>
         )}
         {person.description ? (
-          <Text style={pcard.desc} numberOfLines={1}>{person.description}</Text>
+          <Text style={[pcard.desc, { color: C.textMuted }]} numberOfLines={1}>{person.description}</Text>
         ) : null}
       </View>
       <Feather name="chevron-right" size={16} color={C.textDim} />
@@ -294,9 +300,10 @@ const pcard = StyleSheet.create({
 function TableRow({ person, onPress, onDelete, isEven }: {
   person: Person; onPress: () => void; onDelete: () => void; isEven: boolean;
 }) {
+  const C = useColors();
   return (
     <Pressable
-      style={({ pressed }) => [trow.row, isEven && trow.even, pressed && trow.pressed]}
+      style={({ pressed }) => [trow.row, { borderBottomColor: C.border }, isEven && { backgroundColor: C.panel + '55' }, pressed && { backgroundColor: C.accent + '15' }]}
       onPress={onPress}
       onLongPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -307,7 +314,7 @@ function TableRow({ person, onPress, onDelete, isEven }: {
       }}
     >
       <View style={{ flex: 3, paddingHorizontal: 6 }}>
-        <Text style={trow.name} numberOfLines={1}>{person.name}</Text>
+        <Text style={[trow.name, { color: C.textBright }]} numberOfLines={1}>{person.name}</Text>
       </View>
       <View style={{ flex: 2, flexDirection: 'row', flexWrap: 'wrap', gap: 3, paddingHorizontal: 4 }}>
         {person.tags.slice(0, 2).map(t => <TagChip key={t} tag={t} small />)}
@@ -316,10 +323,10 @@ function TableRow({ person, onPress, onDelete, isEven }: {
         <TrustBadge level={person.trustLevel} />
       </View>
       <View style={{ flex: 2, paddingHorizontal: 6 }}>
-        <Text style={trow.cell} numberOfLines={1}>{formatDate(person.lastMet)}</Text>
+        <Text style={[trow.cell, { color: C.textMuted }]} numberOfLines={1}>{formatDate(person.lastMet)}</Text>
       </View>
       <View style={{ flex: 1, alignItems: 'center' }}>
-        <Text style={trow.cell}>{notesCount(person)}</Text>
+        <Text style={[trow.cell, { color: C.textMuted }]}>{notesCount(person)}</Text>
       </View>
     </Pressable>
   );
@@ -335,17 +342,18 @@ const trow = StyleSheet.create({
 // ─── App Logo ─────────────────────────────────────────────────────────────────
 
 function AppLogo() {
+  const C = useColors();
   return (
     <View style={logo.wrap}>
       <View style={logo.iconWrap}>
-        <View style={logo.dot1} />
-        <View style={logo.line1} />
-        <View style={logo.dot2} />
-        <View style={logo.line2} />
-        <View style={logo.dot3} />
-        <View style={logo.center} />
+        <View style={[logo.dot1, { backgroundColor: C.accent }]} />
+        <View style={[logo.line1, { backgroundColor: C.accent + '66' }]} />
+        <View style={[logo.dot2, { backgroundColor: C.accentGlow }]} />
+        <View style={[logo.line2, { backgroundColor: C.accentGlow + '55' }]} />
+        <View style={[logo.dot3, { backgroundColor: C.accentGlow + 'AA' }]} />
+        <View style={[logo.center, { backgroundColor: C.accent + '88' }]} />
       </View>
-      <Text style={logo.text}>PEOPLE</Text>
+      <Text style={[logo.text, { color: C.textBright }]}>PEOPLE</Text>
     </View>
   );
 }
@@ -364,6 +372,7 @@ const logo = StyleSheet.create({
 // ─── Add Tag Modal ─────────────────────────────────────────────────────────────
 
 function AddTagModal({ visible, onClose, onAdd }: { visible: boolean; onClose: () => void; onAdd: (tag: string) => void }) {
+  const C = useColors();
   const [text, setText] = useState('');
   const submit = () => {
     if (text.trim()) { onAdd(text.trim()); setText(''); onClose(); }
@@ -371,10 +380,10 @@ function AddTagModal({ visible, onClose, onAdd }: { visible: boolean; onClose: (
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={atm.overlay} onPress={onClose} />
-      <View style={atm.box}>
-        <Text style={atm.title}>Filter by tag</Text>
+      <View style={[atm.box, { backgroundColor: C.panel, borderColor: C.border }]}>
+        <Text style={[atm.title, { color: C.textBright }]}>Filter by tag</Text>
         <TextInput
-          style={atm.input}
+          style={[atm.input, { backgroundColor: C.bg, borderColor: C.border, color: C.text }]}
           value={text}
           onChangeText={setText}
           placeholder="Tag name…"
@@ -384,10 +393,10 @@ function AddTagModal({ visible, onClose, onAdd }: { visible: boolean; onClose: (
           onSubmitEditing={submit}
         />
         <View style={atm.row}>
-          <Pressable style={atm.cancel} onPress={onClose}>
-            <Text style={atm.cancelText}>Cancel</Text>
+          <Pressable style={[atm.cancel, { backgroundColor: C.panelHigh }]} onPress={onClose}>
+            <Text style={[atm.cancelText, { color: C.textMuted }]}>Cancel</Text>
           </Pressable>
-          <Pressable style={atm.confirm} onPress={submit}>
+          <Pressable style={[atm.confirm, { backgroundColor: C.accent }]} onPress={submit}>
             <Text style={atm.confirmText}>Filter</Text>
           </Pressable>
         </View>
@@ -453,20 +462,21 @@ function QuickLogModal({ visible, people, onClose, onSave }: {
     onClose();
   };
 
+  const C = useColors();
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={handleClose}>
       <KeyboardAvoidingView style={ql.overlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <Pressable style={ql.backdrop} onPress={handleClose} />
-        <View style={ql.sheet}>
-          <View style={ql.handle} />
+        <View style={[ql.sheet, { backgroundColor: C.panel, borderColor: C.border }]}>
+          <View style={[ql.handle, { backgroundColor: C.border }]} />
 
           {step === 'pick' ? (
             <>
-              <Text style={ql.title}>Who did you interact with?</Text>
-              <View style={ql.searchWrap}>
+              <Text style={[ql.title, { color: C.textBright }]}>Who did you interact with?</Text>
+              <View style={[ql.searchWrap, { backgroundColor: C.bg, borderColor: C.border }]}>
                 <Feather name="search" size={14} color={C.textDim} />
                 <TextInput
-                  style={ql.searchInput}
+                  style={[ql.searchInput, { color: C.text }]}
                   value={search}
                   onChangeText={setSearch}
                   placeholder="Search name…"
@@ -476,17 +486,17 @@ function QuickLogModal({ visible, people, onClose, onSave }: {
               </View>
               <ScrollView style={ql.list} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
                 {filtered.length === 0 ? (
-                  <Text style={ql.empty}>No people found</Text>
+                  <Text style={[ql.empty, { color: C.textMuted }]}>No people found</Text>
                 ) : (
                   filtered.map(p => {
                     const initials = p.name.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('');
                     const nc = avatarColorForName(p.name);
                     return (
-                      <Pressable key={p.id} style={({ pressed }) => [ql.personRow, pressed && ql.personPressed]} onPress={() => handlePick(p)}>
+                      <Pressable key={p.id} style={({ pressed }) => [ql.personRow, { borderBottomColor: C.border }, pressed && { backgroundColor: C.panelHigh }]} onPress={() => handlePick(p)}>
                         <View style={[ql.personAvatar, { backgroundColor: nc.bg }]}>
                           <Text style={[ql.personInitials, { color: nc.text }]}>{initials}</Text>
                         </View>
-                        <Text style={ql.personName}>{p.name}</Text>
+                        <Text style={[ql.personName, { color: C.textBright }]}>{p.name}</Text>
                         <Feather name="chevron-right" size={15} color={C.textDim} />
                       </Pressable>
                     );
@@ -498,11 +508,11 @@ function QuickLogModal({ visible, people, onClose, onSave }: {
             <>
               <Pressable style={ql.backRow} onPress={() => setStep('pick')}>
                 <Feather name="arrow-left" size={16} color={C.accent} />
-                <Text style={ql.backText}>Change person</Text>
+                <Text style={[ql.backText, { color: C.accent }]}>Change person</Text>
               </Pressable>
-              <Text style={ql.title}>What happened with <Text style={{ color: C.accentGlow }}>{selected?.name}</Text>?</Text>
+              <Text style={[ql.title, { color: C.textBright }]}>What happened with <Text style={{ color: C.accentGlow }}>{selected?.name}</Text>?</Text>
               <TextInput
-                style={ql.noteInput}
+                style={[ql.noteInput, { backgroundColor: C.bg, borderColor: C.border, color: C.text }]}
                 value={note}
                 onChangeText={setNote}
                 placeholder="e.g. Caught up over coffee, talked about the move to Berlin…"
@@ -513,13 +523,13 @@ function QuickLogModal({ visible, people, onClose, onSave }: {
                 autoFocus
                 maxLength={500}
               />
-              <Text style={ql.charCount}>{note.length}/500</Text>
+              <Text style={[ql.charCount, { color: C.textDim }]}>{note.length}/500</Text>
               <View style={ql.actions}>
-                <Pressable style={ql.cancelBtn} onPress={handleClose}>
-                  <Text style={ql.cancelText}>Cancel</Text>
+                <Pressable style={[ql.cancelBtn, { backgroundColor: C.bg, borderColor: C.border }]} onPress={handleClose}>
+                  <Text style={[ql.cancelText, { color: C.textMuted }]}>Cancel</Text>
                 </Pressable>
                 <Pressable
-                  style={[ql.saveBtn, (!note.trim() || saving) && ql.saveBtnDisabled]}
+                  style={[ql.saveBtn, { backgroundColor: C.accent }, (!note.trim() || saving) && ql.saveBtnDisabled]}
                   onPress={handleSave}
                   disabled={!note.trim() || saving}
                 >
@@ -578,6 +588,7 @@ const ql = StyleSheet.create({
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 
 export default function Dashboard() {
+  const C = useColors();
   const { people, deletePerson, lock, hasSeenTutorial, markTutorialSeen, addInteraction } = useApp();
   const insets = useSafeAreaInsets();
 
@@ -661,37 +672,37 @@ export default function Dashboard() {
   const closeFab = () => setFabOpen(false);
 
   return (
-    <View style={[s.root, { paddingTop: topPadding }]}>
+    <View style={[s.root, { paddingTop: topPadding, backgroundColor: C.bg }]}>
       {/* Header */}
       <View style={s.header}>
         <View>
           <AppLogo />
-          <Text style={s.count}>{people.length} {people.length === 1 ? 'person' : 'people'}</Text>
+          <Text style={[s.count, { color: C.textMuted }]}>{people.length} {people.length === 1 ? 'person' : 'people'}</Text>
         </View>
         <View style={s.headerActions}>
           <Pressable
-            style={s.iconBtn}
+            style={[s.iconBtn, { backgroundColor: C.panel, borderColor: C.border }]}
             onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.push('/settings'); }}
           >
             <Feather name="settings" size={18} color={C.textMuted} />
           </Pressable>
           <Pressable
-            style={[s.iconBtn, view === 'table' && s.iconBtnActive]}
+            style={[s.iconBtn, { backgroundColor: C.panel, borderColor: C.border }, view === 'table' && { borderColor: C.accent + '55', backgroundColor: C.accent + '18' }]}
             onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setView(v => v === 'cards' ? 'table' : 'cards'); }}
           >
             <Feather name={view === 'cards' ? 'grid' : 'list'} size={17} color={view === 'table' ? C.accent : C.textMuted} />
           </Pressable>
-          <Pressable style={s.iconBtn} onPress={lock}>
+          <Pressable style={[s.iconBtn, { backgroundColor: C.panel, borderColor: C.border }]} onPress={lock}>
             <Feather name="lock" size={17} color={C.textMuted} />
           </Pressable>
         </View>
       </View>
 
       {/* Search */}
-      <View style={s.searchWrap}>
+      <View style={[s.searchWrap, { backgroundColor: C.panel, borderColor: C.border }]}>
         <Feather name="search" size={15} color={C.textMuted} />
         <TextInput
-          style={s.search}
+          style={[s.search, { color: C.text }]}
           placeholder="Search name, tags, notes…"
           placeholderTextColor={C.textDim}
           value={query}
@@ -713,10 +724,10 @@ export default function Dashboard() {
         style={s.tagFiltersContainer}
       >
         <Pressable
-          style={[s.tagFilter, !activeTag && s.tagFilterActive]}
+          style={[s.tagFilter, { backgroundColor: C.panel, borderColor: C.border }, !activeTag && { backgroundColor: C.accent + '20', borderColor: C.accent + '55' }]}
           onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setActiveTag(null); }}
         >
-          <Text style={[s.tagFilterText, !activeTag && s.tagFilterTextActive]}>All</Text>
+          <Text style={[s.tagFilterText, { color: !activeTag ? C.accent : C.textMuted }]}>All</Text>
         </Pressable>
         {allTags.map(t => {
           const key = t.toLowerCase() as keyof typeof C.tag;
@@ -725,14 +736,14 @@ export default function Dashboard() {
           return (
             <Pressable
               key={t}
-              style={[s.tagFilter, isActive && { backgroundColor: colors.bg, borderColor: colors.text + '55' }]}
+              style={[s.tagFilter, { backgroundColor: C.panel, borderColor: C.border }, isActive && { backgroundColor: colors.bg, borderColor: colors.text + '55' }]}
               onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setActiveTag(isActive ? null : t); }}
             >
-              <Text style={[s.tagFilterText, isActive && { color: colors.text }]}>{t}</Text>
+              <Text style={[s.tagFilterText, { color: isActive ? colors.text : C.textMuted }]}>{t}</Text>
             </Pressable>
           );
         })}
-        <Pressable style={s.tagFilterAdd} onPress={() => setAddTagOpen(true)}>
+        <Pressable style={[s.tagFilterAdd, { backgroundColor: C.panel, borderColor: C.border }]} onPress={() => setAddTagOpen(true)}>
           <Feather name="plus" size={14} color={C.textMuted} />
         </Pressable>
       </ScrollView>
@@ -743,14 +754,14 @@ export default function Dashboard() {
       {people.length === 0 ? (
         <View style={s.empty}>
           <Feather name="users" size={52} color={C.textDim} />
-          <Text style={s.emptyTitle}>No people yet</Text>
-          <Text style={s.emptyText}>Tap + to add someone</Text>
+          <Text style={[s.emptyTitle, { color: C.textMuted }]}>No people yet</Text>
+          <Text style={[s.emptyText, { color: C.textDim }]}>Tap + to add someone</Text>
         </View>
       ) : filtered.length === 0 ? (
         <View style={s.empty}>
           <Feather name="search" size={44} color={C.textDim} />
-          <Text style={s.emptyTitle}>No results</Text>
-          <Text style={s.emptyText}>Try a different search or filter</Text>
+          <Text style={[s.emptyTitle, { color: C.textMuted }]}>No results</Text>
+          <Text style={[s.emptyText, { color: C.textDim }]}>Try a different search or filter</Text>
         </View>
       ) : view === 'cards' ? (
         <FlatList
@@ -780,7 +791,7 @@ export default function Dashboard() {
               onPress={p => router.push({ pathname: '/profile/[id]', params: { id: p.id } })}
             />
           )}
-          <View style={[tbl.header, { marginHorizontal: 14 }]}>
+          <View style={[tbl.header, { marginHorizontal: 14, borderBottomColor: C.border, backgroundColor: C.header }]}>
             <SortHeader label="NAME" sortKey="name" current={sortKey} dir={sortDir} onPress={handleSort} flex={3} />
             <View style={{ flex: 2, paddingHorizontal: 6, paddingVertical: 8 }}>
               <Text style={ssh.text}>TAGS</Text>
@@ -814,9 +825,11 @@ export default function Dashboard() {
         {fabOpen && (
           <>
             <View style={s.fabOptionRow}>
-              <View style={s.fabLabel}><Text style={s.fabLabelText}>Log Interaction</Text></View>
+              <View style={[s.fabLabel, { backgroundColor: C.panel, borderColor: C.border }]}>
+                <Text style={[s.fabLabelText, { color: C.textBright }]}>Log Interaction</Text>
+              </View>
               <Pressable
-                style={s.fabOption}
+                style={[s.fabOption, { backgroundColor: C.accentDim }]}
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   setFabOpen(false);
@@ -827,9 +840,11 @@ export default function Dashboard() {
               </Pressable>
             </View>
             <View style={s.fabOptionRow}>
-              <View style={s.fabLabel}><Text style={s.fabLabelText}>Add Person</Text></View>
+              <View style={[s.fabLabel, { backgroundColor: C.panel, borderColor: C.border }]}>
+                <Text style={[s.fabLabelText, { color: C.textBright }]}>Add Person</Text>
+              </View>
               <Pressable
-                style={s.fabOption}
+                style={[s.fabOption, { backgroundColor: C.accentDim }]}
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   setFabOpen(false);
@@ -842,7 +857,7 @@ export default function Dashboard() {
           </>
         )}
         <Pressable
-          style={({ pressed }) => [s.fab, pressed && s.fabPressed, fabOpen && s.fabActive]}
+          style={({ pressed }) => [s.fab, { backgroundColor: fabOpen ? C.accentDim : C.accent, shadowColor: C.accent }, pressed && s.fabPressed]}
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             setFabOpen(v => !v);

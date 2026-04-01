@@ -13,10 +13,36 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { useColors } from '@/constants/colors';
 import { AppProvider } from '@/context/AppContext';
-import C from '@/constants/colors';
+import { ThemeProvider } from '@/context/ThemeContext';
 
 SplashScreen.preventAutoHideAsync();
+
+function ThemedShell() {
+  const C = useColors();
+  return (
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: C.bg }}>
+      <KeyboardProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: C.bg },
+            animation: 'slide_from_right',
+          }}
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="dashboard" />
+          <Stack.Screen name="add" />
+          <Stack.Screen name="edit/[id]" />
+          <Stack.Screen name="profile/[id]" />
+          <Stack.Screen name="settings" />
+          <Stack.Screen name="privacy" />
+        </Stack>
+      </KeyboardProvider>
+    </GestureHandlerRootView>
+  );
+}
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -35,27 +61,11 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ErrorBoundary>
-        <AppProvider>
-          <GestureHandlerRootView style={{ flex: 1, backgroundColor: C.bg }}>
-            <KeyboardProvider>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: { backgroundColor: C.bg },
-                  animation: 'slide_from_right',
-                }}
-              >
-                <Stack.Screen name="index" />
-                <Stack.Screen name="dashboard" />
-                <Stack.Screen name="add" />
-                <Stack.Screen name="edit/[id]" />
-                <Stack.Screen name="profile/[id]" />
-                <Stack.Screen name="settings" />
-                <Stack.Screen name="privacy" />
-              </Stack>
-            </KeyboardProvider>
-          </GestureHandlerRootView>
-        </AppProvider>
+        <ThemeProvider>
+          <AppProvider>
+            <ThemedShell />
+          </AppProvider>
+        </ThemeProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
   );

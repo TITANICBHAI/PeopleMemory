@@ -18,7 +18,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AvatarDisplay, AvatarValue } from '@/components/AvatarPicker';
-import C from '@/constants/colors';
+import { useColors } from '@/constants/colors';
 import { useApp } from '@/context/AppContext';
 
 function photoUriToAvatarValue(uri?: string): AvatarValue {
@@ -28,6 +28,7 @@ function photoUriToAvatarValue(uri?: string): AvatarValue {
 }
 
 function TagChip({ tag }: { tag: string }) {
+  const C = useColors();
   const key = tag.toLowerCase() as keyof typeof C.tag;
   const colors = C.tag[key] ?? C.tag.custom;
   return (
@@ -44,13 +45,14 @@ const tg = StyleSheet.create({
 });
 
 function TrustBar({ level }: { level: number }) {
+  const C = useColors();
   const color = level <= 3 ? C.red : level <= 6 ? C.yellow : C.green;
   const label = level <= 3 ? 'Low Trust' : level <= 6 ? 'Moderate Trust' : 'High Trust';
   return (
     <View style={tr.wrap}>
-      <Text style={tr.heading}>Trust Level</Text>
+      <Text style={[tr.heading, { color: C.textMuted }]}>Trust Level</Text>
       <View style={tr.row}>
-        <View style={tr.barBg}>
+        <View style={[tr.barBg, { backgroundColor: C.border }]}>
           <View style={[tr.barFill, { width: `${level * 10}%` as any, backgroundColor: color }]} />
         </View>
         <Text style={[tr.label, { color }]}>{label}</Text>
@@ -68,10 +70,11 @@ const tr = StyleSheet.create({
 });
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
+  const C = useColors();
   return (
     <View style={sc.wrap}>
-      <Text style={sc.title}>{title}</Text>
-      <View style={sc.card}>{children}</View>
+      <Text style={[sc.title, { color: C.textMuted }]}>{title}</Text>
+      <View style={[sc.card, { backgroundColor: C.panel, borderColor: C.border }]}>{children}</View>
     </View>
   );
 }
@@ -108,6 +111,7 @@ function formatInteractionDate(s: string) {
 }
 
 export default function ProfileScreen() {
+  const C = useColors();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getPersonById, deletePerson, addInteraction, deleteInteraction } = useApp();
   const insets = useSafeAreaInsets();
@@ -182,19 +186,19 @@ export default function ProfileScreen() {
   const interactions = person.interactions ?? [];
 
   return (
-    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0) }]}>
-      <View style={s.navbar}>
-        <Pressable style={s.navIconBtn} onPress={() => router.back()}>
+    <View style={[s.root, { paddingTop: insets.top + (Platform.OS === 'web' ? 67 : 0), backgroundColor: C.bg }]}>
+      <View style={[s.navbar, { borderBottomColor: C.border }]}>
+        <Pressable style={[s.navIconBtn, { backgroundColor: C.panel, borderColor: C.border }]} onPress={() => router.back()}>
           <Feather name="arrow-left" size={20} color={C.text} />
         </Pressable>
         <View style={s.navActions}>
           <Pressable
-            style={s.navIconBtn}
+            style={[s.navIconBtn, { backgroundColor: C.panel, borderColor: C.border }]}
             onPress={() => router.push({ pathname: '/edit/[id]', params: { id: person.id } })}
           >
             <Feather name="edit-2" size={18} color={C.accent} />
           </Pressable>
-          <Pressable style={[s.navIconBtn, s.deleteBtn]} onPress={handleDelete}>
+          <Pressable style={[s.navIconBtn, { backgroundColor: C.panel, borderColor: C.border }]} onPress={handleDelete}>
             <Feather name="trash-2" size={18} color={C.red} />
           </Pressable>
         </View>
@@ -204,8 +208,8 @@ export default function ProfileScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: insets.bottom + 32 }}
       >
-        <View style={s.hero}>
-          <View style={s.avatarRing}>
+        <View style={[s.hero, { backgroundColor: C.panel, borderBottomColor: C.border }]}>
+          <View style={[s.avatarRing, { borderColor: C.accent + '44', backgroundColor: C.accent + '15' }]}>
             <AvatarDisplay
               value={photoUriToAvatarValue(person.photoUri)}
               name={person.name}
@@ -213,7 +217,7 @@ export default function ProfileScreen() {
             />
           </View>
           <View style={s.heroInfo}>
-            <Text style={s.name}>{person.name}</Text>
+            <Text style={[s.name, { color: C.textBright }]}>{person.name}</Text>
             {person.phone ? (
               <Pressable
                 style={s.phoneRow}
