@@ -9,7 +9,6 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -23,23 +22,21 @@ function ThemedShell() {
   const C = useColors();
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: C.bg }}>
-      <KeyboardProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: C.bg },
-            animation: 'slide_from_right',
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="dashboard" />
-          <Stack.Screen name="add" />
-          <Stack.Screen name="edit/[id]" />
-          <Stack.Screen name="profile/[id]" />
-          <Stack.Screen name="settings" />
-          <Stack.Screen name="privacy" />
-        </Stack>
-      </KeyboardProvider>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: C.bg },
+          animation: 'slide_from_right',
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="dashboard" />
+        <Stack.Screen name="add" />
+        <Stack.Screen name="edit/[id]" />
+        <Stack.Screen name="profile/[id]" />
+        <Stack.Screen name="settings" />
+        <Stack.Screen name="privacy" />
+      </Stack>
     </GestureHandlerRootView>
   );
 }
