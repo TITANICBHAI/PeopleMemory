@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@expo/config-plugins": "~54.0.4",
+    "@expo/env": "~2.1.1",
     "@react-native-community/datetimepicker": "8.4.4",
     "crypto-js": "^4.2.0",
     "expo-contacts": "~15.0.11",
