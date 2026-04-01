@@ -119,34 +119,26 @@ export function ContactNameField({ value, onChange, onFill }: Props) {
 const s = StyleSheet.create({
   inputRow: {
     flexDirection: 'row', alignItems: 'center',
-    backgroundColor: C.panel, borderRadius: 12,
-    borderWidth: 1, borderColor: C.border,
-    paddingHorizontal: 14, height: 48,
+    borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, height: 48,
   },
   input: {
-    flex: 1, fontSize: 15, fontFamily: 'Inter_400Regular', color: C.text,
+    flex: 1, fontSize: 15, fontFamily: 'Inter_400Regular',
   },
   badge: {
-    backgroundColor: C.accent + '22', borderRadius: 6,
-    paddingHorizontal: 6, paddingVertical: 3,
-    borderWidth: 1, borderColor: C.accent + '44',
+    borderRadius: 6, paddingHorizontal: 6, paddingVertical: 3, borderWidth: 1,
   },
   dropdown: {
-    backgroundColor: C.panel, borderRadius: 12,
-    borderWidth: 1, borderColor: C.accent + '44',
+    borderRadius: 12, borderWidth: 1,
     marginTop: 4, overflow: 'hidden',
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3, shadowRadius: 8, elevation: 6,
   },
   row: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12 },
-  rowPressed: { backgroundColor: C.panelHigh },
-  rowBorder: { borderTopWidth: 1, borderTopColor: C.border },
   initials: {
-    width: 34, height: 34, borderRadius: 17,
-    backgroundColor: C.accent + '22', alignItems: 'center', justifyContent: 'center',
+    width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center',
   },
-  initialsText: { fontSize: 12, fontFamily: 'Inter_700Bold', color: C.accent },
+  initialsText: { fontSize: 12, fontFamily: 'Inter_700Bold' },
   info: { flex: 1 },
-  name: { fontSize: 14, fontFamily: 'Inter_600SemiBold', color: C.textBright },
-  phone: { fontSize: 12, fontFamily: 'Inter_400Regular', color: C.textMuted, marginTop: 1 },
+  name: { fontSize: 14, fontFamily: 'Inter_600SemiBold' },
+  phone: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 1 },
 });
