@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://peoplememory.app/sitemap.xml
+Sitemap: https://titanicbhai.github.io/people-memory-expo/sitemap.xml
