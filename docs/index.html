@@ -377,6 +377,7 @@
     }
     .store-badge:hover { border-color: var(--accent); color: var(--text-bright); }
     .store-badge svg { width: 24px; height: 24px; fill: var(--text-bright); flex-shrink: 0; }
+    .store-badge img.badge-icon { width: 24px; height: 24px; border-radius: 5px; flex-shrink: 0; object-fit: contain; }
 
     /* ─── Footer ──────────────────────────────────────── */
     footer {
@@ -640,12 +641,23 @@
       <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l2.7 1.6 247.2-247v-5.8L47 0zm325.4 233.2l-80.4-46.4-80.4 46.4 80.4 46.4 80.4-46.4zm-55.9 150.4l-220.7-127 60.5-60.5 220.7 127-60.5 60.5z"/></svg>
       Google Play
     </a>
+    <a href="https://people-memory.en.uptodown.com/android" class="store-badge" target="_blank" rel="noopener" title="Download from Uptodown">
+      <img
+        class="badge-icon"
+        src="https://img.utdstc.com/icon/a11/bcd/a11bcdd8718e0ca244f93ab5864e945140641f865c8b3084361c77add63381e5"
+        srcset="https://img.utdstc.com/icon/a11/bcd/a11bcdd8718e0ca244f93ab5864e945140641f865c8b3084361c77add63381e5:100 1x, https://img.utdstc.com/icon/a11/bcd/a11bcdd8718e0ca244f93ab5864e945140641f865c8b3084361c77add63381e5:200 2x"
+        alt="People Memory on Uptodown"
+        loading="lazy"
+        onerror="this.style.display='none'"
+      />
+      Uptodown
+    </a>
     <a href="https://github.com/TITANICBHAI/people-memory-expo" class="store-badge" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
       Source Code
     </a>
   </div>
-  <p style="margin-top:20px; font-size:13px; color:var(--text-dim)">Store listings coming soon · Build your own with EAS</p>
+  <p style="margin-top:20px; font-size:13px; color:var(--text-dim)">App Store & Google Play listings coming soon · Build your own with EAS</p>
 </div>
 
 <!-- ─── Footer ─────────────────────────────────────────── -->
@@ -682,7 +694,7 @@
   </div>
   <div class="footer-bottom">
     <p>© 2025 TBTechs. All rights reserved.</p>
-    <span class="version-badge">v1.1.0 · iOS build 2 · Android versionCode 3</span>
+    <span class="version-badge">v1.1.0 · iOS build 2 · Android versionCode 5</span>
   </div>
 </footer>
 
