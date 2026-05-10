@@ -35,7 +35,6 @@ People Memory has zero network requests, zero analytics, zero advertising, and z
 ## Pages
 
 - Homepage: https://peoplememory.pages.dev/
-- Getting Started Guide: https://peoplememory.pages.dev/guide.html
 - Privacy Policy: https://peoplememory.pages.dev/privacy.html
 - Terms of Service: https://peoplememory.pages.dev/terms.html
 - Download (Uptodown): https://people-memory.en.uptodown.com/android

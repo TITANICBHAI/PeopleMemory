@@ -7,12 +7,6 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://peoplememory.pages.dev/guide.html</loc>
-    <lastmod>2025-05-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://peoplememory.pages.dev/privacy.html</loc>
     <lastmod>2025-05-10</lastmod>
     <changefreq>yearly</changefreq>
