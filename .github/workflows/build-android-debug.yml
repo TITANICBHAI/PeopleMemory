@@ -1,4 +1,4 @@
-name: Build Android — Debug APK
+name: Build Android Debug APK
 
 on:
   workflow_dispatch:
@@ -34,9 +34,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install workspace dependencies
         run: pnpm install --frozen-lockfile
 
@@ -48,13 +45,26 @@ jobs:
           VERSION_CODE=$(node -p "require('./app.json').expo.android.versionCode")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
-          echo "Building debug v$VERSION (code $VERSION_CODE)"
+          echo "Building People Memory debug v$VERSION (versionCode $VERSION_CODE)"
 
-      - name: Expo Prebuild — Android
+      - name: Expo Prebuild (Android)
         working-directory: artifacts/people-mobile
         env:
           EXPO_NO_TELEMETRY: 1
         run: npx expo prebuild --platform android --clean --no-install
+
+      - name: Point Android SDK at pre-installed SDK
+        working-directory: artifacts/people-mobile/android
+        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('artifacts/people-mobile/android/**/*.gradle*', 'artifacts/people-mobile/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
 
       - name: Make gradlew executable
         working-directory: artifacts/people-mobile/android
@@ -62,19 +72,19 @@ jobs:
 
       - name: Build Debug APK
         working-directory: artifacts/people-mobile/android
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        run: ./gradlew assembleDebug --no-daemon
 
-      - name: Collect & rename debug APK
+      - name: Collect and rename Debug APK
         run: |
-          VERSION="${{ steps.meta.outputs.version }}"
-          mkdir -p dist/debug
+          V="${{ steps.meta.outputs.version }}"
+          mkdir -p dist
           APK=$(find artifacts/people-mobile/android -name "*.apk" -path "*/debug/*" | head -1)
-          [ -n "$APK" ] && cp "$APK" "dist/debug/PeopleMemory-v${VERSION}-debug.apk"
-          ls -lh dist/debug/
+          [ -n "$APK" ] && cp "$APK" "dist/PeopleMemory-v${V}-debug.apk" && echo "APK: dist/PeopleMemory-v${V}-debug.apk"
+          ls -lh dist/
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: PeopleMemory-v${{ steps.meta.outputs.version }}-debug-apk
-          path: dist/debug/*.apk
+          path: dist/PeopleMemory-v${{ steps.meta.outputs.version }}-debug.apk
           retention-days: 14
