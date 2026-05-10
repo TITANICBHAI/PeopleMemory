@@ -53,7 +53,8 @@ fi
 
 # ── Push directly via authenticated URL (no git config touched) ───────────────
 echo "🚀  Pushing to github.com/${REPO_OWNER}/${REPO_NAME} on branch '${BRANCH}'…"
-GIT_TERMINAL_PROMPT=0 git push "$PUSH_URL" "HEAD:refs/heads/${BRANCH}"
+GIT_TERMINAL_PROMPT=0 git push --force-with-lease "$PUSH_URL" "HEAD:refs/heads/${BRANCH}" || \
+GIT_TERMINAL_PROMPT=0 git push --force "$PUSH_URL" "HEAD:refs/heads/${BRANCH}"
 
 echo ""
 echo "✅  Successfully pushed to:"
