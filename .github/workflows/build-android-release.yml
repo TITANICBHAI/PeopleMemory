@@ -7,6 +7,7 @@ on:
     paths:
       - 'artifacts/people-mobile/**'
       - '.github/workflows/build-android-release.yml'
+      - '.npmrc'
 
 jobs:
   build-release:
@@ -33,6 +34,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Enable shameful hoisting so Metro can resolve modules
+        run: echo "shamefully-hoist=true" >> .npmrc
 
       - name: Install workspace dependencies
         run: pnpm install --frozen-lockfile
