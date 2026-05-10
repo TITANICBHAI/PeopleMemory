@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://titanicbhai.github.io/people-memory-expo/</loc>
+    <loc>https://titanicbhai.github.io/PeopleMemory/</loc>
     <lastmod>2025-05-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://titanicbhai.github.io/people-memory-expo/privacy.html</loc>
+    <loc>https://titanicbhai.github.io/PeopleMemory/privacy.html</loc>
     <lastmod>2025-05-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://titanicbhai.github.io/people-memory-expo/terms.html</loc>
+    <loc>https://titanicbhai.github.io/PeopleMemory/terms.html</loc>
     <lastmod>2025-05-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>

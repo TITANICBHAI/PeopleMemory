@@ -11,7 +11,7 @@ set -euo pipefail
 #   CLOUDFLARE_ACCOUNT_ID  — from dash.cloudflare.com → right sidebar
 # ─────────────────────────────────────────────────────────────────────────────
 
-PAGES_PROJECT="peoplememory"
+PAGES_PROJECT="PeopleMemory"
 APP_JSON="artifacts/people-mobile/app.json"
 
 # ── Read version info ─────────────────────────────────────────────────────────

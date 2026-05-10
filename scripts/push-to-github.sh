@@ -11,7 +11,7 @@ set -euo pipefail
 # ─────────────────────────────────────────────────────────────────────────────
 
 REPO_OWNER="TITANICBHAI"
-REPO_NAME="people-memory-expo"
+REPO_NAME="PeopleMemory"
 BRANCH="main"
 COMMIT_MSG="${1:-feat: v2.0.0 — health engine, prep cards, journal, voice notes, groups}"
 

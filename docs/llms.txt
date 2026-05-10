@@ -34,8 +34,8 @@ People Memory has zero network requests, zero analytics, zero advertising, and z
 
 ## Pages
 
-- Homepage: https://titanicbhai.github.io/people-memory-expo/
-- Privacy Policy: https://titanicbhai.github.io/people-memory-expo/privacy.html
-- Terms of Service: https://titanicbhai.github.io/people-memory-expo/terms.html
+- Homepage: https://titanicbhai.github.io/PeopleMemory/
+- Privacy Policy: https://titanicbhai.github.io/PeopleMemory/privacy.html
+- Terms of Service: https://titanicbhai.github.io/PeopleMemory/terms.html
 - Download (Uptodown): https://people-memory.en.uptodown.com/android
-- Source Code: https://github.com/TITANICBHAI/people-memory-expo
+- Source Code: https://github.com/TITANICBHAI/PeopleMemory
