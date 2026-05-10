@@ -1,0 +1,40 @@
+# People Memory
+
+> People Memory is a 100% private, on-device personal relationship manager (PRM) for Android and iOS. It helps you remember everyone you meet — their trust level, notes, birthdays, interactions, and more — without any data ever leaving your device.
+
+## What is People Memory?
+
+People Memory is a free mobile app (React Native / Expo) that acts as an extended memory for your personal and professional relationships. All data is stored exclusively in local device storage (AsyncStorage). There is no cloud, no server, no analytics, and no third-party SDKs that touch your data.
+
+## Core Features
+
+- **PIN-Protected Vault**: Local 4-digit PIN, SHA-256 hashed, stored only on-device
+- **Trust Level Tracking**: Rate each person 0–10 (red/yellow/green visual indicators)
+- **Rich Notes**: Likes, dislikes, quick facts, personal descriptions
+- **Dates & Reminders**: Birthdays, first/last met, next meetings, custom dates with local notifications
+- **Voice Interaction Notes**: Record voice notes after meetings, timestamped per person
+- **Groups**: Colour-coded groups (work, family, friends, networking)
+- **Relationship Health Score**: Auto-calculated from recency, upcoming events, and profile completeness
+- **Meeting Prep Cards**: Curated card before any meeting — what to ask, what they care about, upcoming dates
+- **Activity Journal**: Chronological feed of all interactions across all people
+
+## Privacy Commitment
+
+People Memory has zero network requests, zero analytics, zero advertising, and zero third-party SDKs that access your data. The app does not require an account. All personal information stays on your device, forever.
+
+## Technical Details
+
+- Platform: Android & iOS
+- Framework: React Native with Expo SDK 54
+- Data storage: AsyncStorage (local only)
+- Bundle ID: com.peoplememory.app
+- Version: 1.1.0
+- Developer: TBTechs (https://github.com/TITANICBHAI)
+- License: Open source (GitHub)
+
+## Pages
+
+- Homepage: https://peoplememory.app/
+- Privacy Policy: https://peoplememory.app/privacy.html
+- Terms of Service: https://peoplememory.app/terms.html
+- Source Code: https://github.com/TITANICBHAI/people-memory-expo
