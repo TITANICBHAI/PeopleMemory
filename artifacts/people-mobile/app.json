@@ -2,7 +2,7 @@
   "expo": {
     "name": "People Memory",
     "slug": "people-mobile",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "peoplememory",
@@ -27,7 +27,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.peoplememory.app",
-      "buildNumber": "1",
+      "buildNumber": "2",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "People Memory needs access to your photos so you can set a profile picture for your contacts.",
         "NSCameraUsageDescription": "People Memory needs access to your camera so you can take a profile photo for your contacts.",
@@ -41,7 +41,7 @@
     },
     "android": {
       "package": "com.peoplememory.app",
-      "versionCode": 2,
+      "versionCode": 3,
       "permissions": [
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_EXTERNAL_STORAGE",

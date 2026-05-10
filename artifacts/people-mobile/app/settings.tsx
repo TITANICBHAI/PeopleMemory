@@ -25,8 +25,8 @@ import { useApp } from '@/context/AppContext';
 import { useTheme } from '@/context/ThemeContext';
 import { decryptBackup, encryptBackup } from '@/utils/backup';
 
-const VERSION = '1.0.0';
-const BUILD = '1';
+const VERSION = '1.1.0';
+const BUILD = '2';
 
 // ─── Theme Picker ──────────────────────────────────────────────────────────────
 
