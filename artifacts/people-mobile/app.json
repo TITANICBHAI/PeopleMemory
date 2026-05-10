@@ -2,7 +2,7 @@
   "expo": {
     "name": "People Memory",
     "slug": "people-mobile",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "peoplememory",
@@ -27,11 +27,12 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.peoplememory.app",
-      "buildNumber": "1",
+      "buildNumber": "2",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "People Memory needs access to your photos so you can set a profile picture for your contacts.",
         "NSCameraUsageDescription": "People Memory needs access to your camera so you can take a profile photo for your contacts.",
         "NSUserNotificationUsageDescription": "People Memory sends you reminders before scheduled meetings.",
+        "NSMicrophoneUsageDescription": "People Memory needs microphone access to record voice notes for your contacts.",
         "ITSAppUsesNonExemptEncryption": false
       },
       "privacyManifests": {
@@ -40,13 +41,14 @@
     },
     "android": {
       "package": "com.peoplememory.app",
-      "versionCode": 4,
+      "versionCode": 5,
       "permissions": [
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.RECEIVE_BOOT_COMPLETED",
         "android.permission.SCHEDULE_EXACT_ALARM",
-        "android.permission.POST_NOTIFICATIONS"
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.RECORD_AUDIO"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
@@ -65,6 +67,12 @@
       ],
       "expo-font",
       "expo-web-browser",
+      [
+        "expo-av",
+        {
+          "microphonePermission": "People Memory needs microphone access to record voice notes for your contacts."
+        }
+      ],
       [
         "expo-notifications",
         {
