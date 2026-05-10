@@ -1,4 +1,4 @@
-name: Build Android Release (APK + AAB)
+name: Build Android Release (Signed APK + AAB)
 
 on:
   workflow_dispatch:
@@ -7,7 +7,6 @@ on:
     paths:
       - 'artifacts/people-mobile/**'
       - '.github/workflows/build-android-release.yml'
-      - '.npmrc'
 
 jobs:
   build-release:
@@ -35,9 +34,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Enable shameful hoisting so Metro can resolve modules
-        run: echo "shamefully-hoist=true" >> .npmrc
-
       - name: Install workspace dependencies
         run: pnpm install --frozen-lockfile
 
@@ -47,9 +43,27 @@ jobs:
         run: |
           VERSION=$(node -p "require('./app.json').expo.version")
           VERSION_CODE=$(node -p "require('./app.json').expo.android.versionCode")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
-          echo "Building People Memory v$VERSION (versionCode $VERSION_CODE)"
+          IOS_BUILD=$(node -p "require('./app.json').expo.ios.buildNumber")
+          BUNDLE_ID=$(node -p "require('./app.json').expo.android.package")
+          echo "version=$VERSION"            >> $GITHUB_OUTPUT
+          echo "version_code=$VERSION_CODE"  >> $GITHUB_OUTPUT
+          echo "ios_build=$IOS_BUILD"        >> $GITHUB_OUTPUT
+          echo "bundle_id=$BUNDLE_ID"        >> $GITHUB_OUTPUT
+          echo ""
+          echo "================================================"
+          echo "  RELEASE BUILD STARTING"
+          echo "------------------------------------------------"
+          echo "  App:           People Memory"
+          echo "  Version:       $VERSION"
+          echo "  iOS build:     $IOS_BUILD"
+          echo "  Android code:  $VERSION_CODE"
+          echo "  Bundle ID:     $BUNDLE_ID"
+          echo "================================================"
+
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > /tmp/peoplememory.keystore
+          echo "Keystore decoded OK"
 
       - name: Expo Prebuild (Android)
         working-directory: artifacts/people-mobile
@@ -61,19 +75,32 @@ jobs:
         working-directory: artifacts/people-mobile/android
         run: echo "sdk.dir=$ANDROID_HOME" > local.properties
 
-      - name: Sign release build with debug keystore (installable APK)
+      - name: Inject keystore signing into build.gradle
         working-directory: artifacts/people-mobile/android/app
         run: |
           node -e "
             const fs = require('fs');
             let g = fs.readFileSync('build.gradle', 'utf8');
-            if (!g.includes('signingConfig signingConfigs.debug')) {
-              g = g.replace(/(\s*release\s*\{)/, '\$1\n            signingConfig signingConfigs.debug');
-              fs.writeFileSync('build.gradle', g);
-              console.log('Patched: release build now uses debug signing (APK is installable).');
-            } else {
-              console.log('Already has signing config.');
+
+            const sigBlock = \"\"\`
+            signingConfigs {
+                release {
+                    storeFile file('/tmp/peoplememory.keystore')
+                    storePassword System.getenv('KEYSTORE_PASSWORD')
+                    keyAlias     System.getenv('KEY_ALIAS')
+                    keyPassword  System.getenv('KEY_PASSWORD')
+                }
+            }\"\"\`.trim();
+
+            if (!g.includes('signingConfigs {')) {
+                // insert after 'android {'
+                g = g.replace(/(android\s*\{)/, '\$1\n    ' + sigBlock);
             }
+            if (!g.includes('signingConfig signingConfigs.release')) {
+                g = g.replace(/(buildTypes\s*\{[\s\S]*?release\s*\{)/, '\$1\n            signingConfig signingConfigs.release');
+            }
+            fs.writeFileSync('build.gradle', g);
+            console.log('Keystore signing injected into build.gradle');
           "
 
       - name: Cache Gradle
@@ -89,34 +116,50 @@ jobs:
         working-directory: artifacts/people-mobile/android
         run: chmod +x gradlew
 
-      - name: Build Release APK
+      - name: Build Signed Release APK
         working-directory: artifacts/people-mobile/android
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease --no-daemon
 
-      - name: Build Release AAB
+      - name: Build Signed Release AAB
         working-directory: artifacts/people-mobile/android
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew bundleRelease --no-daemon
 
       - name: Collect and rename artifacts
         run: |
           V="${{ steps.meta.outputs.version }}"
+          VC="${{ steps.meta.outputs.version_code }}"
           mkdir -p dist
           APK=$(find artifacts/people-mobile/android -name "*.apk" ! -path "*/debug/*" | head -1)
           AAB=$(find artifacts/people-mobile/android -name "*.aab" | head -1)
-          [ -n "$APK" ] && cp "$APK" "dist/PeopleMemory-v${V}-release.apk" && echo "APK ready: PeopleMemory-v${V}-release.apk"
-          [ -n "$AAB" ] && cp "$AAB" "dist/PeopleMemory-v${V}-release.aab" && echo "AAB ready: PeopleMemory-v${V}-release.aab"
+          [ -n "$APK" ] && cp "$APK" "dist/PeopleMemory-v${V}-versionCode${VC}-signed.apk"
+          [ -n "$AAB" ] && cp "$AAB" "dist/PeopleMemory-v${V}-versionCode${VC}-signed.aab"
+          echo ""
+          echo "================================================"
+          echo "  BUILD COMPLETE"
+          echo "------------------------------------------------"
+          echo "  Version:       ${V}"
+          echo "  versionCode:   ${VC}"
           ls -lh dist/
+          echo "================================================"
 
-      - name: Upload Release APK
+      - name: Upload Signed APK
         uses: actions/upload-artifact@v4
         with:
-          name: PeopleMemory-v${{ steps.meta.outputs.version }}-release-apk
-          path: dist/PeopleMemory-v${{ steps.meta.outputs.version }}-release.apk
+          name: PeopleMemory-v${{ steps.meta.outputs.version }}-versionCode${{ steps.meta.outputs.version_code }}-signed-apk
+          path: dist/PeopleMemory-v${{ steps.meta.outputs.version }}-versionCode${{ steps.meta.outputs.version_code }}-signed.apk
           retention-days: 30
 
-      - name: Upload Release AAB
+      - name: Upload Signed AAB
         uses: actions/upload-artifact@v4
         with:
-          name: PeopleMemory-v${{ steps.meta.outputs.version }}-release-aab
-          path: dist/PeopleMemory-v${{ steps.meta.outputs.version }}-release.aab
+          name: PeopleMemory-v${{ steps.meta.outputs.version }}-versionCode${{ steps.meta.outputs.version_code }}-signed-aab
+          path: dist/PeopleMemory-v${{ steps.meta.outputs.version }}-versionCode${{ steps.meta.outputs.version_code }}-signed.aab
           retention-days: 30
