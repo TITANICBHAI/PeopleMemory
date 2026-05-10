@@ -57,44 +57,19 @@ jobs:
         working-directory: artifacts/people-mobile/android
         run: echo "sdk.dir=$ANDROID_HOME" > local.properties
 
-      - name: Decode keystore (if secret is set)
-        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
-        working-directory: artifacts/people-mobile/android/app
-        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.keystore
-
-      - name: Inject release signing into build.gradle (keystore)
-        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
+      - name: Sign release build with debug keystore (installable APK)
         working-directory: artifacts/people-mobile/android/app
         run: |
           node -e "
-          const fs = require('fs');
-          let g = fs.readFileSync('build.gradle', 'utf8');
-          const sigCfg = \`
-              signingConfigs {
-                  release {
-                      storeFile file('release.keystore')
-                      storePassword '${{ secrets.STORE_PASSWORD }}'
-                      keyAlias '${{ secrets.KEY_ALIAS }}'
-                      keyPassword '${{ secrets.KEY_PASSWORD }}'
-                  }
-              }
-          \`;
-          g = g.replace(/android\s*\{/, 'android {' + sigCfg);
-          g = g.replace(/buildTypes\s*\{[\s\S]*?release\s*\{/, (m) => m + '\n            signingConfig signingConfigs.release');
-          fs.writeFileSync('build.gradle', g);
-          console.log('Release signing injected from keystore secret.');
-          "
-
-      - name: Use debug signing for release build (no keystore secret set)
-        if: ${{ secrets.KEYSTORE_BASE64 == '' }}
-        working-directory: artifacts/people-mobile/android/app
-        run: |
-          node -e "
-          const fs = require('fs');
-          let g = fs.readFileSync('build.gradle', 'utf8');
-          g = g.replace(/release\s*\{/, 'release {\n            signingConfig signingConfigs.debug');
-          fs.writeFileSync('build.gradle', g);
-          console.log('Debug signing applied to release build (no keystore secret set).');
+            const fs = require('fs');
+            let g = fs.readFileSync('build.gradle', 'utf8');
+            if (!g.includes('signingConfig signingConfigs.debug')) {
+              g = g.replace(/(\s*release\s*\{)/, '\$1\n            signingConfig signingConfigs.debug');
+              fs.writeFileSync('build.gradle', g);
+              console.log('Patched: release build now uses debug signing (APK is installable).');
+            } else {
+              console.log('Already has signing config.');
+            }
           "
 
       - name: Cache Gradle
@@ -103,7 +78,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('artifacts/people-mobile/android/**/*.gradle*', 'artifacts/people-mobile/android/gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('artifacts/people-mobile/android/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
       - name: Make gradlew executable
@@ -124,8 +99,8 @@ jobs:
           mkdir -p dist
           APK=$(find artifacts/people-mobile/android -name "*.apk" ! -path "*/debug/*" | head -1)
           AAB=$(find artifacts/people-mobile/android -name "*.aab" | head -1)
-          [ -n "$APK" ] && cp "$APK" "dist/PeopleMemory-v${V}-release.apk" && echo "APK: dist/PeopleMemory-v${V}-release.apk"
-          [ -n "$AAB" ] && cp "$AAB" "dist/PeopleMemory-v${V}-release.aab" && echo "AAB: dist/PeopleMemory-v${V}-release.aab"
+          [ -n "$APK" ] && cp "$APK" "dist/PeopleMemory-v${V}-release.apk" && echo "APK ready: PeopleMemory-v${V}-release.apk"
+          [ -n "$AAB" ] && cp "$AAB" "dist/PeopleMemory-v${V}-release.aab" && echo "AAB ready: PeopleMemory-v${V}-release.aab"
           ls -lh dist/
 
       - name: Upload Release APK
