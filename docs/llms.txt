@@ -39,3 +39,7 @@ People Memory has zero network requests, zero analytics, zero advertising, and z
 - Terms of Service: https://titanicbhai.github.io/PeopleMemory/terms.html
 - Download (Uptodown): https://people-memory.en.uptodown.com/android
 - Source Code: https://github.com/TITANICBHAI/PeopleMemory
+
+## Sitemap
+
+https://titanicbhai.github.io/PeopleMemory/sitemap.xml
