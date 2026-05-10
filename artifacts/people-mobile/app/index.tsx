@@ -50,7 +50,7 @@ const PRIVACY_SECTIONS = [
   },
   {
     title: 'Contact',
-    body: 'Privacy questions: privacy@peoplememory.app',
+    body: 'Privacy questions? Contact TBTechs at: privacy@peoplememory.app',
   },
 ];
 

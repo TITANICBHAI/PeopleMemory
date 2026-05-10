@@ -372,6 +372,7 @@ export default function SettingsScreen() {
         <View style={s.footer}>
           <Text style={[s.footerText, { color: C.textDim }]}>People Memory</Text>
           <Text style={[s.footerSub, { color: C.textDim }]}>Made with care. Your data stays yours.</Text>
+          <Text style={[s.footerSub, { color: C.textDim }]}>© TBTechs</Text>
         </View>
       </ScrollView>
 

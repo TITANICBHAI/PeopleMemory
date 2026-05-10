@@ -45,7 +45,7 @@ const SECTIONS = [
   },
   {
     title: 'Contact',
-    body: 'For any privacy-related questions, contact us at: privacy@peoplememory.app',
+    body: 'For any privacy-related questions, contact TBTechs at: privacy@peoplememory.app',
   },
 ];
 
