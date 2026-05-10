@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog — People Memory</title>
+  <meta name="description" content="Version history and release notes for People Memory — your private personal relationship manager for Android and iOS." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Changelog — People Memory" />
+  <meta property="og:description" content="Version history and release notes for People Memory." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://peoplememory.pages.dev/changelog.html" />
+  <meta property="og:image" content="https://peoplememory.pages.dev/icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="https://peoplememory.pages.dev/icon.png" />
+  <link rel="canonical" href="https://peoplememory.pages.dev/changelog.html" />
+
+  <style>
+    :root {
+      --bg: #1A1A1A;
+      --panel: #242424;
+      --panel2: #2C2C2C;
+      --border: #3E3E42;
+      --accent: #3A7EFF;
+      --text: #D4D4D4;
+      --text-bright: #FFFFFF;
+      --text-muted: #8A8A8A;
+      --text-dim: #5A5A5A;
+      --green: #4EC94E;
+      --yellow: #E5C07B;
+      --red: #F44747;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { opacity: 0.8; }
+
+    /* ─── Nav ─────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(26,26,26,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 16px; font-weight: 700; color: var(--text-bright);
+      text-decoration: none;
+    }
+    .nav-brand img { width: 30px; height: 30px; border-radius: 8px; }
+    .nav-back { font-size: 14px; color: var(--text-muted); }
+
+    /* ─── Page ────────────────────────────────────────── */
+    .page-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .page-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800; color: var(--text-bright);
+      line-height: 1.2; margin-bottom: 10px;
+    }
+    .subtitle {
+      font-size: 15px; color: var(--text-muted); margin-bottom: 48px;
+    }
+
+    /* ─── Timeline ────────────────────────────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px; top: 8px; bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .release {
+      position: relative;
+      margin-bottom: 48px;
+    }
+    .release::before {
+      content: '';
+      position: absolute;
+      left: -24px; top: 8px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .release.latest::before {
+      background: var(--green);
+      box-shadow: 0 0 0 2px var(--green), 0 0 12px var(--green);
+    }
+
+    .release-header {
+      display: flex; align-items: center; gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .version-tag {
+      font-size: 18px; font-weight: 800; color: var(--text-bright);
+    }
+    .release-badge {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      padding: 3px 10px; border-radius: 20px;
+      text-transform: uppercase;
+    }
+    .badge-latest {
+      background: rgba(78,201,78,0.15);
+      color: var(--green);
+      border: 1px solid rgba(78,201,78,0.3);
+    }
+    .badge-stable {
+      background: rgba(58,126,255,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(58,126,255,0.25);
+    }
+    .release-date {
+      font-size: 13px; color: var(--text-dim);
+      margin-left: auto;
+    }
+
+    .release-meta {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .meta-chip {
+      font-size: 12px; color: var(--text-muted);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 10px;
+    }
+
+    .change-group { margin-bottom: 18px; }
+    .change-group-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .change-group-label.new { color: var(--green); }
+    .change-group-label.improved { color: var(--accent); }
+    .change-group-label.fixed { color: var(--yellow); }
+
+    .change-list {
+      list-style: none;
+      display: grid; gap: 8px;
+    }
+    .change-list li {
+      font-size: 14px; color: var(--text);
+      padding-left: 18px;
+      position: relative;
+    }
+    .change-list li::before {
+      content: '–';
+      position: absolute; left: 0;
+      color: var(--text-dim);
+    }
+
+    /* ─── Footer ──────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .footer-links {
+      display: flex; gap: 24px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .footer-links a { font-size: 14px; color: var(--text-muted); }
+    footer p { font-size: 12px; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="icon.png" alt="People Memory icon" onerror="this.style.display='none'" />
+    People Memory
+  </a>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+  <p class="page-label">Release Notes</p>
+  <h1>Changelog</h1>
+  <p class="subtitle">Every update to People Memory — what changed, what's new, what was fixed.</p>
+
+  <div class="timeline">
+
+    <!-- v1.1.0 -->
+    <div class="release latest">
+      <div class="release-header">
+        <span class="version-tag">v1.1.0</span>
+        <span class="release-badge badge-latest">Latest</span>
+        <span class="release-date">May 2026</span>
+      </div>
+      <div class="release-meta">
+        <span class="meta-chip">Android versionCode 5</span>
+        <span class="meta-chip">iOS build 2</span>
+        <span class="meta-chip">Expo SDK 54</span>
+        <span class="meta-chip">com.peoplememory.app</span>
+      </div>
+
+      <div class="change-group">
+        <div class="change-group-label new">✦ New</div>
+        <ul class="change-list">
+          <li>Relationship Health Score — auto-calculated from recency, upcoming events, and profile completeness</li>
+          <li>Meeting Prep Cards — curated summary of what to ask and what matters before any meeting</li>
+          <li>Activity Journal — chronological feed of all interactions across every person</li>
+          <li>Voice Interaction Notes — record voice notes after meetings, timestamped per person</li>
+          <li>Groups — colour-coded organisation (work, family, friends, networking)</li>
+          <li>Contacts import — auto-fill names, numbers, and birthdays from your device address book</li>
+          <li>Custom dates — unlimited labelled dates per person beyond birthdays and meetings</li>
+          <li>Local push notifications — reminders for meetings and birthdays, fully on-device</li>
+        </ul>
+      </div>
+
+      <div class="change-group">
+        <div class="change-group-label improved">↑ Improved</div>
+        <ul class="change-list">
+          <li>Avatar picker now supports device camera in addition to photo library</li>
+          <li>Dashboard search now matches tags, descriptions, and quick facts</li>
+          <li>Sort options expanded — by name, trust level, last met, and health score</li>
+          <li>Profile screen redesigned with tabbed sections for cleaner navigation</li>
+          <li>PIN auto-lock after 5 minutes of inactivity</li>
+        </ul>
+      </div>
+
+      <div class="change-group">
+        <div class="change-group-label fixed">✓ Fixed</div>
+        <ul class="change-list">
+          <li>Avatar not saving correctly after editing a person</li>
+          <li>Tutorial overlay reappearing after PIN change</li>
+          <li>Tag filter not resetting when navigating back to dashboard</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- v1.0.0 -->
+    <div class="release">
+      <div class="release-header">
+        <span class="version-tag">v1.0.0</span>
+        <span class="release-badge badge-stable">Initial Release</span>
+        <span class="release-date">March 2026</span>
+      </div>
+      <div class="release-meta">
+        <span class="meta-chip">Android versionCode 1</span>
+        <span class="meta-chip">iOS build 1</span>
+        <span class="meta-chip">Expo SDK 52</span>
+      </div>
+
+      <div class="change-group">
+        <div class="change-group-label new">✦ New</div>
+        <ul class="change-list">
+          <li>First public release of People Memory</li>
+          <li>PIN-protected vault — 4-digit PIN, SHA-256 hashed, stored only on-device</li>
+          <li>Add, edit, and delete people with names, tags, and avatars</li>
+          <li>Trust level tracking — 0 to 10 scale with red/yellow/green indicators</li>
+          <li>Notes — likes, dislikes, things to remember, quick facts, personal description</li>
+          <li>Key dates — birthday, first met, last met, next meeting</li>
+          <li>Avatar picker — 12 preset emoji avatars or device photo library</li>
+          <li>Dashboard with search, tag filter, and sort</li>
+          <li>One-time onboarding tutorial overlay</li>
+          <li>100% offline — zero network requests, zero analytics, zero cloud</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="changelog.html">Changelog</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="https://github.com/TITANICBHAI/PeopleMemory" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <p>© 2025 TBTechs. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
