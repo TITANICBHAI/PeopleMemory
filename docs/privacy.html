@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — People Memory</title>
+  <meta name="description" content="People Memory Privacy Policy. All data is stored exclusively on your device. No cloud, no tracking, no third-party data sharing." />
+  <style>
+    :root {
+      --bg: #1A1A1A;
+      --panel: #242424;
+      --panel2: #2C2C2C;
+      --border: #3E3E42;
+      --accent: #3A7EFF;
+      --text: #D4D4D4;
+      --text-bright: #FFFFFF;
+      --text-muted: #8A8A8A;
+      --text-dim: #5A5A5A;
+      --green: #4EC94E;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { opacity: 0.8; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(26,26,26,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 16px; font-weight: 700; color: var(--text-bright);
+      text-decoration: none;
+    }
+    .nav-brand img { width: 30px; height: 30px; border-radius: 8px; }
+    .nav-back {
+      font-size: 14px; color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .page-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .page-header {
+      margin-bottom: 40px;
+    }
+    .page-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      color: var(--text-bright);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .page-header .meta { font-size: 13px; color: var(--text-dim); margin-bottom: 24px; }
+    .intro-box {
+      background: var(--panel);
+      border: 1px solid rgba(78,201,78,0.3);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-size: 15px;
+      color: var(--text-bright);
+      line-height: 1.7;
+    }
+    .intro-box strong { color: var(--green); }
+
+    .section {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section:last-of-type { border-bottom: none; }
+    .section h2 {
+      font-size: 18px; font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section h2 .icon { font-size: 20px; }
+    .section p {
+      font-size: 15px; color: var(--text);
+      line-height: 1.75; margin-bottom: 12px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .highlight {
+      background: var(--panel);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      font-size: 14px; color: var(--text);
+      line-height: 1.65;
+      margin-top: 12px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+    .footer-links a { font-size: 14px; color: var(--text-muted); }
+    footer p { font-size: 12px; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-brand">
+    <img src="icon.png" alt="People Memory icon" onerror="this.style.display='none'" />
+    People Memory
+  </a>
+  <a href="/" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <p class="page-label">Legal</p>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Last updated: March 2026 · Version 2.0.0</p>
+    <div class="intro-box">
+      People Memory is built on a single principle: <strong>your data belongs to you</strong>.
+      Everything you store — names, notes, trust levels, dates, photos, and voice notes —
+      lives exclusively on your device. No data is ever transmitted, synced, or shared.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📋</span> What We Collect</h2>
+    <p>
+      People Memory stores all data you enter — names, notes, trust levels, dates, avatars,
+      interaction logs, voice note files, and group memberships — exclusively on your device
+      using local device storage (AsyncStorage). No data is ever sent to any server, cloud
+      service, or third party.
+    </p>
+    <div class="highlight">
+      We do not collect your name, email address, phone number, location, IP address, device
+      identifiers, or any other personal information. There are no user accounts and no registration.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🔧</span> How We Use Your Data</h2>
+    <p>
+      Your data is used solely to provide the app's features: displaying people profiles,
+      showing activity timelines, calculating relationship health scores, and scheduling
+      local meeting reminders. Nothing else.
+    </p>
+    <p>
+      The app does not process your data for advertising, profiling, machine learning,
+      or any purpose beyond what you directly request.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">💾</span> Data Storage</h2>
+    <p>
+      All information is stored in your device's private app storage using AsyncStorage.
+      This storage is sandboxed to the app — other apps cannot access it. It is never
+      synced, backed up to the cloud, or transmitted over the internet by this app.
+    </p>
+    <p>
+      If you use your device's built-in backup services (iCloud Backup on iOS, or Google
+      Backup on Android), your app data may be included in those backups according to your
+      device settings. This is controlled by your OS, not by People Memory.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🔔</span> Notifications</h2>
+    <p>
+      If you set a meeting reminder or birthday reminder, a local notification is scheduled
+      entirely on your device using the OS notification APIs. No notification data is sent
+      to any external server. No push notification service (such as FCM or APNs) is used
+      for data delivery — reminders are purely local.
+    </p>
+    <p>You can disable notifications at any time in your device settings.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📷</span> Photos &amp; Camera</h2>
+    <p>
+      Photo and camera access is requested only when you choose to set a profile picture
+      for a contact. Selected photos are stored locally within the app's private storage.
+      We do not access your photo library beyond what you explicitly select, and we do not
+      upload, transmit, or process photos outside your device.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🎙️</span> Microphone &amp; Voice Notes</h2>
+    <p>
+      Microphone access is requested only when you choose to record a voice interaction note.
+      Audio recordings are stored as local files within the app's private storage. They are
+      never transmitted, streamed, or processed by any external service.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">👤</span> Contacts Access</h2>
+    <p>
+      Contact list access is requested only when you choose to import contact details while
+      adding a person. Data read from your contacts (name, phone, birthday) is stored locally
+      in the app. We do not sync, upload, or store your full contact list anywhere outside
+      the app.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🚫</span> Third-Party Services</h2>
+    <p>
+      People Memory does not use any analytics, advertising, crash reporting, or tracking services.
+      There are no third-party SDKs in this app that collect or transmit user data. The full
+      dependency list is publicly available in the open-source repository.
+    </p>
+    <div class="highlight">
+      No Google Analytics. No Firebase. No Facebook SDK. No Amplitude. No Mixpanel.
+      No advertising networks. No data brokers. None.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🗑️</span> Data Deletion</h2>
+    <p>
+      You can delete any individual person's data at any time from within the app. You can
+      also clear all app data from the Settings screen. Uninstalling the app permanently
+      removes all stored data from your device.
+    </p>
+    <p>
+      Because we store no data on our servers, there is nothing for us to delete on our end —
+      you are always in full control.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🔒</span> Security</h2>
+    <p>
+      The app is protected by a 4-digit PIN that you set on first launch. Your PIN is hashed
+      using SHA-256 and stored only on your device. The app automatically locks after 5 minutes
+      of inactivity.
+    </p>
+    <p>
+      We recommend keeping your device passcode enabled as an additional layer of protection
+      for your locally stored data.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">👶</span> Children's Privacy</h2>
+    <p>
+      This app is not directed at children under 13 and does not knowingly collect data from
+      children. Because the app collects no data from anyone, there is nothing specific to
+      children's data to disclose.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🔄</span> Changes to This Policy</h2>
+    <p>
+      If this privacy policy changes, the updated version will be available at this URL and
+      within the app. Continued use of the app after changes constitutes acceptance of the
+      new policy. We will update the "Last updated" date at the top of this page.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">✉️</span> Contact</h2>
+    <p>
+      For any privacy-related questions or concerns, contact us at:
+      <a href="mailto:privacy@peoplememory.app">privacy@peoplememory.app</a>
+    </p>
+    <p>
+      Source code is publicly available at:
+      <a href="https://github.com/TITANICBHAI/people-memory-expo" target="_blank" rel="noopener">
+        github.com/TITANICBHAI/people-memory-expo
+      </a>
+    </p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="mailto:privacy@peoplememory.app">Contact</a>
+  </div>
+  <p>© 2025 People Memory · v2.0.0 · iOS build 2 · Android versionCode 5</p>
+</footer>
+
+</body>
+</html>

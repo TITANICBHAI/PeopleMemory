@@ -58,3 +58,27 @@ GIT_TERMINAL_PROMPT=0 git push "$PUSH_URL" "HEAD:refs/heads/${BRANCH}"
 echo ""
 echo "✅  Successfully pushed to:"
 echo "    https://github.com/${REPO_OWNER}/${REPO_NAME}/tree/${BRANCH}"
+
+# ── Print version summary ─────────────────────────────────────────────────────
+APP_JSON="artifacts/people-mobile/app.json"
+if command -v node >/dev/null 2>&1 && [ -f "$APP_JSON" ]; then
+  APP_VERSION=$(node -e "const a=require('./${APP_JSON}').expo; console.log(a.version)" 2>/dev/null || echo "unknown")
+  IOS_BUILD=$(node -e "const a=require('./${APP_JSON}').expo; console.log(a.ios?.buildNumber ?? '—')" 2>/dev/null || echo "unknown")
+  ANDROID_CODE=$(node -e "const a=require('./${APP_JSON}').expo; console.log(a.android?.versionCode ?? '—')" 2>/dev/null || echo "unknown")
+  BUNDLE_ID=$(node -e "const a=require('./${APP_JSON}').expo; console.log(a.android?.package ?? a.ios?.bundleIdentifier ?? '—')" 2>/dev/null || echo "unknown")
+  echo ""
+  echo "────────────────────────────────────────────────"
+  echo "  📱  App:             People Memory"
+  echo "  🏷️   Version:         ${APP_VERSION}"
+  echo "  🍎  iOS build:       ${IOS_BUILD}"
+  echo "  🤖  Android code:    ${ANDROID_CODE}"
+  echo "  📦  Bundle ID:       ${BUNDLE_ID}"
+  echo "────────────────────────────────────────────────"
+else
+  echo ""
+  echo "  📱  App:             People Memory"
+  echo "  🏷️   Version:         2.0.0"
+  echo "  🍎  iOS build:       2"
+  echo "  🤖  Android code:    5"
+  echo "  📦  Bundle ID:       com.peoplememory.app"
+fi

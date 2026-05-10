@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — People Memory</title>
+  <meta name="description" content="People Memory Terms of Service. Free open-source personal relationship manager for iOS and Android." />
+  <style>
+    :root {
+      --bg: #1A1A1A;
+      --panel: #242424;
+      --panel2: #2C2C2C;
+      --border: #3E3E42;
+      --accent: #3A7EFF;
+      --text: #D4D4D4;
+      --text-bright: #FFFFFF;
+      --text-muted: #8A8A8A;
+      --text-dim: #5A5A5A;
+      --yellow: #E5C07B;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { opacity: 0.8; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(26,26,26,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 16px; font-weight: 700; color: var(--text-bright);
+      text-decoration: none;
+    }
+    .nav-brand img { width: 30px; height: 30px; border-radius: 8px; }
+    .nav-back { font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+
+    .page-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .page-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800; color: var(--text-bright);
+      line-height: 1.15; margin-bottom: 12px;
+    }
+    .page-header .meta { font-size: 13px; color: var(--text-dim); margin-bottom: 24px; }
+    .intro-box {
+      background: var(--panel);
+      border: 1px solid rgba(58,126,255,0.3);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-size: 15px; color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    .section {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section:last-of-type { border-bottom: none; }
+    .section h2 {
+      font-size: 18px; font-weight: 700;
+      color: var(--text-bright); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section h2 .icon { font-size: 20px; }
+    .section p {
+      font-size: 15px; color: var(--text);
+      line-height: 1.75; margin-bottom: 12px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section ul {
+      margin: 12px 0 12px 20px;
+      display: grid; gap: 8px;
+    }
+    .section ul li { font-size: 15px; color: var(--text); line-height: 1.65; }
+    .note-box {
+      background: var(--panel);
+      border-left: 3px solid var(--yellow);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      font-size: 14px; color: var(--text);
+      line-height: 1.65; margin-top: 12px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+    .footer-links a { font-size: 14px; color: var(--text-muted); }
+    footer p { font-size: 12px; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-brand">
+    <img src="icon.png" alt="People Memory icon" onerror="this.style.display='none'" />
+    People Memory
+  </a>
+  <a href="/" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <p class="page-label">Legal</p>
+    <h1>Terms of Service</h1>
+    <p class="meta">Last updated: March 2026 · Version 2.0.0</p>
+  </div>
+
+  <div class="intro-box">
+    These Terms of Service govern your use of the People Memory mobile application ("the App").
+    By downloading or using the App, you agree to these terms. If you do not agree, please
+    do not use the App.
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📱</span> 1. About the App</h2>
+    <p>
+      People Memory is a free, open-source personal relationship manager for iOS and Android,
+      developed and maintained by TITANICBHAI. The App allows you to store personal notes,
+      trust ratings, interaction history, and dates for people you know — all stored exclusively
+      on your device.
+    </p>
+    <p>
+      The source code is available at:
+      <a href="https://github.com/TITANICBHAI/people-memory-expo" target="_blank" rel="noopener">
+        github.com/TITANICBHAI/people-memory-expo
+      </a>
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">✅</span> 2. Eligibility</h2>
+    <p>
+      You must be at least 13 years old to use this App. By using the App, you confirm that
+      you meet this age requirement. The App is not directed at children under 13.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🆓</span> 3. License &amp; Use</h2>
+    <p>
+      We grant you a free, non-exclusive, non-transferable, revocable license to install and
+      use the App on your personal device for personal, non-commercial purposes, subject to
+      these Terms.
+    </p>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Reverse-engineer, decompile, or disassemble the App (the source code is already publicly available)</li>
+      <li>Use the App to store information about individuals without a lawful basis under applicable privacy law</li>
+      <li>Use the App for stalking, harassment, surveillance, or any unlawful purpose</li>
+      <li>Distribute modified versions of the App without complying with the open-source license terms</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">💾</span> 4. Your Data &amp; Responsibility</h2>
+    <p>
+      All data you enter into the App is stored locally on your device. You are solely responsible
+      for the accuracy, legality, and appropriateness of the information you store.
+    </p>
+    <p>
+      Because we have no access to your data, we cannot recover it if you lose your device,
+      forget your PIN, or uninstall the App. We strongly encourage you to use the in-app
+      export/backup feature before switching devices.
+    </p>
+    <div class="note-box">
+      <strong>Important:</strong> If you forget your PIN, there is no recovery mechanism.
+      Your data cannot be accessed without the correct PIN. This is by design.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🔒</span> 5. Privacy</h2>
+    <p>
+      Your use of the App is governed by our
+      <a href="privacy.html">Privacy Policy</a>, which is incorporated into these Terms by reference.
+      In summary: we collect no personal data, store nothing on servers, and use no tracking or
+      analytics services.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">⚖️</span> 6. Acceptable Use</h2>
+    <p>
+      You agree to use People Memory only for lawful purposes. You must not store, collect, or
+      process personal information about other individuals in a way that violates applicable
+      law, including but not limited to:
+    </p>
+    <ul>
+      <li>GDPR (European Union)</li>
+      <li>CCPA (California, USA)</li>
+      <li>PIPEDA (Canada)</li>
+      <li>Any other applicable national or regional privacy law</li>
+    </ul>
+    <p>
+      Since all data is stored only on your device, you act as the sole data controller for
+      any personal information you record. It is your responsibility to ensure this complies
+      with the laws in your jurisdiction.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🚫</span> 7. Disclaimer of Warranties</h2>
+    <p>
+      The App is provided "as is" and "as available" without warranties of any kind, express
+      or implied, including but not limited to warranties of merchantability, fitness for a
+      particular purpose, or non-infringement.
+    </p>
+    <p>
+      We do not warrant that the App will be error-free, uninterrupted, or free of bugs. We
+      are not responsible for any loss of data resulting from device failure, OS updates,
+      or uninstallation.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🛡️</span> 8. Limitation of Liability</h2>
+    <p>
+      To the maximum extent permitted by applicable law, we shall not be liable for any
+      indirect, incidental, special, consequential, or punitive damages arising out of or
+      related to your use of the App, including but not limited to loss of data, loss of
+      privacy, or device damage.
+    </p>
+    <p>
+      Our total liability to you for any claims arising from your use of the App shall not
+      exceed the amount you paid for the App (which is zero, as the App is free).
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🔄</span> 9. Updates &amp; Changes</h2>
+    <p>
+      We may update the App from time to time to fix bugs, add features, or improve performance.
+      Updates are distributed through the App Store and Google Play. You are not required to
+      update, but older versions may become incompatible with your device's OS over time.
+    </p>
+    <p>
+      We may also update these Terms of Service. When we do, we will update the "Last updated"
+      date at the top. Continued use of the App after an update constitutes your acceptance of
+      the revised Terms.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🌍</span> 10. Governing Law</h2>
+    <p>
+      These Terms shall be governed by and construed in accordance with applicable law.
+      Any disputes shall be resolved in the courts of competent jurisdiction where the
+      developer is domiciled.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📂</span> 11. Open Source</h2>
+    <p>
+      People Memory is open source. The source code is available on GitHub under its
+      respective open-source license. If you build upon or fork this project, you must
+      comply with the license terms specified in the repository.
+    </p>
+    <p>
+      <a href="https://github.com/TITANICBHAI/people-memory-expo" target="_blank" rel="noopener">
+        github.com/TITANICBHAI/people-memory-expo
+      </a>
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">✉️</span> 12. Contact</h2>
+    <p>
+      Questions about these Terms? Contact us at:
+      <a href="mailto:privacy@peoplememory.app">privacy@peoplememory.app</a>
+    </p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="mailto:privacy@peoplememory.app">Contact</a>
+  </div>
+  <p>© 2025 People Memory · v2.0.0 · iOS build 2 · Android versionCode 5</p>
+</footer>
+
+</body>
+</html>
