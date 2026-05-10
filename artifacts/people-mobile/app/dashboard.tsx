@@ -20,8 +20,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { PRESET_AVATARS } from '@/components/AvatarPicker';
 import Tutorial from '@/components/Tutorial';
-import { useColors, avatarColorForName } from '@/constants/colors';
+import { avatarColorForName, useColors } from '@/constants/colors';
 import { Person, useApp } from '@/context/AppContext';
+import { calculateHealthScore, getReconnectList } from '@/utils/health';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -163,7 +164,7 @@ function ComingUpStrip({ events, onPress }: {
     <View style={cu.wrap}>
       <Text style={[cu.label, { color: C.textMuted }]}>COMING UP</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={cu.scroll}>
-        {events.map((ev, i) => {
+        {events.map((ev) => {
           const isBirthday = ev.type === 'birthday';
           const isToday = ev.days === 0;
           const accent = isBirthday ? '#C678DD' : C.accent;
@@ -205,6 +206,74 @@ const cu = StyleSheet.create({
   cardType: { fontSize: 11, fontFamily: 'Inter_400Regular', marginTop: 1 },
   daysBadge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 },
   daysText: { fontSize: 11, fontFamily: 'Inter_600SemiBold' },
+});
+
+// ─── Reconnect Strip ─────────────────────────────────────────────────────────
+
+function ReconnectStrip({ items, onPress }: {
+  items: { person: Person; health: ReturnType<typeof calculateHealthScore> }[];
+  onPress: (person: Person) => void;
+}) {
+  const C = useColors();
+  if (items.length === 0) return null;
+  return (
+    <View style={rc.wrap}>
+      <View style={rc.headerRow}>
+        <Feather name="heart" size={11} color="#F4A747" />
+        <Text style={[rc.label, { color: C.textMuted }]}>RECONNECT</Text>
+      </View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={rc.scroll}>
+        {items.map(({ person, health }) => {
+          const initials = person.name.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() ?? '').join('');
+          const nc = avatarColorForName(person.name);
+          return (
+            <Pressable
+              key={person.id}
+              style={({ pressed }) => [rc.card, { backgroundColor: C.panel, borderColor: health.color + '44' }, pressed && { backgroundColor: C.panelHigh }]}
+              onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); onPress(person); }}
+            >
+              {person.photoUri && !person.photoUri.startsWith('preset:') ? (
+                <Image source={{ uri: person.photoUri }} style={[rc.avatar, { borderColor: health.color + '66' }]} />
+              ) : person.photoUri?.startsWith('preset:') ? (
+                (() => {
+                  const preset = PRESET_AVATARS.find(a => a.id === person.photoUri!.slice(7));
+                  return preset
+                    ? <Image source={{ uri: preset.uri }} style={[rc.avatar, { borderColor: health.color + '66' }]} />
+                    : <View style={[rc.avatarInit, { backgroundColor: nc.bg, borderColor: health.color + '66' }]}><Text style={[rc.initials, { color: nc.text }]}>{initials}</Text></View>;
+                })()
+              ) : (
+                <View style={[rc.avatarInit, { backgroundColor: nc.bg, borderColor: health.color + '66' }]}>
+                  <Text style={[rc.initials, { color: nc.text }]}>{initials}</Text>
+                </View>
+              )}
+              <Text style={[rc.name, { color: C.textBright }]} numberOfLines={1}>{person.name.split(' ')[0]}</Text>
+              <View style={[rc.badge, { backgroundColor: health.color + '22' }]}>
+                <Text style={[rc.badgeText, { color: health.color }]}>{health.label}</Text>
+              </View>
+              <Text style={[rc.reason, { color: C.textDim }]} numberOfLines={1}>{health.reason}</Text>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+    </View>
+  );
+}
+const rc = StyleSheet.create({
+  wrap: { marginBottom: 8 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginHorizontal: 18, marginBottom: 8 },
+  label: { fontSize: 10, fontFamily: 'Inter_600SemiBold', letterSpacing: 2 },
+  scroll: { paddingHorizontal: 14, gap: 10 },
+  card: {
+    alignItems: 'center', borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12,
+    borderWidth: 1, width: 120, gap: 5,
+  },
+  avatar: { width: 46, height: 46, borderRadius: 23, borderWidth: 2 },
+  avatarInit: { width: 46, height: 46, borderRadius: 23, alignItems: 'center', justifyContent: 'center', borderWidth: 2 },
+  initials: { fontSize: 16, fontFamily: 'Inter_700Bold' },
+  name: { fontSize: 13, fontFamily: 'Inter_600SemiBold' },
+  badge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 },
+  badgeText: { fontSize: 10, fontFamily: 'Inter_600SemiBold' },
+  reason: { fontSize: 10, fontFamily: 'Inter_400Regular', textAlign: 'center' },
 });
 
 // ─── Sort Header Cell ─────────────────────────────────────────────────────────
@@ -625,10 +694,25 @@ export default function Dashboard() {
     return events.sort((a, b) => a.date.getTime() - b.date.getTime());
   }, [people]);
 
+  const reconnectList = useMemo(() => getReconnectList(people), [people]);
+
   const topPadding = insets.top + (Platform.OS === 'web' ? 67 : 0);
   const bottomPadding = insets.bottom + (Platform.OS === 'web' ? 34 : 0);
 
   const closeFab = () => setFabOpen(false);
+
+  const ListHeader = useMemo(() => (
+    <>
+      <ComingUpStrip
+        events={upcomingEvents}
+        onPress={p => router.push({ pathname: '/profile/[id]', params: { id: p.id } })}
+      />
+      <ReconnectStrip
+        items={reconnectList}
+        onPress={p => router.push({ pathname: '/profile/[id]', params: { id: p.id } })}
+      />
+    </>
+  ), [upcomingEvents, reconnectList]);
 
   return (
     <View style={[s.root, { paddingTop: topPadding, backgroundColor: C.bg }]}>
@@ -639,6 +723,18 @@ export default function Dashboard() {
           <Text style={[s.count, { color: C.textMuted }]}>{people.length} {people.length === 1 ? 'person' : 'people'}</Text>
         </View>
         <View style={s.headerActions}>
+          <Pressable
+            style={[s.iconBtn, { backgroundColor: C.panel, borderColor: C.border }]}
+            onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.push('/journal'); }}
+          >
+            <Feather name="book-open" size={17} color={C.textMuted} />
+          </Pressable>
+          <Pressable
+            style={[s.iconBtn, { backgroundColor: C.panel, borderColor: C.border }]}
+            onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.push('/groups'); }}
+          >
+            <Feather name="users" size={17} color={C.textMuted} />
+          </Pressable>
           <Pressable
             style={[s.iconBtn, { backgroundColor: C.panel, borderColor: C.border }]}
             onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); router.push('/settings'); }}
@@ -726,12 +822,7 @@ export default function Dashboard() {
         <FlatList
           data={filtered}
           keyExtractor={p => p.id}
-          ListHeaderComponent={
-            <ComingUpStrip
-              events={upcomingEvents}
-              onPress={p => router.push({ pathname: '/profile/[id]', params: { id: p.id } })}
-            />
-          }
+          ListHeaderComponent={ListHeader}
           renderItem={({ item }) => (
             <PersonCard
               person={item}
@@ -744,11 +835,17 @@ export default function Dashboard() {
         />
       ) : (
         <View style={{ flex: 1 }}>
-          {upcomingEvents.length > 0 && (
-            <ComingUpStrip
-              events={upcomingEvents}
-              onPress={p => router.push({ pathname: '/profile/[id]', params: { id: p.id } })}
-            />
+          {(upcomingEvents.length > 0 || reconnectList.length > 0) && (
+            <>
+              <ComingUpStrip
+                events={upcomingEvents}
+                onPress={p => router.push({ pathname: '/profile/[id]', params: { id: p.id } })}
+              />
+              <ReconnectStrip
+                items={reconnectList}
+                onPress={p => router.push({ pathname: '/profile/[id]', params: { id: p.id } })}
+              />
+            </>
           )}
           <View style={[tbl.header, { marginHorizontal: 14, borderBottomColor: C.border, backgroundColor: C.header }]}>
             <SortHeader label="NAME" sortKey="name" current={sortKey} dir={sortDir} onPress={handleSort} flex={3} />
@@ -854,8 +951,8 @@ const s = StyleSheet.create({
     paddingHorizontal: 18, paddingTop: 8, paddingBottom: 14,
   },
   count: { fontSize: 12, fontFamily: 'Inter_400Regular', marginTop: 4 },
-  headerActions: { flexDirection: 'row', gap: 8 },
-  iconBtn: { width: 38, height: 38, borderRadius: 11, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
+  headerActions: { flexDirection: 'row', gap: 6 },
+  iconBtn: { width: 36, height: 36, borderRadius: 10, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
   searchWrap: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
     marginHorizontal: 14, marginBottom: 10,

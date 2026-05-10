@@ -17,6 +17,27 @@ env = { "CI" = "true" }
 [workflows]
 runButton = "Project"
 
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "People Mobile"
+
+[[workflows.workflow]]
+name = "People Mobile"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=21989 pnpm --filter @workspace/people-mobile run dev"
+waitForPort = 21989
+
 [agent]
 stack = "PNPM_WORKSPACE"
 expertMode = true

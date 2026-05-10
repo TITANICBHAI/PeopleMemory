@@ -37,6 +37,10 @@ function ThemedShell() {
         <Stack.Screen name="profile/[id]" />
         <Stack.Screen name="settings" />
         <Stack.Screen name="privacy" />
+        <Stack.Screen name="journal" />
+        <Stack.Screen name="groups" />
+        <Stack.Screen name="group/[id]" />
+        <Stack.Screen name="prep/[id]" />
       </Stack>
     </GestureHandlerRootView>
   );

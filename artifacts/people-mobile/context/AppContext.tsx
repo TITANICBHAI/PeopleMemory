@@ -23,6 +23,7 @@ export interface Interaction {
   id: string;
   date: string;
   note: string;
+  audioUri?: string;
 }
 
 export interface Person {
@@ -49,8 +50,20 @@ export interface Person {
   updatedAt: string;
 }
 
+export interface Group {
+  id: string;
+  name: string;
+  emoji: string;
+  color: string;
+  description: string;
+  memberIds: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface State {
   people: Person[];
+  groups: Group[];
   pinHash: string | null;
   isUnlocked: boolean;
   isLoading: boolean;
@@ -70,10 +83,13 @@ interface CtxValue extends State {
   deletePerson: (id: string) => Promise<void>;
   getPersonById: (id: string) => Person | undefined;
   clearAllData: () => Promise<void>;
-  addInteraction: (personId: string, note: string) => Promise<void>;
+  addInteraction: (personId: string, note: string, audioUri?: string) => Promise<void>;
   deleteInteraction: (personId: string, interactionId: string) => Promise<void>;
-  getRawData: () => { people: Person[]; pinHash: string | null };
+  getRawData: () => { people: Person[]; groups: Group[]; pinHash: string | null };
   importRawData: (people: Person[]) => Promise<void>;
+  addGroup: (g: Omit<Group, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Group>;
+  updateGroup: (g: Group) => Promise<void>;
+  deleteGroup: (id: string) => Promise<void>;
 }
 
 const Ctx = createContext<CtxValue | null>(null);
@@ -82,6 +98,7 @@ const PEOPLE_KEY = 'pm_people_v1';
 const PIN_KEY = 'pm_pin_v1';
 const TUTORIAL_KEY = 'pm_tutorial_seen';
 const PRIVACY_KEY = 'pm_privacy_accepted';
+const GROUPS_KEY = 'pm_groups_v1';
 const AUTO_LOCK_MS = 5 * 60 * 1000;
 
 async function sha256(text: string): Promise<string> {
@@ -95,14 +112,33 @@ export function uid(): string {
 function migratePerson(p: any): Person {
   return {
     ...p,
-    interactions: p.interactions ?? [],
+    interactions: (p.interactions ?? []).map((i: any) => ({
+      id: i.id,
+      date: i.date,
+      note: i.note,
+      audioUri: i.audioUri,
+    })),
     customDates: p.customDates ?? [],
+  };
+}
+
+function migrateGroup(g: any): Group {
+  return {
+    id: g.id,
+    name: g.name,
+    emoji: g.emoji ?? '👥',
+    color: g.color ?? '#007ACC',
+    description: g.description ?? '',
+    memberIds: g.memberIds ?? [],
+    createdAt: g.createdAt,
+    updatedAt: g.updatedAt,
   };
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<State>({
     people: [],
+    groups: [],
     pinHash: null,
     isUnlocked: false,
     isLoading: true,
@@ -115,16 +151,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        const [rawPeople, rawPin, rawTutorial, rawPrivacy] = await Promise.all([
+        const [rawPeople, rawPin, rawTutorial, rawPrivacy, rawGroups] = await Promise.all([
           AsyncStorage.getItem(PEOPLE_KEY),
           AsyncStorage.getItem(PIN_KEY),
           AsyncStorage.getItem(TUTORIAL_KEY),
           AsyncStorage.getItem(PRIVACY_KEY),
+          AsyncStorage.getItem(GROUPS_KEY),
         ]);
         const parsed: Person[] = rawPeople ? JSON.parse(rawPeople).map(migratePerson) : [];
+        const parsedGroups: Group[] = rawGroups ? JSON.parse(rawGroups).map(migrateGroup) : [];
         setState(s => ({
           ...s,
           people: parsed,
+          groups: parsedGroups,
           pinHash: rawPin,
           hasSeenTutorial: rawTutorial === '1',
           hasAcceptedPrivacy: rawPrivacy === '1',
@@ -158,6 +197,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const savePeople = async (people: Person[]) => {
     await AsyncStorage.setItem(PEOPLE_KEY, JSON.stringify(people));
+  };
+
+  const saveGroups = async (groups: Group[]) => {
+    await AsyncStorage.setItem(GROUPS_KEY, JSON.stringify(groups));
   };
 
   const setupPin = useCallback(async (pin: string) => {
@@ -221,24 +264,30 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const deletePerson = useCallback(async (id: string) => {
     const next = state.people.filter(p => p.id !== id);
     await savePeople(next);
-    setState(s => ({ ...s, people: next }));
-  }, [state.people]);
+    const nextGroups = state.groups.map(g => ({
+      ...g,
+      memberIds: g.memberIds.filter(mid => mid !== id),
+    }));
+    await saveGroups(nextGroups);
+    setState(s => ({ ...s, people: next, groups: nextGroups }));
+  }, [state.people, state.groups]);
 
   const getPersonById = useCallback((id: string) => {
     return state.people.find(p => p.id === id);
   }, [state.people]);
 
   const clearAllData = useCallback(async () => {
-    await AsyncStorage.multiRemove([PEOPLE_KEY]);
-    setState(s => ({ ...s, people: [] }));
+    await AsyncStorage.multiRemove([PEOPLE_KEY, GROUPS_KEY]);
+    setState(s => ({ ...s, people: [], groups: [] }));
     router.replace('/dashboard');
   }, []);
 
-  const addInteraction = useCallback(async (personId: string, note: string) => {
+  const addInteraction = useCallback(async (personId: string, note: string, audioUri?: string) => {
     const interaction: Interaction = {
       id: uid(),
       date: new Date().toISOString(),
       note: note.trim(),
+      audioUri,
     };
     const next = state.people.map(p => {
       if (p.id !== personId) return p;
@@ -266,8 +315,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [state.people]);
 
   const getRawData = useCallback(() => {
-    return { people: state.people, pinHash: state.pinHash };
-  }, [state.people, state.pinHash]);
+    return { people: state.people, groups: state.groups, pinHash: state.pinHash };
+  }, [state.people, state.groups, state.pinHash]);
 
   const importRawData = useCallback(async (people: Person[]) => {
     const migrated = people.map(migratePerson);
@@ -275,12 +324,36 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setState(s => ({ ...s, people: migrated }));
   }, []);
 
+  const addGroup = useCallback(async (data: Omit<Group, 'id' | 'createdAt' | 'updatedAt'>): Promise<Group> => {
+    const now = new Date().toISOString();
+    const group: Group = { ...data, id: uid(), createdAt: now, updatedAt: now };
+    const next = [...state.groups, group];
+    await saveGroups(next);
+    setState(s => ({ ...s, groups: next }));
+    return group;
+  }, [state.groups]);
+
+  const updateGroup = useCallback(async (group: Group) => {
+    const next = state.groups.map(g =>
+      g.id === group.id ? { ...group, updatedAt: new Date().toISOString() } : g
+    );
+    await saveGroups(next);
+    setState(s => ({ ...s, groups: next }));
+  }, [state.groups]);
+
+  const deleteGroup = useCallback(async (id: string) => {
+    const next = state.groups.filter(g => g.id !== id);
+    await saveGroups(next);
+    setState(s => ({ ...s, groups: next }));
+  }, [state.groups]);
+
   return (
     <Ctx.Provider value={{
       ...state,
       setupPin, verifyPin, lock, resetInactivity, markTutorialSeen, acceptPrivacy,
       addPerson, updatePerson, deletePerson, getPersonById, clearAllData,
       addInteraction, deleteInteraction, getRawData, importRawData,
+      addGroup, updateGroup, deleteGroup,
     }}>
       {children}
     </Ctx.Provider>
