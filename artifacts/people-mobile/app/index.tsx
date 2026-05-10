@@ -97,7 +97,7 @@ function PrivacyAcceptScreen({ onAccept }: { onAccept: () => void }) {
         ))}
 
         <View style={[pv.lastUpdated, { borderTopColor: C.border }]}>
-          <Text style={[pv.lastUpdatedText, { color: C.textDim }]}>Last updated: March 2026 · Version 1.0</Text>
+          <Text style={[pv.lastUpdatedText, { color: C.textDim }]}>Last updated: March 2026 · Version 2.0.0</Text>
         </View>
       </ScrollView>
 
