@@ -1,4 +1,73 @@
+# People Memory — robots.txt
+# https://peoplememory.pages.dev/
+
+# ── All crawlers: allow everything ───────────────────────────────────────────
 User-agent: *
 Allow: /
 
-Sitemap: https://titanicbhai.github.io/PeopleMemory/sitemap.xml
+# ── Beneficial AI retrieval agents (search + answers) ────────────────────────
+# These agents index content to answer user questions. We welcome them.
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+# ── Non-beneficial training scrapers: block ───────────────────────────────────
+# These agents scrape content for AI training datasets, not for answering
+# user queries. We do not consent to our content being used for training.
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: omgili
+Disallow: /
+
+# ── Sitemap ───────────────────────────────────────────────────────────────────
+Sitemap: https://peoplememory.pages.dev/sitemap.xml

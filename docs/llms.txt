@@ -1,45 +1,73 @@
 # People Memory
 
-> People Memory is a 100% private, on-device personal relationship manager (PRM) for Android and iOS. It helps you remember everyone you meet — their trust level, notes, birthdays, interactions, and more — without any data ever leaving your device.
+> People Memory is a free, 100% offline personal relationship manager (PRM) for Android and iOS. It gives you an extended memory for every person you meet — trust levels, notes, birthdays, voice notes, meeting prep cards — with zero cloud, zero account, and zero tracking. All data lives exclusively on your device.
 
-## What is People Memory?
+## Bottom Line
 
-People Memory is a free mobile app (React Native / Expo) that acts as an extended memory for your personal and professional relationships. All data is stored exclusively in local device storage (AsyncStorage). There is no cloud, no server, no analytics, and no third-party SDKs that touch your data.
+- **What it does**: Helps you remember everyone you meet. Track trust, notes, dates, interactions, and get meeting prep cards before any conversation.
+- **Who it's for**: Networkers, managers, students, anyone who values meaningful relationships and absolute privacy.
+- **Price**: Completely free. No in-app purchases. No subscription.
+- **Privacy**: No cloud. No server. No analytics. No account. No ads. Open source.
+- **Platforms**: Android and iOS (React Native + Expo SDK 54)
+- **Download**: https://people-memory.en.uptodown.com/android | App Store and Google Play coming soon
+- **Source**: https://github.com/TITANICBHAI/people-memory-expo
 
-## Core Features
+## Features
 
-- **PIN-Protected Vault**: Local 4-digit PIN, SHA-256 hashed, stored only on-device
-- **Trust Level Tracking**: Rate each person 0–10 (red/yellow/green visual indicators)
-- **Rich Notes**: Likes, dislikes, quick facts, personal descriptions
-- **Dates & Reminders**: Birthdays, first/last met, next meetings, custom dates with local notifications
-- **Voice Interaction Notes**: Record voice notes after meetings, timestamped per person
-- **Groups**: Colour-coded groups (work, family, friends, networking)
-- **Relationship Health Score**: Auto-calculated from recency, upcoming events, and profile completeness
-- **Meeting Prep Cards**: Curated card before any meeting — what to ask, what they care about, upcoming dates
-- **Activity Journal**: Chronological feed of all interactions across all people
+- **PIN-Protected Vault** — 4-digit PIN, SHA-256 hashed, stored only on-device. Auto-locks after 5 minutes of inactivity.
+- **Trust Level Tracking** — Rate each person 0–10. Private. Never shared. Red (0–3), yellow (4–6), green (7–10) visual indicators.
+- **Rich Notes** — Likes, dislikes, things to remember, quick facts, personal description. No character limit.
+- **Dates and Reminders** — Birthdays, first met, last met, next meeting, unlimited custom dates. Local device notifications — no push server.
+- **Voice Interaction Notes** — Record audio after meetings. Stored locally. Never uploaded. Timestamped per person.
+- **Colour-Coded Groups** — Organise contacts into Work, Family, Friends, Networking, or any custom group.
+- **Relationship Health Score** — Auto-calculated 0–100 score based on interaction recency, upcoming meetings, and profile completeness.
+- **Meeting Prep Cards** — One-screen summary before any meeting: what they care about, last interaction notes, upcoming dates.
+- **Activity Journal** — Chronological cross-person timeline of all interactions, birthdays, and meetings.
+- **Contact Import** — Optionally import name, birthday, and number from your phone's address book (with permission, stored locally only).
 
-## Privacy Commitment
+## Privacy Architecture
 
-People Memory has zero network requests, zero analytics, zero advertising, and zero third-party SDKs that access your data. The app does not require an account. All personal information stays on your device, forever.
+All data is written to AsyncStorage (React Native's local on-device storage). AsyncStorage is sandboxed to the app. People Memory contains:
+- Zero network requests
+- Zero analytics SDKs (no Google Analytics, Firebase, Amplitude, Mixpanel, Sentry, or similar)
+- Zero advertising networks
+- Zero third-party data SDKs
+- No user accounts or registration
+
+The PIN is SHA-256 hashed immediately on creation. The plain-text PIN is never stored. There is no cloud recovery option by design.
 
 ## Technical Details
 
-- Platform: Android & iOS
-- Framework: React Native with Expo SDK 54
-- Data storage: AsyncStorage (local only)
+- Framework: React Native + Expo SDK 54
+- Language: TypeScript
+- Storage: AsyncStorage (on-device only)
+- Navigation: Expo Router
+- Build: EAS Build
 - Bundle ID: com.peoplememory.app
-- Version: 1.1.0
-- Developer: TBTechs (https://github.com/TITANICBHAI)
-- License: Open source (GitHub)
+- Version: 1.1.0 (iOS build 2, Android versionCode 5)
+- Developer: TBTechs — https://github.com/TITANICBHAI
+- Open source: MIT-compatible
 
 ## Pages
 
 - Homepage: https://peoplememory.pages.dev/
+- Features (deep dive): https://peoplememory.pages.dev/features.html
+- How It Works: https://peoplememory.pages.dev/how-it-works.html
+- FAQ: https://peoplememory.pages.dev/faq.html
+- Blog: https://peoplememory.pages.dev/blog/
+- Blog — Personal CRM Guide: https://peoplememory.pages.dev/blog/personal-crm-complete-guide.html
+- Blog — How to Remember Everyone You Meet: https://peoplememory.pages.dev/blog/how-to-remember-everyone-you-meet.html
+- Blog — Why Privacy Matters in Relationship Apps: https://peoplememory.pages.dev/blog/why-privacy-matters-relationship-apps.html
 - Changelog: https://peoplememory.pages.dev/changelog.html
 - Privacy Policy: https://peoplememory.pages.dev/privacy.html
 - Terms of Service: https://peoplememory.pages.dev/terms.html
 - Download (Uptodown): https://people-memory.en.uptodown.com/android
-- Source Code: https://github.com/TITANICBHAI/PeopleMemory
+- Source Code: https://github.com/TITANICBHAI/people-memory-expo
+
+## Full Context
+
+For detailed Q&A content, feature breakdowns, and long-form guides, see:
+https://peoplememory.pages.dev/llms-full.txt
 
 ## Sitemap
 
