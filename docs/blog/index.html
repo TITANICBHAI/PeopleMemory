@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — People Memory | Relationships, Privacy, and Personal Growth</title>
+  <meta name="description" content="Practical guides on building better relationships, managing your personal network privately, remembering everyone you meet, and why privacy matters in everyday apps." />
+  <meta name="keywords" content="personal CRM blog, relationship management tips, networking tips, how to remember people, offline app privacy, contact management guide" />
+
+  <meta property="og:title" content="Blog — People Memory | Relationships, Privacy, Personal Growth" />
+  <meta property="og:description" content="Guides on building meaningful relationships, managing your network privately, and getting the most out of People Memory." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://peoplememory.pages.dev/blog/" />
+  <meta property="og:image" content="https://peoplememory.pages.dev/icon.png" />
+  <meta property="og:site_name" content="People Memory" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Blog — People Memory" />
+  <meta name="twitter:description" content="Guides on relationships, privacy, and networking — from the team behind People Memory." />
+  <meta name="twitter:image" content="https://peoplememory.pages.dev/icon.png" />
+  <meta name="twitter:site" content="@peoplememoryapp" />
+
+  <link rel="canonical" href="https://peoplememory.pages.dev/blog/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "People Memory Blog",
+    "url": "https://peoplememory.pages.dev/blog/",
+    "description": "Practical guides on building better relationships, networking with intention, and protecting your privacy.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "TBTechs",
+      "url": "https://github.com/TITANICBHAI"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #1A1A1A; --panel: #242424; --panel2: #2C2C2C;
+      --border: #3E3E42; --accent: #3A7EFF; --accent-dim: #3A7EFF22;
+      --text: #D4D4D4; --text-bright: #FFFFFF; --text-muted: #8A8A8A;
+      --text-dim: #5A5A5A; --green: #4EC94E; --yellow: #E5C07B; --red: #F44747;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { opacity: 0.8; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(26,26,26,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: var(--text-bright); text-decoration: none; }
+    .nav-brand img { width: 30px; height: 30px; border-radius: 8px; }
+    .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--text); }
+    .nav-cta { background: var(--accent); color: #fff !important; padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+
+    .breadcrumb { max-width: 960px; margin: 0 auto; padding: 20px 24px 0; display: flex; gap: 8px; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+    .breadcrumb a { color: var(--text-muted); }
+
+    .page-hero { max-width: 960px; margin: 0 auto; padding: 60px 24px 48px; }
+    .page-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 14px; display: block; }
+    .page-hero h1 { font-size: clamp(30px, 4vw, 46px); font-weight: 800; color: var(--text-bright); line-height: 1.15; margin-bottom: 14px; }
+    .page-hero p { font-size: 17px; color: var(--text-muted); max-width: 560px; line-height: 1.7; }
+
+    .content-wrap { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+
+    .featured-post { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 40px; margin-bottom: 48px; }
+    .featured-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; display: block; }
+    .featured-post h2 { font-size: clamp(20px, 2.5vw, 28px); font-weight: 800; color: var(--text-bright); margin-bottom: 12px; line-height: 1.25; }
+    .featured-post p { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+    .post-meta { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; }
+    .post-tag { display: inline-block; background: var(--accent-dim); color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 6px; }
+    .read-more { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; padding: 11px 22px; border-radius: 9px; font-weight: 700; font-size: 14px; }
+    .featured-visual { background: var(--panel2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; display: flex; align-items: center; justify-content: center; font-size: 80px; min-height: 200px; }
+
+    .posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .post-card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 28px; display: flex; flex-direction: column; transition: border-color 0.2s; }
+    .post-card:hover { border-color: var(--accent); }
+    .post-card .post-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+    .post-card h2 { font-size: 17px; font-weight: 800; color: var(--text-bright); margin-bottom: 10px; line-height: 1.3; }
+    .post-card p { font-size: 14px; color: var(--text-muted); line-height: 1.65; flex: 1; margin-bottom: 20px; }
+    .post-card .read-more-link { font-size: 14px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 4px; }
+
+    .section-divider { margin: 60px 0 32px; }
+    .section-divider h2 { font-size: 18px; font-weight: 700; color: var(--text-bright); }
+    .section-divider p { font-size: 15px; color: var(--text-muted); margin-top: 6px; }
+
+    footer { max-width: 960px; margin: 0 auto; padding: 40px 24px 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    footer p { font-size: 13px; color: var(--text-dim); }
+    .footer-links-row { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links-row a { font-size: 13px; color: var(--text-muted); }
+
+    @media (max-width: 700px) {
+      .featured-post { grid-template-columns: 1fr; }
+      .featured-visual { display: none; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-brand">
+    <img src="../icon.png" alt="People Memory app icon" onerror="this.style.display='none'" />
+    People Memory
+  </a>
+  <ul class="nav-links">
+    <li><a href="../features.html">Features</a></li>
+    <li><a href="../how-it-works.html">How It Works</a></li>
+    <li><a href="../faq.html">FAQ</a></li>
+    <li><a href="index.html" style="color:var(--text-bright)">Blog</a></li>
+    <li><a href="../changelog.html">Changelog</a></li>
+    <li><a href="https://github.com/TITANICBHAI/people-memory-expo" class="nav-cta" target="_blank" rel="noopener">GitHub</a></li>
+  </ul>
+</nav>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <a href="../index.html">Home</a>
+  <span>›</span>
+  <span>Blog</span>
+</nav>
+
+<div class="page-hero">
+  <span class="page-label">The People Memory Blog</span>
+  <h1>Relationships, Privacy,<br/>and the Art of Remembering</h1>
+  <p>Practical guides on building meaningful relationships, networking with intention, and protecting your personal data in a world that wants to collect it.</p>
+</div>
+
+<div class="content-wrap">
+
+  <div class="featured-post">
+    <div>
+      <span class="featured-label">Featured</span>
+      <span class="post-tag">Networking</span>
+      <span class="post-tag">Memory</span>
+      <h2>How to Remember Everyone You Meet: The Complete System</h2>
+      <p class="post-meta">May 2025 · 12 min read</p>
+      <p>Most people forget 80% of what they learn about someone within 48 hours. Here is the system that fixes that — without feeling like a robot or a sales machine.</p>
+      <a href="how-to-remember-everyone-you-meet.html" class="read-more">Read Article →</a>
+    </div>
+    <div class="featured-visual">🤝</div>
+  </div>
+
+  <div class="section-divider">
+    <h2>All Articles</h2>
+    <p>Guides, deep dives, and honest takes on relationships and privacy.</p>
+  </div>
+
+  <div class="posts-grid">
+
+    <a href="personal-crm-complete-guide.html" class="post-card" style="color:inherit">
+      <span class="post-icon">🗂️</span>
+      <span class="post-tag">Personal CRM</span>
+      <h2>The Complete Guide to Personal CRM: What It Is, Why You Need One, and How to Start</h2>
+      <p class="post-meta" style="font-size:12px; color:var(--text-dim); margin: 8px 0 10px">May 2025 · 15 min read</p>
+      <p>A personal CRM is not a business tool. It is a system for being a better friend, colleague, and human being. This guide explains everything from scratch.</p>
+      <span class="read-more-link">Read Article →</span>
+    </a>
+
+    <a href="how-to-remember-everyone-you-meet.html" class="post-card" style="color:inherit">
+      <span class="post-icon">🧠</span>
+      <span class="post-tag">Memory</span>
+      <span class="post-tag">Networking</span>
+      <h2>How to Remember Everyone You Meet: The Complete System</h2>
+      <p class="post-meta" style="font-size:12px; color:var(--text-dim); margin: 8px 0 10px">May 2025 · 12 min read</p>
+      <p>Most people forget 80% of what they learn about someone within 48 hours. Here is the system — note-taking, review loops, and meeting prep — that actually sticks.</p>
+      <span class="read-more-link">Read Article →</span>
+    </a>
+
+    <a href="why-privacy-matters-relationship-apps.html" class="post-card" style="color:inherit">
+      <span class="post-icon">🔒</span>
+      <span class="post-tag">Privacy</span>
+      <span class="post-tag">Security</span>
+      <h2>Why Privacy Matters More Than Ever in Relationship and Contact Apps</h2>
+      <p class="post-meta" style="font-size:12px; color:var(--text-dim); margin: 8px 0 10px">May 2025 · 10 min read</p>
+      <p>Your contact notes contain the most sensitive data imaginable. Who you trust, who you do not, what people told you in confidence. Here is why that data deserves protection.</p>
+      <span class="read-more-link">Read Article →</span>
+    </a>
+
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2025 TBTechs · People Memory v1.1.0</p>
+  <div class="footer-links-row">
+    <a href="../index.html">Home</a>
+    <a href="../features.html">Features</a>
+    <a href="../faq.html">FAQ</a>
+    <a href="../privacy.html">Privacy</a>
+    <a href="../terms.html">Terms</a>
+    <a href="mailto:privacy@peoplememory.app">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>

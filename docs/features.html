@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Features — People Memory | Private Relationship Manager</title>
+  <meta name="description" content="Explore every feature of People Memory: PIN-protected vault, trust level tracking, voice interaction notes, meeting prep cards, relationship health scores, and more — all 100% offline." />
+  <meta name="keywords" content="personal CRM features, offline relationship manager, trust level tracking, meeting prep, relationship health score, private contact notes, voice notes app" />
+
+  <meta property="og:title" content="Features — People Memory | Private Relationship Manager" />
+  <meta property="og:description" content="Discover every feature of People Memory. Track trust, notes, birthdays, and interactions — 100% on-device, zero cloud." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://peoplememory.pages.dev/features.html" />
+  <meta property="og:image" content="https://peoplememory.pages.dev/icon.png" />
+  <meta property="og:site_name" content="People Memory" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Features — People Memory | Private Relationship Manager" />
+  <meta name="twitter:description" content="Every feature of People Memory: PIN vault, trust levels, voice notes, meeting prep, and more. 100% offline." />
+  <meta name="twitter:image" content="https://peoplememory.pages.dev/icon.png" />
+  <meta name="twitter:site" content="@peoplememoryapp" />
+
+  <link rel="canonical" href="https://peoplememory.pages.dev/features.html" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://peoplememory.pages.dev/features.html",
+        "url": "https://peoplememory.pages.dev/features.html",
+        "name": "Features — People Memory",
+        "description": "Complete feature list for People Memory, the private offline personal relationship manager.",
+        "isPartOf": { "@id": "https://peoplememory.pages.dev/" }
+      },
+      {
+        "@type": "ItemList",
+        "name": "People Memory Features",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "PIN-Protected Vault" },
+          { "@type": "ListItem", "position": 2, "name": "Trust Level Tracking" },
+          { "@type": "ListItem", "position": 3, "name": "Rich Notes and Context" },
+          { "@type": "ListItem", "position": 4, "name": "Dates and Reminders" },
+          { "@type": "ListItem", "position": 5, "name": "Voice Interaction Notes" },
+          { "@type": "ListItem", "position": 6, "name": "Groups" },
+          { "@type": "ListItem", "position": 7, "name": "Relationship Health Score" },
+          { "@type": "ListItem", "position": 8, "name": "Meeting Prep Cards" },
+          { "@type": "ListItem", "position": 9, "name": "Activity Journal" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #1A1A1A; --panel: #242424; --panel2: #2C2C2C;
+      --border: #3E3E42; --accent: #3A7EFF; --accent-dim: #3A7EFF22;
+      --text: #D4D4D4; --text-bright: #FFFFFF; --text-muted: #8A8A8A;
+      --text-dim: #5A5A5A; --green: #4EC94E; --yellow: #E5C07B; --red: #F44747;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { opacity: 0.8; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(26,26,26,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: var(--text-bright); text-decoration: none; }
+    .nav-brand img { width: 30px; height: 30px; border-radius: 8px; }
+    .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--text); }
+    .nav-cta { background: var(--accent); color: #fff !important; padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; }
+
+    .page-hero { text-align: center; padding: 80px 24px 60px; max-width: 800px; margin: 0 auto; }
+    .page-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 14px; display: block; }
+    .page-hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; color: var(--text-bright); line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 18px; }
+    .page-hero h1 span { color: var(--accent); }
+    .page-hero p { font-size: 18px; color: var(--text); max-width: 580px; margin: 0 auto; line-height: 1.7; }
+
+    .features-main { max-width: 1060px; margin: 0 auto; padding: 0 24px 80px; }
+
+    .feature-block { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; padding: 60px 0; border-bottom: 1px solid var(--border); }
+    .feature-block:last-child { border-bottom: none; }
+    .feature-block.reverse { direction: rtl; }
+    .feature-block.reverse > * { direction: ltr; }
+
+    .feature-info .icon-wrap { font-size: 48px; margin-bottom: 20px; display: block; }
+    .feature-info h2 { font-size: clamp(22px, 3vw, 30px); font-weight: 800; color: var(--text-bright); margin-bottom: 14px; line-height: 1.2; }
+    .feature-info p { font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 14px; }
+    .feature-info p:last-of-type { margin-bottom: 0; }
+
+    .feature-detail-card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+    .feature-detail-card h3 { font-size: 14px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+    .detail-list { list-style: none; display: grid; gap: 12px; }
+    .detail-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text); line-height: 1.6; }
+    .detail-list li::before { content: "✓"; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    .trust-visual { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+    .trust-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .trust-row:last-child { border-bottom: none; }
+    .trust-num { font-size: 24px; font-weight: 900; color: var(--text-bright); width: 36px; text-align: center; font-variant-numeric: tabular-nums; }
+    .trust-bar-wrap { flex: 1; }
+    .trust-bar { height: 8px; border-radius: 4px; }
+    .trust-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    .health-visual { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+    .health-factor { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .health-factor:last-child { border-bottom: none; }
+    .health-factor-name { font-size: 14px; color: var(--text); }
+    .health-pips { display: flex; gap: 4px; }
+    .pip { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+    .pip.on { background: var(--green); }
+    .pip.on.yellow { background: var(--yellow); }
+
+    .breadcrumb { max-width: 1060px; margin: 0 auto; padding: 20px 24px 0; display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--text-dim); flex-wrap: wrap; }
+    .breadcrumb a { color: var(--text-muted); }
+    .breadcrumb span { color: var(--text-dim); }
+
+    .cta-strip { background: linear-gradient(135deg, var(--panel) 0%, #1e2030 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 60px 24px; text-align: center; }
+    .cta-strip h2 { font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: var(--text-bright); margin-bottom: 12px; }
+    .cta-strip p { font-size: 16px; color: var(--text-muted); margin-bottom: 28px; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .btn-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--accent); color: #fff; padding: 13px 26px; border-radius: 10px; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-secondary { background: var(--panel2); color: var(--text-bright); border: 1px solid var(--border); padding: 13px 26px; border-radius: 10px; font-weight: 600; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; }
+
+    footer { max-width: 1060px; margin: 0 auto; padding: 40px 24px 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    footer p { font-size: 13px; color: var(--text-dim); }
+    .footer-links-row { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links-row a { font-size: 13px; color: var(--text-muted); }
+
+    @media (max-width: 720px) {
+      .feature-block { grid-template-columns: 1fr; gap: 28px; }
+      .feature-block.reverse { direction: ltr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="icon.png" alt="People Memory app icon" onerror="this.style.display='none'" />
+    People Memory
+  </a>
+  <ul class="nav-links">
+    <li><a href="features.html" style="color:var(--text-bright)">Features</a></li>
+    <li><a href="how-it-works.html">How It Works</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="blog/index.html">Blog</a></li>
+    <li><a href="changelog.html">Changelog</a></li>
+    <li><a href="https://github.com/TITANICBHAI/people-memory-expo" class="nav-cta" target="_blank" rel="noopener">GitHub</a></li>
+  </ul>
+</nav>
+
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <a href="index.html">Home</a>
+  <span>›</span>
+  <span>Features</span>
+</nav>
+
+<div class="page-hero">
+  <span class="page-label">What You Get</span>
+  <h1>Every Feature, <span>Every Detail</span></h1>
+  <p>People Memory is not a simple address book. It is your second brain for human relationships — designed from the ground up for depth, privacy, and everyday use.</p>
+</div>
+
+<div class="features-main">
+
+  <!-- Feature 1: PIN Vault -->
+  <div class="feature-block">
+    <div class="feature-info">
+      <span class="icon-wrap">🔐</span>
+      <h2>PIN-Protected Vault</h2>
+      <p>The moment you open People Memory for the first time, you create a 4-digit PIN. This PIN is immediately hashed using SHA-256 — a one-way cryptographic function — and stored only on your device. Your plain PIN is never written anywhere.</p>
+      <p>Every subsequent app launch requires your PIN before any data is visible. After 5 minutes of inactivity, the app locks automatically. Nobody who picks up your phone can browse your contacts or read your notes.</p>
+      <p>This is not "PIN as a convenience unlock." It is a genuine privacy layer because the people you track in this app are your most personal relationships — and that data deserves real protection.</p>
+    </div>
+    <div class="feature-detail-card">
+      <h3>Security Details</h3>
+      <ul class="detail-list">
+        <li>4-digit PIN chosen by you on first launch</li>
+        <li>PIN stored as SHA-256 hash — never in plain text</li>
+        <li>Auto-lock after 5 minutes of inactivity</li>
+        <li>Zero network calls — PIN never leaves your device</li>
+        <li>No "forgot PIN" cloud reset — your privacy is absolute</li>
+        <li>All data locked until correct PIN entered</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 2: Trust Levels -->
+  <div class="feature-block reverse">
+    <div class="feature-info">
+      <span class="icon-wrap">📊</span>
+      <h2>Trust Level Tracking (0–10)</h2>
+      <p>Every person in your life occupies a different position in your circle of trust. People Memory lets you assign each contact a trust level from 0 to 10, giving you an honest, private picture of where each relationship stands.</p>
+      <p>The trust level is entirely private — it never appears in notifications, is never shared, and is only visible to you. It is a tool for your own situational awareness: should you share a business idea with this person? How much personal information is appropriate to reveal?</p>
+      <p>Visual indicators (red, yellow, and green dots on the people list) let you scan your contacts at a glance without reading individual profiles. A quick colour-coded overview of your entire social landscape.</p>
+    </div>
+    <div class="trust-visual">
+      <h3 style="font-size:14px; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Trust Scale</h3>
+      <div class="trust-row">
+        <div class="trust-num">0–3</div>
+        <div class="trust-bar-wrap">
+          <div class="trust-bar" style="background:var(--red); width:30%"></div>
+          <div class="trust-label">Low Trust — proceed carefully</div>
+        </div>
+      </div>
+      <div class="trust-row">
+        <div class="trust-num">4–6</div>
+        <div class="trust-bar-wrap">
+          <div class="trust-bar" style="background:var(--yellow); width:60%"></div>
+          <div class="trust-label">Moderate — building the relationship</div>
+        </div>
+      </div>
+      <div class="trust-row">
+        <div class="trust-num">7–10</div>
+        <div class="trust-bar-wrap">
+          <div class="trust-bar" style="background:var(--green); width:100%"></div>
+          <div class="trust-label">High Trust — your inner circle</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 3: Rich Notes -->
+  <div class="feature-block">
+    <div class="feature-info">
+      <span class="icon-wrap">📝</span>
+      <h2>Rich Notes and Deep Context</h2>
+      <p>The human mind is not designed to remember every detail about every person. People Memory extends your memory with structured, searchable notes for each contact.</p>
+      <p>Each profile includes dedicated fields for what a person likes, what they dislike, things you must remember (allergies, sensitivities, preferences), quick facts (job title, company, city), and a full free-form personal description. Together, these give you a complete picture before any conversation.</p>
+      <p>Whether you are preparing for a job interview follow-up, a first date, a networking event, or a family reunion, these notes mean you walk in knowing exactly what matters to the person in front of you.</p>
+    </div>
+    <div class="feature-detail-card">
+      <h3>Note Fields</h3>
+      <ul class="detail-list">
+        <li>Likes — hobbies, interests, preferences</li>
+        <li>Dislikes — things to avoid mentioning</li>
+        <li>Things to Remember — allergies, sensitivities, commitments</li>
+        <li>Quick Facts — job, company, city, role</li>
+        <li>Personal Description — freeform overview of the person</li>
+        <li>All fields are private and searchable</li>
+        <li>No character limit on any field</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 4: Dates & Reminders -->
+  <div class="feature-block reverse">
+    <div class="feature-info">
+      <span class="icon-wrap">📅</span>
+      <h2>Dates, Birthdays, and Local Reminders</h2>
+      <p>People Memory tracks every important date without relying on a server. Birthdays, the date you first met, the date of your last interaction, the date of your next planned meeting — all stored locally and surfaced at the right time.</p>
+      <p>You can also create unlimited custom date entries for any person. "Promotion date," "anniversary of partnership," "visa expiry" — whatever matters to you. Each custom date can have a descriptive label.</p>
+      <p>Reminders are scheduled as local device notifications using your phone's OS notification system. There is no push notification server, no Firebase Cloud Messaging, no Apple Push Notification Service carrying your data. Your phone schedules and fires the alert itself.</p>
+    </div>
+    <div class="feature-detail-card">
+      <h3>Date Tracking</h3>
+      <ul class="detail-list">
+        <li>Birthday with annual reminder</li>
+        <li>First Met date</li>
+        <li>Last Met date (auto-updated on interaction log)</li>
+        <li>Next Meeting with local reminder</li>
+        <li>Unlimited custom dates with labels</li>
+        <li>Reminders fire from your device's OS — no server</li>
+        <li>Disable or adjust reminders any time in device settings</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 5: Voice Notes -->
+  <div class="feature-block">
+    <div class="feature-info">
+      <span class="icon-wrap">🎙️</span>
+      <h2>Voice Interaction Notes</h2>
+      <p>After a meeting or phone call, capturing what happened quickly and accurately is often more important than capturing it perfectly. People Memory lets you record a voice note immediately after an interaction — while it is fresh.</p>
+      <p>Each voice note is stored as a local audio file within the app's private storage. It is timestamped and tied to the specific person's interaction timeline. You can play it back any time before your next meeting with that person.</p>
+      <p>No audio is ever streamed, transcribed by a third-party service, or uploaded anywhere. Your voice stays on your device, always.</p>
+    </div>
+    <div class="feature-detail-card">
+      <h3>Voice Notes</h3>
+      <ul class="detail-list">
+        <li>Record directly inside a person's profile</li>
+        <li>Timestamped to the moment of recording</li>
+        <li>Stored as local audio files in app private storage</li>
+        <li>Playback any time — no internet required</li>
+        <li>Never transcribed or uploaded to any service</li>
+        <li>Linked to the person's interaction history</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 6: Groups -->
+  <div class="feature-block reverse">
+    <div class="feature-info">
+      <span class="icon-wrap">👥</span>
+      <h2>Colour-Coded Groups</h2>
+      <p>Your contacts are not a flat list — they exist in different spheres of your life. Work colleagues, close friends, family, networking connections, mentors, collaborators. People Memory lets you organise everyone into named, colour-coded groups.</p>
+      <p>Groups serve two purposes: visual filtering on the main people list, and contextual clarity. When you need to think about how to approach a professional relationship, you know immediately which people are in that sphere.</p>
+      <p>You can create as many groups as you need, rename them, change their colour, and assign each person to one or more groups. The group filter on the main dashboard makes it effortless to focus on one slice of your network at a time.</p>
+    </div>
+    <div class="feature-detail-card">
+      <h3>Groups System</h3>
+      <ul class="detail-list">
+        <li>Create unlimited named groups</li>
+        <li>Assign any colour to each group</li>
+        <li>A person can belong to multiple groups</li>
+        <li>Filter your entire people list by group instantly</li>
+        <li>Default groups: Work, Family, Friends, Networking</li>
+        <li>Rename or delete groups without losing contacts</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 7: Health Score -->
+  <div class="feature-block">
+    <div class="feature-info">
+      <span class="icon-wrap">❤️</span>
+      <h2>Relationship Health Score</h2>
+      <p>Out of sight, out of mind is the enemy of meaningful relationships. The Relationship Health Score is an automatic calculation that tells you, at a glance, which relationships need your attention before they go cold.</p>
+      <p>The score is calculated from several factors: how recently you last interacted, whether you have an upcoming meeting scheduled, how complete the person's profile is, and whether their birthday is approaching. Together, these signals produce a single 0–100 score displayed on each person's card.</p>
+      <p>This is not gamification — it is a quiet, honest nudge to be a more proactive friend, colleague, and relationship builder.</p>
+    </div>
+    <div class="health-visual">
+      <h3 style="font-size:14px; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px; margin-bottom:16px;">Score Factors</h3>
+      <div class="health-factor">
+        <span class="health-factor-name">Recency of last interaction</span>
+        <div class="health-pips"><div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div></div>
+      </div>
+      <div class="health-factor">
+        <span class="health-factor-name">Next meeting scheduled</span>
+        <div class="health-pips"><div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div><div class="pip"></div></div>
+      </div>
+      <div class="health-factor">
+        <span class="health-factor-name">Profile completeness</span>
+        <div class="health-pips"><div class="pip on"></div><div class="pip on yellow"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+      </div>
+      <div class="health-factor">
+        <span class="health-factor-name">Upcoming birthday</span>
+        <div class="health-pips"><div class="pip on"></div><div class="pip on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 8: Meeting Prep Cards -->
+  <div class="feature-block reverse">
+    <div class="feature-info">
+      <span class="icon-wrap">🃏</span>
+      <h2>Meeting Prep Cards</h2>
+      <p>Five minutes before a meeting, how much can you actually remember about the person you are about to see? People Memory curates a Meeting Prep Card for each contact — a focused, one-screen summary of everything relevant to the upcoming conversation.</p>
+      <p>The card surfaces what they care about, what topics to explore, upcoming dates (birthdays, anniversaries), the last things you discussed, and any notes you flagged as important. You walk into every meeting having done your homework automatically.</p>
+      <p>This feature is particularly valuable for networkers, managers, salespeople, and anyone who meets many different people across multiple contexts and cannot keep every detail in their head.</p>
+    </div>
+    <div class="feature-detail-card">
+      <h3>Prep Card Contents</h3>
+      <ul class="detail-list">
+        <li>Person's name, photo, and trust level</li>
+        <li>What they like — conversation starters</li>
+        <li>Things to remember — sensitivities, preferences</li>
+        <li>Recent interaction notes from your history</li>
+        <li>Upcoming dates — birthday, next meeting, custom dates</li>
+        <li>Relationship health score and last interaction date</li>
+        <li>Quick facts — job, company, city</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 9: Activity Journal -->
+  <div class="feature-block">
+    <div class="feature-info">
+      <span class="icon-wrap">📖</span>
+      <h2>Activity Journal</h2>
+      <p>The Activity Journal is a chronological, cross-person feed of everything that has happened across your entire network. Birthdays coming up, interactions you logged, meetings you attended, milestones you recorded — all in one scrollable timeline.</p>
+      <p>This gives you a bird's-eye view of how active your social and professional life has been recently, and which people have been present in it. It is the difference between managing relationships reactively — only when someone reaches out — and managing them proactively.</p>
+      <p>Each journal entry is linked to the relevant person's profile. One tap takes you straight to their full profile to add a note, log a follow-up, or read your previous interaction history.</p>
+    </div>
+    <div class="feature-detail-card">
+      <h3>Journal Features</h3>
+      <ul class="detail-list">
+        <li>Chronological timeline across all contacts</li>
+        <li>Interactions, birthdays, meetings, custom events</li>
+        <li>Tap any entry to go directly to the person's profile</li>
+        <li>Filter by person or date range</li>
+        <li>Never miss a birthday or anniversary again</li>
+        <li>Reflects your full relational history at a glance</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-strip">
+  <h2>Ready to remember everyone?</h2>
+  <p>Download People Memory free. No account. No cloud. Your people, your privacy.</p>
+  <div class="btn-row">
+    <a href="index.html#download" class="btn-primary">⬇ Download Free</a>
+    <a href="how-it-works.html" class="btn-secondary">See How It Works →</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 TBTechs · People Memory v1.1.0</p>
+  <div class="footer-links-row">
+    <a href="index.html">Home</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a href="faq.html">FAQ</a>
+    <a href="blog/index.html">Blog</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="mailto:privacy@peoplememory.app">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
