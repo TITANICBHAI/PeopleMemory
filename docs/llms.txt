@@ -10,7 +10,7 @@
 - **Privacy**: No cloud. No server. No analytics. No account. No ads. Open source.
 - **Platforms**: Android and iOS (React Native + Expo SDK 54)
 - **Download**: https://people-memory.en.uptodown.com/android | App Store and Google Play coming soon
-- **Source**: https://github.com/TITANICBHAI/people-memory-expo
+- **Source**: https://github.com/TITANICBHAI/PeopleMemory
 
 ## Features
 
@@ -61,8 +61,9 @@ The PIN is SHA-256 hashed immediately on creation. The plain-text PIN is never s
 - Changelog: https://peoplememory.pages.dev/changelog.html
 - Privacy Policy: https://peoplememory.pages.dev/privacy.html
 - Terms of Service: https://peoplememory.pages.dev/terms.html
+- Data Subject Rights: https://peoplememory.pages.dev/data-subject-rights.html
 - Download (Uptodown): https://people-memory.en.uptodown.com/android
-- Source Code: https://github.com/TITANICBHAI/people-memory-expo
+- Source Code: https://github.com/TITANICBHAI/PeopleMemory
 
 ## Full Context
 

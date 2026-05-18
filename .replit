@@ -63,7 +63,7 @@ outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "bash scripts/push-to-github.sh \"fix: remove /privacy and /terms redirect rules causing loop with Cloudflare Pretty URLs\""
+args = "bash scripts/push-to-github.sh \"docs: add data-subject-rights to llms.txt, llms-full.txt; fix GitHub repo URLs\""
 
 [[workflows.workflow]]
 name = "Publish Docs"
