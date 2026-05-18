@@ -63,7 +63,7 @@ outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "bash scripts/push-to-github.sh \"docs: fix canonical URLs, add Data Subject Rights page, update footers and sitemap\""
+args = "bash scripts/push-to-github.sh \"fix: remove self-referencing redirect causing loop on data-subject-rights\""
 
 [[workflows.workflow]]
 name = "Publish Docs"
