@@ -60,3 +60,9 @@ id = "ZG8ncrGV79E8wpLsIY9rt"
 uri = "file://store-assets/screenshot-security.png"
 type = "image"
 title = "Screenshot 3 — PIN / Security"
+
+[[outputs]]
+id = "ng92CUBuw15WmGL7gySRn"
+uri = "file://store-assets/huawei/huawei-upload-key.zip"
+type = "unspecified"
+title = "Huawei Upload Key Files"
