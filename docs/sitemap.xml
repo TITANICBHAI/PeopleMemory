@@ -67,6 +67,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://peoplememory.pages.dev/data-subject-rights.html</loc>
+    <lastmod>2025-05-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://peoplememory.pages.dev/llms.txt</loc>
     <lastmod>2025-05-11</lastmod>
     <changefreq>monthly</changefreq>

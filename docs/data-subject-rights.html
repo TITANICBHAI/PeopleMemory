@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Data Rights — People Memory</title>
+  <meta name="description" content="Understand your data subject rights with People Memory. Since all data stays on your device, you are always in full control — no requests needed." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Your Data Rights — People Memory" />
+  <meta property="og:description" content="People Memory stores everything on your device. You have complete control over your data at all times — no requests, no waiting." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://peoplememory.pages.dev/data-subject-rights.html" />
+  <meta property="og:image" content="https://peoplememory.pages.dev/icon.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="https://peoplememory.pages.dev/icon.png" />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://peoplememory.pages.dev/data-subject-rights.html" />
+
+  <style>
+    :root {
+      --bg: #1A1A1A;
+      --panel: #242424;
+      --panel2: #2C2C2C;
+      --border: #3E3E42;
+      --accent: #3A7EFF;
+      --text: #D4D4D4;
+      --text-bright: #FFFFFF;
+      --text-muted: #8A8A8A;
+      --text-dim: #5A5A5A;
+      --green: #4EC94E;
+      --yellow: #F5A623;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { opacity: 0.8; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(26,26,26,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 16px; font-weight: 700; color: var(--text-bright);
+      text-decoration: none;
+    }
+    .nav-brand img { width: 30px; height: 30px; border-radius: 8px; }
+    .nav-back {
+      font-size: 14px; color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .page-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .page-header { margin-bottom: 40px; }
+    .page-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      color: var(--text-bright);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .page-header .meta { font-size: 13px; color: var(--text-dim); margin-bottom: 24px; }
+
+    .intro-box {
+      background: var(--panel);
+      border: 1px solid rgba(78,201,78,0.3);
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-size: 15px;
+      color: var(--text-bright);
+      line-height: 1.7;
+    }
+    .intro-box strong { color: var(--green); }
+
+    .rights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 40px 0;
+    }
+    @media (max-width: 580px) { .rights-grid { grid-template-columns: 1fr; } }
+
+    .right-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .right-card .right-icon { font-size: 24px; margin-bottom: 10px; }
+    .right-card h3 {
+      font-size: 15px; font-weight: 700;
+      color: var(--text-bright); margin-bottom: 6px;
+    }
+    .right-card p { font-size: 13px; color: var(--text); line-height: 1.6; }
+    .right-card .how {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .section {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section:last-of-type { border-bottom: none; }
+    .section h2 {
+      font-size: 18px; font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section h2 .icon { font-size: 20px; }
+    .section p {
+      font-size: 15px; color: var(--text);
+      line-height: 1.75; margin-bottom: 12px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    .highlight {
+      background: var(--panel);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      font-size: 14px; color: var(--text);
+      line-height: 1.65;
+      margin-top: 12px;
+    }
+    .highlight.green { border-left-color: var(--green); }
+
+    .step-list { list-style: none; margin-top: 12px; display: grid; gap: 10px; }
+    .step-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 14px; color: var(--text); line-height: 1.6;
+    }
+    .step-num {
+      min-width: 24px; height: 24px;
+      background: var(--accent); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: #fff;
+      margin-top: 1px;
+    }
+
+    .contact-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    .contact-box p { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; }
+    .contact-box a.btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px; font-weight: 600;
+      padding: 10px 24px;
+      border-radius: 8px;
+    }
+    .contact-box a.btn:hover { opacity: 0.85; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+    .footer-links a { font-size: 14px; color: var(--text-muted); }
+    footer p { font-size: 12px; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="icon.png" alt="People Memory icon" onerror="this.style.display='none'" />
+    People Memory
+  </a>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <p class="page-label">Legal · Privacy</p>
+    <h1>Your Data Rights</h1>
+    <p class="meta">Last updated: May 2025 · Applies to People Memory v1.1.0 and later</p>
+    <div class="intro-box">
+      Because People Memory stores <strong>all data exclusively on your device</strong>, you
+      already have complete, immediate control over every piece of information at all times.
+      You don't need to submit a request to us — your data is yours, always.
+    </div>
+  </div>
+
+  <!-- Rights grid -->
+  <div class="rights-grid">
+    <div class="right-card">
+      <div class="right-icon">👁️</div>
+      <h3>Right of Access</h3>
+      <p>View all data stored about the people in your life at any time, within the app.</p>
+      <p class="how">→ Open any person's profile in the app.</p>
+    </div>
+    <div class="right-card">
+      <div class="right-icon">✏️</div>
+      <h3>Right to Rectification</h3>
+      <p>Correct or update any inaccurate data immediately, without waiting for us.</p>
+      <p class="how">→ Tap Edit on any person's profile.</p>
+    </div>
+    <div class="right-card">
+      <div class="right-icon">🗑️</div>
+      <h3>Right to Erasure</h3>
+      <p>Delete any individual contact or wipe all data completely at any time.</p>
+      <p class="how">→ Settings → Clear All Data, or delete per-person.</p>
+    </div>
+    <div class="right-card">
+      <div class="right-icon">📦</div>
+      <h3>Right to Data Portability</h3>
+      <p>Export your data as a JSON file you can keep, move, or import elsewhere.</p>
+      <p class="how">→ Settings → Export Data.</p>
+    </div>
+    <div class="right-card">
+      <div class="right-icon">🚫</div>
+      <h3>Right to Object</h3>
+      <p>Object to any specific processing of your data. Since we process nothing on our servers, there is nothing to object to.</p>
+      <p class="how">→ No action needed.</p>
+    </div>
+    <div class="right-card">
+      <div class="right-icon">🔒</div>
+      <h3>Right to Restrict Processing</h3>
+      <p>Restrict how your data is used. All processing happens on-device and only when you directly interact with the app.</p>
+      <p class="how">→ Already restricted by design.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🌍</span> Who This Applies To</h2>
+    <p>
+      These rights apply to all users of People Memory worldwide. Users in the European Economic
+      Area (EEA), United Kingdom, and California (CCPA) have these rights guaranteed by law.
+      Because of our offline-first, no-server architecture, we meet — and in most cases exceed —
+      the requirements of GDPR, UK GDPR, and CCPA by design.
+    </p>
+    <div class="highlight green">
+      Our privacy model means you never need to wait days for a data access or deletion request
+      to be fulfilled. Everything is instant and in your hands.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📲</span> How to Exercise Your Rights In-App</h2>
+    <p>All rights can be exercised directly inside People Memory:</p>
+    <ul class="step-list">
+      <li>
+        <span class="step-num">1</span>
+        <span><strong>Access your data</strong> — tap any person's card to view all stored information including notes, trust level, interaction history, and dates.</span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span><strong>Edit or correct data</strong> — tap the edit icon on any profile to update any field instantly.</span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span><strong>Delete a single person</strong> — open their profile, scroll to the bottom, and tap Delete Contact. This is permanent and immediate.</span>
+      </li>
+      <li>
+        <span class="step-num">4</span>
+        <span><strong>Delete all data</strong> — go to Settings → Clear All Data. This wipes every contact, note, photo, and voice note from your device.</span>
+      </li>
+      <li>
+        <span class="step-num">5</span>
+        <span><strong>Export your data</strong> — go to Settings → Export Data to download a JSON backup you can store anywhere.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🏛️</span> GDPR &amp; CCPA Notes</h2>
+    <p>
+      Under GDPR (EU) and UK GDPR, you have rights including access, rectification, erasure,
+      portability, restriction, and objection. Under CCPA (California), you have rights to know,
+      delete, and opt out of sale. People Memory satisfies all of these through its offline
+      architecture — we have no personal data on our servers to access, modify, or sell.
+    </p>
+    <p>
+      We do not sell, share, or broker personal data. We have no user accounts, no tracking,
+      no analytics, and no third-party SDKs. There is nothing to opt out of.
+    </p>
+    <div class="highlight">
+      Legal basis for processing (GDPR Article 6): All data processing occurs locally on your
+      device based on your explicit action (Article 6(1)(a) — consent, and Article 6(1)(b) —
+      performance of a service you requested). No processing occurs without your direct input.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">✉️</span> Contact Us</h2>
+    <p>
+      If you have questions about your rights, want written confirmation that we hold no data
+      about you, or have a concern related to privacy, reach out at any time:
+    </p>
+    <div class="contact-box">
+      <p>We aim to respond to all privacy enquiries within 72 hours.</p>
+      <a href="mailto:privacy@peoplememory.app" class="btn">privacy@peoplememory.app</a>
+    </div>
+    <p style="margin-top: 16px;">
+      You also have the right to lodge a complaint with your local data protection authority
+      (e.g., the ICO in the UK, or your national supervisory authority in the EEA) if you
+      believe your rights have been infringed. However, given our no-server architecture,
+      we are confident any concern can be resolved directly with us.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🔗</span> Related Documents</h2>
+    <p>
+      <a href="privacy.html">Privacy Policy</a> — full details on what People Memory does and does not do with data.<br /><br />
+      <a href="terms.html">Terms of Service</a> — the terms governing your use of the app.
+    </p>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="data-subject-rights.html">Your Rights</a>
+    <a href="mailto:privacy@peoplememory.app">Contact</a>
+  </div>
+  <p>© 2025 TBTechs · People Memory v1.1.0 · iOS build 2 · Android versionCode 5</p>
+</footer>
+
+</body>
+</html>

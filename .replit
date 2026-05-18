@@ -58,12 +58,12 @@ waitForPort = 21989
 name = "Push to GitHub"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "bash scripts/push-to-github.sh"
-
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash scripts/push-to-github.sh \"docs: fix canonical URLs, add Data Subject Rights page, update footers and sitemap\""
 
 [[workflows.workflow]]
 name = "Publish Docs"
