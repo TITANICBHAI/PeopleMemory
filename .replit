@@ -63,7 +63,7 @@ outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "bash scripts/push-to-github.sh \"fix: remove self-referencing redirect causing loop on data-subject-rights\""
+args = "bash scripts/push-to-github.sh \"fix: remove /privacy and /terms redirect rules causing loop with Cloudflare Pretty URLs\""
 
 [[workflows.workflow]]
 name = "Publish Docs"
