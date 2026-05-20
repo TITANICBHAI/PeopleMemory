@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="48" viewBox="0 0 160 48">
+  <rect width="160" height="48" rx="8" fill="#1A1A1A" stroke="#444" stroke-width="1"/>
+  <!-- Huawei Petal Logo -->
+  <g transform="translate(12,24)">
+    <!-- Top petal -->
+    <ellipse cx="0" cy="-7" rx="3.5" ry="6" fill="#CF1825" transform="rotate(0)"/>
+    <!-- Upper right petal -->
+    <ellipse cx="0" cy="-7" rx="3.5" ry="6" fill="#E8372A" transform="rotate(60)"/>
+    <!-- Lower right petal -->
+    <ellipse cx="0" cy="-7" rx="3.5" ry="6" fill="#F47C20" transform="rotate(120)"/>
+    <!-- Bottom petal -->
+    <ellipse cx="0" cy="-7" rx="3.5" ry="6" fill="#CF1825" transform="rotate(180)"/>
+    <!-- Lower left petal -->
+    <ellipse cx="0" cy="-7" rx="3.5" ry="6" fill="#E8372A" transform="rotate(240)"/>
+    <!-- Upper left petal -->
+    <ellipse cx="0" cy="-7" rx="3.5" ry="6" fill="#F47C20" transform="rotate(300)"/>
+  </g>
+  <!-- Text -->
+  <text x="32" y="19" font-family="Arial,sans-serif" font-size="9" fill="#CCCCCC" letter-spacing="0.3">Explore it on</text>
+  <text x="32" y="34" font-family="Arial,sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF">AppGallery</text>
+</svg>

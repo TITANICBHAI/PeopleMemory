@@ -698,19 +698,36 @@
       <img
         class="badge-icon"
         src="https://img.utdstc.com/icon/a11/bcd/a11bcdd8718e0ca244f93ab5864e945140641f865c8b3084361c77add63381e5"
-        srcset="https://img.utdstc.com/icon/a11/bcd/a11bcdd8718e0ca244f93ab5864e945140641f865c8b3084361c77add63381e5:100 1x, https://img.utdstc.com/icon/a11/bcd/a11bcdd8718e0ca244f93ab5864e945140641f865c8b3084361c77add63381e5:200 2x"
+        srcset="https://img.utdstc.com/icon/a11/bcd/a11bcdd8718e0ca244f93ab5864e945140641f865c8b3084361c77add63381e5:100 1x, https://img.utdstc.com/icon/a11/bcd/a11bcdd8818e0ca244f93ab5864e945140641f865c8b3084361c77add63381e5:200 2x"
         alt="People Memory on Uptodown"
         loading="lazy"
         onerror="this.style.display='none'"
       />
       Uptodown
     </a>
+    <a href="https://appgallery.huawei.com/app/C117758139"
+       class="store-badge"
+       id="huawei-gallery-btn"
+       target="_blank" rel="noopener"
+       title="Get it on HUAWEI AppGallery">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;flex-shrink:0;overflow:visible">
+        <g transform="translate(12,12)">
+          <ellipse cx="0" cy="-5.2" rx="2.6" ry="4.5" fill="#CF1825" transform="rotate(0)"/>
+          <ellipse cx="0" cy="-5.2" rx="2.6" ry="4.5" fill="#E8372A" transform="rotate(60)"/>
+          <ellipse cx="0" cy="-5.2" rx="2.6" ry="4.5" fill="#F47C20" transform="rotate(120)"/>
+          <ellipse cx="0" cy="-5.2" rx="2.6" ry="4.5" fill="#CF1825" transform="rotate(180)"/>
+          <ellipse cx="0" cy="-5.2" rx="2.6" ry="4.5" fill="#E8372A" transform="rotate(240)"/>
+          <ellipse cx="0" cy="-5.2" rx="2.6" ry="4.5" fill="#F47C20" transform="rotate(300)"/>
+        </g>
+      </svg>
+      AppGallery
+    </a>
     <a href="https://github.com/TITANICBHAI/people-memory-expo" class="store-badge" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
       Source Code
     </a>
   </div>
-  <p style="margin-top:20px; font-size:13px; color:var(--text-dim)">App Store & Google Play listings coming soon · Build your own with EAS</p>
+  <p style="margin-top:20px; font-size:13px; color:var(--text-dim)">App Store & Google Play listings coming soon · Available now on HUAWEI AppGallery & Uptodown</p>
 </div>
 
 <!-- ─── Footer ─────────────────────────────────────────── -->
@@ -754,5 +771,25 @@
   </div>
 </footer>
 
+<script>
+  (function() {
+    var btn = document.getElementById('huawei-gallery-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var deepLink = 'hiapplink://com.huawei.appmarket?appId=C117758139&channelId=website&id=bc4dbb0883da4bbd9caa8308eca54d7d&s=296463A39438912A7ECBBF79AEF6454B2C140F6CAB5A6865B0D1189AA0B65BB0&detailType=0&v=&callType=AGDLINK&installType=0000';
+      var webLink = 'https://appgallery.huawei.com/app/C117758139';
+      var fallback = setTimeout(function() {
+        window.open(webLink, '_blank');
+      }, 1500);
+      try {
+        window.location.href = deepLink;
+      } catch (err) {
+        clearTimeout(fallback);
+        window.open(webLink, '_blank');
+      }
+    });
+  })();
+</script>
 </body>
 </html>
