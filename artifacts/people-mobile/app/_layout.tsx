@@ -6,9 +6,11 @@ import {
   Inter_700Bold,
   useFonts,
 } from '@expo-google-fonts/inter';
+import * as Device from 'expo-device';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -18,6 +20,37 @@ import { AppProvider } from '@/context/AppContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 
 SplashScreen.preventAutoHideAsync();
+
+function RootedDeviceScreen() {
+  return (
+    <View style={rd.root}>
+      <Text style={rd.icon}>🔒</Text>
+      <Text style={rd.title}>Device Not Supported</Text>
+      <Text style={rd.body}>
+        People Memory cannot run on rooted or jailbroken devices. This restriction is in place to
+        protect the privacy and security of your data.
+      </Text>
+      <Text style={rd.sub}>Please use an unmodified device to continue.</Text>
+    </View>
+  );
+}
+
+const rd = StyleSheet.create({
+  root: {
+    flex: 1, backgroundColor: '#1A1A1A',
+    alignItems: 'center', justifyContent: 'center', padding: 32,
+  },
+  icon: { fontSize: 52, marginBottom: 20 },
+  title: {
+    fontSize: 22, fontWeight: '700', color: '#FFFFFF',
+    marginBottom: 14, textAlign: 'center',
+  },
+  body: {
+    fontSize: 15, color: '#D4D4D4', textAlign: 'center',
+    lineHeight: 24, marginBottom: 16,
+  },
+  sub: { fontSize: 13, color: '#888888', textAlign: 'center' },
+});
 
 function ThemedShell() {
   const C = useColors();
@@ -53,12 +86,34 @@ export default function RootLayout() {
     Inter_600SemiBold,
     Inter_700Bold,
   });
+  const [isRooted, setIsRooted] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (fontsLoaded || fontError) SplashScreen.hideAsync();
-  }, [fontsLoaded, fontError]);
+    if (Platform.OS === 'web') {
+      setIsRooted(false);
+      return;
+    }
+    Device.isRootedExperimentalAsync()
+      .then(rooted => setIsRooted(rooted))
+      .catch(() => setIsRooted(false));
+  }, []);
+
+  useEffect(() => {
+    if ((fontsLoaded || fontError) && isRooted !== null) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError, isRooted]);
 
   if (!fontsLoaded && !fontError) return null;
+  if (isRooted === null) return null;
+
+  if (isRooted) {
+    return (
+      <SafeAreaProvider>
+        <RootedDeviceScreen />
+      </SafeAreaProvider>
+    );
+  }
 
   return (
     <SafeAreaProvider>

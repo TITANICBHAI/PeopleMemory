@@ -409,6 +409,9 @@ importers:
       expo-crypto:
         specifier: ~15.0.8
         version: 15.0.8(expo@54.0.33)
+      expo-device:
+        specifier: ~7.1.4
+        version: 7.1.4(expo@54.0.33)
       expo-document-picker:
         specifier: ~14.0.8
         version: 14.0.8(expo@54.0.33)
@@ -3230,6 +3233,11 @@ packages:
     peerDependencies:
       expo: '*'
 
+  expo-device@7.1.4:
+    resolution: {integrity: sha512-HS04IiE1Fy0FRjBLurr9e5A6yj3kbmQB+2jCZvbSGpsjBnCLdSk/LCii4f5VFhPIBWJLyYuN5QqJyEAw6BcS4Q==}
+    peerDependencies:
+      expo: '*'
+
   expo-document-picker@14.0.8:
     resolution: {integrity: sha512-3tyQKpPqWWFlI8p9RiMX1+T1Zge5mEKeBuXWp1h8PEItFMUDSiOJbQ112sfdC6Hxt8wSxreV9bCRl/NgBdt+fA==}
     peerDependencies:
@@ -4219,11 +4227,11 @@ packages:
     engines: {node: '>=0.10.0'}
 
   npm-package-arg@11.0.3:
-    resolution: {integrity: sha512-sHGJy8sOC1YraBywpzQlIKBE4pBbGbiF95U6Auspzyem956E0+FtDtsx1ZxlOJkQCZ1AFXAY/yuvtFYrOxF+Bw==}
+    resolution: {integrity: sha512-sHGJy8sOC1YraBywpzQlIKBE4pBbGbiF95U6Auspzyem956E0+FtDtsx1ZxlOJkQCZ1AFXAY/yuvtFYrOxF+Bw==, tarball: https://registry.npmjs.org/npm-package-arg/-/npm-package-arg-11.0.3.tgz}
     engines: {node: ^16.14.0 || >=18.0.0}
 
   npm-run-path@6.0.0:
-    resolution: {integrity: sha512-9qny7Z9DsQU8Ou39ERsPU4OZQlSTP47ShQzuKZ6PRXpYLtIFgl/DEBYEXKlvcEa+9tHVcK8CF81Y2V72qaZhWA==}
+    resolution: {integrity: sha512-9qny7Z9DsQU8Ou39ERsPU4OZQlSTP47ShQzuKZ6PRXpYLtIFgl/DEBYEXKlvcEa+9tHVcK8CF81Y2V72qaZhWA==, tarball: https://registry.npmjs.org/npm-run-path/-/npm-run-path-6.0.0.tgz}
     engines: {node: '>=18'}
 
   nullthrows@1.1.1:
@@ -4703,6 +4711,7 @@ packages:
   recharts@2.15.4:
     resolution: {integrity: sha512-UT/q6fwS3c1dHbXv2uFgYJ9BMFHu3fwnd7AYZaEQhXuYQ4hgsxLvsUXzGdKeZrW5xopzDCvuA2N41WJ88I7zIw==}
     engines: {node: '>=14'}
+    deprecated: 1.x and 2.x branches are no longer active. Bump to Recharts v3 to receive latest features and bugfixes. See https://github.com/recharts/recharts/wiki/3.0-migration-guide
     peerDependencies:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -5156,6 +5165,10 @@ packages:
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
+    hasBin: true
+
+  ua-parser-js@0.7.41:
+    resolution: {integrity: sha512-O3oYyCMPYgNNHuO7Jjk3uacJWZF8loBgwrfd/5LE/HyZ3lUIOdniQ7DNXJcIgZbwioZxk0fLfI4EVnetdiX5jg==}
     hasBin: true
 
   ua-parser-js@1.0.41:
@@ -8795,6 +8808,11 @@ snapshots:
       base64-js: 1.5.1
       expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
 
+  expo-device@7.1.4(expo@54.0.33):
+    dependencies:
+      expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      ua-parser-js: 0.7.41
+
   expo-document-picker@14.0.8(expo@54.0.33):
     dependencies:
       expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -11050,6 +11068,8 @@ snapshots:
       yaml: 2.8.2
 
   typescript@5.9.3: {}
+
+  ua-parser-js@0.7.41: {}
 
   ua-parser-js@1.0.41: {}
 
