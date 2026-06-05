@@ -25,8 +25,8 @@ import { useApp } from '@/context/AppContext';
 import { useTheme } from '@/context/ThemeContext';
 import { decryptBackup, encryptBackup } from '@/utils/backup';
 
-const VERSION = '1.1.0';
-const BUILD = '2';
+const VERSION = '1.1.1';
+const BUILD = '3';
 
 // ─── Theme Picker ──────────────────────────────────────────────────────────────
 
@@ -271,7 +271,7 @@ export default function SettingsScreen() {
     setBusy(true);
     try {
       const raw = getRawData();
-      const encrypted = encryptBackup(raw, password);
+      const encrypted = await encryptBackup(raw, password);
       const filename = `PeopleMemory_${new Date().toISOString().slice(0, 10)}.pmbackup`;
       const fileUri = (cacheDirectory ?? '') + filename;
       await writeAsStringAsync(fileUri, encrypted, { encoding: EncodingType.UTF8 });
@@ -293,7 +293,7 @@ export default function SettingsScreen() {
     setBusy(true);
     try {
       const encrypted = await readAsStringAsync(pendingFile, { encoding: EncodingType.UTF8 });
-      const payload = decryptBackup(encrypted, password);
+      const payload = await decryptBackup(encrypted, password);
       setPasswordModal(null); setPassword(''); setPendingFile(null);
       Alert.alert(
         'Restore Backup?',
@@ -357,6 +357,52 @@ export default function SettingsScreen() {
           <Row icon="download" label="Export Backup" sub="Encrypt & save all your data to a file" onPress={openExportModal} />
           <Divider />
           <Row icon="upload" label="Import Backup" sub="Restore from an encrypted backup file" onPress={openImportFlow} />
+        </Card>
+
+        <SectionHeader label="WHAT'S NEW" />
+        <Card>
+          <View style={[wn.entry, { borderBottomColor: C.border }]}>
+            <View style={wn.headerRow}>
+              <View style={[wn.badge, { backgroundColor: C.accent + '22', borderColor: C.accent + '55' }]}>
+                <Text style={[wn.badgeText, { color: C.accent }]}>1.1.1</Text>
+              </View>
+              <Text style={[wn.date, { color: C.textDim }]}>June 2026</Text>
+            </View>
+            <Text style={[wn.label, { color: C.textBright }]}>Security Update</Text>
+            {[
+              'Rooted & jailbroken device detection — app now blocks access on compromised devices',
+              'Backup encryption upgraded to SHA-256 key derivation (old backups still restore fine)',
+              'Notification permission now includes a clear explanation before asking',
+              'Minimum Android version raised to Android 10 for a patched, secure OS',
+              'External storage & overlay permissions removed from app manifest',
+            ].map((item, i) => (
+              <View key={i} style={wn.bullet}>
+                <Text style={[wn.dot, { color: C.accent }]}>•</Text>
+                <Text style={[wn.bulletText, { color: C.textMuted }]}>{item}</Text>
+              </View>
+            ))}
+          </View>
+          <View style={wn.entry}>
+            <View style={wn.headerRow}>
+              <View style={[wn.badge, { backgroundColor: C.border, borderColor: C.border }]}>
+                <Text style={[wn.badgeText, { color: C.textMuted }]}>1.1.0</Text>
+              </View>
+              <Text style={[wn.date, { color: C.textDim }]}>March 2026</Text>
+            </View>
+            <Text style={[wn.label, { color: C.textBright }]}>Groups, Journal & Themes</Text>
+            {[
+              'Groups — organise contacts into labelled collections with health scores',
+              'Journal — full chronological timeline of interactions and events',
+              'Themes — Midnight, Eclipse (AMOLED), and Spectrum (GitHub-dark)',
+              'Reconnect strip — surfaces your most neglected relationships',
+              'Coming Up strip — upcoming birthdays and meetings at a glance',
+            ].map((item, i) => (
+              <View key={i} style={wn.bullet}>
+                <Text style={[wn.dot, { color: C.textDim }]}>•</Text>
+                <Text style={[wn.bulletText, { color: C.textMuted }]}>{item}</Text>
+              </View>
+            ))}
+          </View>
         </Card>
 
         <SectionHeader label="LEGAL" />
@@ -468,6 +514,18 @@ const pm = StyleSheet.create({
   actionBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 8 },
   actionBtnDisabled: { opacity: 0.4 },
   actionText: { fontSize: 15, fontFamily: 'Inter_600SemiBold', color: '#fff' },
+});
+
+const wn = StyleSheet.create({
+  entry: { padding: 16, borderBottomWidth: 1 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 },
+  badge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3, borderWidth: 1 },
+  badgeText: { fontSize: 11, fontFamily: 'Inter_700Bold', letterSpacing: 0.5 },
+  date: { fontSize: 12, fontFamily: 'Inter_400Regular' },
+  label: { fontSize: 14, fontFamily: 'Inter_600SemiBold', marginBottom: 8 },
+  bullet: { flexDirection: 'row', gap: 6, marginBottom: 5 },
+  dot: { fontSize: 13, fontFamily: 'Inter_600SemiBold', lineHeight: 20 },
+  bulletText: { flex: 1, fontSize: 13, fontFamily: 'Inter_400Regular', lineHeight: 20 },
 });
 
 const s = StyleSheet.create({
