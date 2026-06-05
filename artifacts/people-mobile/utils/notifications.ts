@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
-import { Platform } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -16,10 +16,35 @@ const MEETING_KEY = (personId: string) => `notif_${personId}`;
 const BIRTHDAY_KEY = (personId: string) => `notif_birthday_${personId}`;
 const CUSTOM_DATE_KEY = (personId: string, dateId: string) => `notif_custom_${personId}_${dateId}`;
 
+function showNotificationRationale(): Promise<boolean> {
+  return new Promise(resolve => {
+    Alert.alert(
+      'Enable Reminders?',
+      'People Memory uses notifications to remind you about upcoming meetings and birthdays you\'ve set for your contacts.\n\nNo marketing or tracking notifications are ever sent.',
+      [
+        {
+          text: 'Not Now',
+          style: 'cancel',
+          onPress: () => resolve(false),
+        },
+        {
+          text: 'Enable Reminders',
+          onPress: () => resolve(true),
+        },
+      ],
+      { cancelable: false },
+    );
+  });
+}
+
 export async function requestNotificationPermission(): Promise<boolean> {
   if (Platform.OS === 'web') return false;
   const { status: existing } = await Notifications.getPermissionsAsync();
   if (existing === 'granted') return true;
+  if (existing === 'undetermined') {
+    const confirmed = await showNotificationRationale();
+    if (!confirmed) return false;
+  }
   const { status } = await Notifications.requestPermissionsAsync();
   return status === 'granted';
 }
